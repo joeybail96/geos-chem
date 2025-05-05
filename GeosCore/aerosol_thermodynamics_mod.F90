@@ -186,6 +186,7 @@ CONTAINS
     INTEGER, SAVE            :: id_NIT,  id_SALA, id_SO4
     INTEGER, SAVE            :: id_HMS ! jmm 12/5/18
     INTEGER, SAVE            :: id_SALACL, id_HCL, id_SALCCL
+    INTEGER, SAVE            :: id_DSTCL1, id_DSTCL2, id_DSTCL3, id_DSTCL4
     INTEGER, SAVE            :: id_SO4s, id_NITs, id_SALC
     INTEGER, SAVE            :: id_SALAAL, id_SALCAL
 
@@ -291,6 +292,10 @@ CONTAINS
        id_HCL    = Ind_('HCl'   )
        id_SALC   = Ind_('SALC'  )
        id_SALCCL = Ind_('SALCCL')
+       id_DSTCL1 = Ind_('DSTCL1')
+       id_DSTCL2 = Ind_('DSTCL2')
+       id_DSTCL3 = Ind_('DSTCL3')
+       id_DSTCL4 = Ind_('DSTCL4')
        !id_NH4s  = Ind_('NH4s'  )
        id_NITs   = Ind_('NITs'  )
        id_SO4s   = Ind_('SO4s'  )
@@ -343,6 +348,26 @@ CONTAINS
        ENDIF
        IF ( id_SALCCL <= 0 ) THEN
           ErrMsg = 'SALCCL is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_DSTCL1 <= 0 ) THEN
+          ErrMsg = 'DSTCL1 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_DSTCL2 <= 0 ) THEN
+          ErrMsg = 'DSTCL2 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_DSTCL3 <= 0 ) THEN
+          ErrMsg = 'DSTCL3 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_DSTCL4 <= 0 ) THEN
+          ErrMsg = 'DSTCL4 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
