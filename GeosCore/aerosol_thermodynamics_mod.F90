@@ -685,8 +685,29 @@ CONTAINS
              ! Changed 0.378 to 0.3061 (dry mass fraction of seasalt)
              TNA = Spc(id_SALC)%Conc(I,J,L) * 0.3061_fp * 1.0e+3_fp           &
                    * AlkR / ( 23.0_fp  * VOL  )
-             ACL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
+
+             ! Separated ACL into SALCCL and DSTCL1-4
+             !ACL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
+             !     ( 35.45_fp  * VOL  )
+             SALCCL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
                    ( 35.45_fp  * VOL  )
+             DSTCL1 = Spc(id_DSTCL1)%Conc(I,J,L) * 1.0e+3_fp /           &
+                   ( 35.45_fp  * VOL  )
+             DSTCL2 = Spc(id_DSTCL2)%Conc(I,J,L) * 1.0e+3_fp /           &
+                   ( 35.45_fp  * VOL  )
+             DSTCL3 = Spc(id_DSTCL3)%Conc(I,J,L) * 1.0e+3_fp /           &
+                   ( 35.45_fp  * VOL  )
+             DSTCL4 = Spc(id_DSTCL4)%Conc(I,J,L) * 1.0e+3_fp /           &
+                   ( 35.45_fp  * VOL  )
+             ACL = SALCCL  + DSTCL1  + DSTCL2  + DSTCL3  + DSTCL4
+
+             ! Added ratio calculations of SALCCL and DSTCL1-4 to ACL
+             frac_SALCCL = SALCCL  / ACL
+             frac_DSTCL1 = DSTCL1  / ACL
+             frac_DSTCL2 = DSTCL2  / ACL
+             frac_DSTCL3 = DSTCL3  / ACL
+             frac_DSTCL4 = DSTCL4  / ACL
+
 
           ENDIF
 
@@ -932,8 +953,24 @@ CONTAINS
             !               Spc(id_NH4s  )%Conc(I,J,L) * (1.0_fp-AlkR) + TNH4
              Spc(id_NITs  )%Conc(I,J,L) = &
                             Spc(id_NITs  )%Conc(I,J,L) * (1.0_fp-AlkR) + TNIT
-             Spc(id_SALCCL)%Conc(I,J,L) = &
-                            Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + ACL
+            ! Dispersing fractions of SALCCL and DSTCL1-4 back into ACL
+            !Spc(id_SALCCL)%Conc(I,J,L) = &
+            !               Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + ACL
+            Spc(id_SALCCL)%Conc(I,J,L) = &
+                            Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + &
+                            (frac_SALCCL * ACL)
+            Spc(id_DSTCL1)%Conc(I,J,L) = &
+                            Spc(id_DSTCL1)%Conc(I,J,L) + &
+                            (frac_DSTCL1 * ACL)
+            Spc(id_DSTCL2)%Conc(I,J,L) = &
+                            Spc(id_DSTCL2)%Conc(I,J,L) + &
+                            (frac_DSTCL2 * ACL)
+            Spc(id_DSTCL3)%Conc(I,J,L) = &
+                            Spc(id_DSTCL3)%Conc(I,J,L) + &
+                            (frac_DSTCL3 * ACL)
+            Spc(id_DSTCL4)%Conc(I,J,L) = &
+                            Spc(id_DSTCL4)%Conc(I,J,L) + &
+                            (frac_DSTCL4 * ACL)
           ENDIF
 
           ! Special handling for HNO3 [kg]
