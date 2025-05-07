@@ -193,6 +193,8 @@ CONTAINS
     ! Scalars
     INTEGER                  :: I,    J,    L,    N,  NM
     REAL(fp)                 :: ANO3, GNO3, ACL, GCL
+    REAL(fp)                 :: SALCCL, DSTCL1, DSTCL2, DSTCL3, DSTCL4
+    REAL(fp)                 :: frac_SALCCL, frac_DSTCL1, frac_DSTCL2, frac_DSTCL3, frac_DSTCL4
     REAL(f8)                 :: RHI,  TEMPI, P_Pa
     REAL(fp)                 :: TCA,  TMG,  TK,   HNO3_DEN
     REAL(fp)                 :: TNA,  TCL,  TNH3, TNH4
