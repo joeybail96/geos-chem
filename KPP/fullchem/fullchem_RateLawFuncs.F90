@@ -3320,6 +3320,39 @@ CONTAINS
     k = kIIR1Ltd( C(ind_OH), C(ind_SALCCL), k )
   END FUNCTION OHuptkBySALCCl
 
+  FUNCTION OHuptkByDSTCL( H,    BIN ) RESULT( k )
+    !
+    ! Computes uptake rate of OH + Cl on playa dust aerosols
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-4)
+    REAL(dp)                   :: gamma, k       ! rxn prob [1], rxn rate [1/s]
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Grab concentration of dust in specified bin
+    SELECT CASE (BIN)
+        CASE (1)
+            DUST_CONC = C(ind_DSTCL1)
+        CASE (2)
+            DUST_CONC = C(ind_DSTCL2)
+        CASE (3)
+            DUST_CONC = C(ind_DSTCL3)
+        CASE (4)
+            DUST_CONC = C(ind_DSTCL4)
+    END SELECT
+    !
+    ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
+    gamma = 0.04_dp * H%Cl_conc_SSC
+    k = Ars_L1k( H%xArea(SSC), H%xRadi(SSC), gamma, SR_MW(ind_OH) )
+    !
+    ! Assume OH is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_OH), DUST_CONC, k )
+  END FUNCTION OHuptkByDSTCL
+
+
   !=========================================================================
   ! Hetchem rate-law functions for VOC species
   !=========================================================================
