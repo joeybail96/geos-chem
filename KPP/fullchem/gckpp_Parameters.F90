@@ -415,13 +415,17 @@ MODULE gckpp_Parameters
   INTEGER, PARAMETER :: ind_NO3 = 351 
   INTEGER, PARAMETER :: ind_HBr = 352 
   INTEGER, PARAMETER :: ind_SALACL = 353 
+  INTEGER, PARAMETER :: ind_DSTCL1 = 354 
+  INTEGER, PARAMETER :: ind_DSTCL1 = 355 
+  INTEGER, PARAMETER :: ind_DSTCL1 = 356 
+  INTEGER, PARAMETER :: ind_DSTCL1 = 357 
 
 ! Index declaration for fixed species in C
 !   C(ind_spc)
 
-  INTEGER, PARAMETER :: ind_H2 = 354 
-  INTEGER, PARAMETER :: ind_N2 = 355 
-  INTEGER, PARAMETER :: ind_O2 = 356 
+  INTEGER, PARAMETER :: ind_H2 = 358 
+  INTEGER, PARAMETER :: ind_N2 = 359 
+  INTEGER, PARAMETER :: ind_O2 = 360 
 
 ! Index declaration for fixed species in FIX
 !    FIX(indf_spc) = C(ind_spc) = C(NVAR+indf_spc)
