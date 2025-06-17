@@ -2710,37 +2710,37 @@ CONTAINS
     SELECT CASE (BIN)
         CASE (1)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA1
+            ind_PLYACL = ind_PLYACL1
             ! Index referencing state_chm_mod.F90
             ind_DST = DU1
         CASE (2)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA2
+            ind_PLYACL = ind_PLYACL2
             ! Index referencing state_chm_mod.F90
             ind_DST = DU2
         CASE (3)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA3
+            ind_PLYACL = ind_PLYACL3
             ! Index referencing state_chm_mod.F90
             ind_DST = DU3
         CASE (4)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA4
+            ind_PLYACL = ind_PLYACL4
             ! Index referencing state_chm_mod.F90
             ind_DST = DU4
         CASE (5)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA5
+            ind_PLYACL = ind_PLYACL5
             ! Index referencing state_chm_mod.F90
             ind_DST = DU5
         CASE (6)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA6
+            ind_PLYACL = ind_PLYACL6
             ! Index referencing state_chm_mod.F90
             ind_DST = DU6
         CASE (7)
             ! Index referencing gckpp_Parameters.F90
-            ind_PLYA = ind_PLYA7
+            ind_PLYACL = ind_PLYACL7
             ! Index referencing state_chm_mod.F90
             ind_DST = DU7
     END SELECT
