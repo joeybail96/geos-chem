@@ -495,6 +495,16 @@ SO2  + SALCAL + O3  = SO4s - SALCAL      : K_MT(4);
 HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
+
+// Plya Dust1
+//
+// Plya Dust2
+//
+// Plya Dust3
+//
+// Plya Dust4
+//
+
 // Cloud
 // S(IV) --> S(VI)
 SO2 + H2O2          = SO4                : K_CLD(1);
@@ -1705,10 +1715,13 @@ N2O5 + HCl = ClNO2 + HNO3 :    N2O5uptkByStratHCl( State_Het );                 
 N2O5 = 2.000HNO3 :             N2O5uptkByCloud( State_Het );                                                {2018/10/17; Cloud uptake, CDH}
 N2O5 + SALACL = ClNO2 + HNO3 : N2O5uptkBySALACl( State_Het );                                               {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
 N2O5 + SALCCL = ClNO2 + HNO3 : N2O5uptkBySALCCl( State_Het );                                               {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
-N2O5 + DSTCL1 = ClNO2 + HNO3 : N2O5uptkByDSTCL( State_Het, 1 );                                             {}
-N2O5 + DSTCL2 = ClNO2 + HNO3 : N2O5uptkByDSTCL( State_Het, 2 );                                             {}
-N2O5 + DSTCL3 = ClNO2 + HNO3 : N2O5uptkByDSTCL( State_Het, 3 );                                             {}
-N2O5 + DSTCL4 = ClNO2 + HNO3 : N2O5uptkByDSTCL( State_Het, 4 );                                             {}
+N2O5 + DSTCL1 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 1 );                                            {}
+N2O5 + DSTCL2 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 2 );                                            {}
+N2O5 + DSTCL3 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 3 );                                            {}
+N2O5 + DSTCL4 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 4 );                                            {}
+N2O5 + DSTCL5 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 5 );                                            {}
+N2O5 + DSTCL6 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 6 );                                            {}
+N2O5 + DSTCL7 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 7 );                                            {}
 OH + SALACL = 0.500Cl2 :       OHuptkBySALACl( State_Het );                                                 {2018/03/12; XW}
 OH + SALCCL = 0.500Cl2 :       OHuptkBySALCCl( State_Het );                                                 {2018/03/12; XW}
 OH + DSTCL1 = 0.500Cl2 :       OHuptkBySALCCl( State_Het, 1 );                                              {}

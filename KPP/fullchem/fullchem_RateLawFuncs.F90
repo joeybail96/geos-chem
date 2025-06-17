@@ -2696,45 +2696,72 @@ CONTAINS
     k = kIIR1Ltd( C(ind_N2O5), C(ind_SALCCL), k )
   END FUNCTION N2O5uptkBySALCCl
 
-  FUNCTION N2O5uptkByDSTCL( H,    BIN ) RESULT( k )
+  FUNCTION N2O5uptkByPLYACL( H,    BIN ) RESULT( k )
     !
-    ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols in bin 1.
+    ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols.
     ! This reaction follows the N2O5 + Cl- channel.
     !
     TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
-    INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-4)
+    INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-7)
     REAL(dp)                   :: k              ! Rxn rate [1/s]
     REAL(dp) :: gamma, Y_ClNO2, Rp, SA           ! local vars
+    !
+    ! Grab concentration of dust in specified bin
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA2
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU2
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA3
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU3
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA4
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU4
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA5
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU5
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA6
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU6
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYA = ind_PLYA7
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU7
+    END SELECT
     !
     ! Exit if in the stratosphere
     k = 0.0_dp
     IF ( H%stratBox ) RETURN
     !
-    ! Grab concentration of dust in specified bin
-    SELECT CASE (BIN)
-        CASE (1)
-            DUST_CONC = C(ind_DSTCL1)
-        CASE (2)
-            DUST_CONC = C(ind_DSTCL2)
-        CASE (3)
-            DUST_CONC = C(ind_DSTCL3)
-        CASE (4)
-            DUST_CONC = C(ind_DSTCL4)
-    END SELECT
-    !
-    ! Properties of inorganic (SNA) sea salt coated with organics
+    ! Properties of playa dust (same as corresponding mineral dust)
     CALL N2O5_InorgOrg(                                                      &
-         H,      H%xVol(SSC),  0.0_dp,      H%xH2O(SSC),                     &
-         0.0_dp, H%xRadi(SSC), C(ind_NITs), DUST_CONC,                       &
-         gamma,  Y_ClNO2,      Rp,          SA                              )
+         H,      H%xVol(ind_DST),  0.0_dp,      H%xH2O(DU1),                 &
+         0.0_dp, H%xRadi(ind_DST), C(ind_NITs), C(ind_PLYA),                 &
+         gamma,  Y_ClNO2,          Rp,          SA                           )    
     !
-    ! Total loss rate of N2O5 (kN2O5) on SNA+ORG+SSA aerosol
+    ! Total loss rate of N2O5 (kN2O5) on playa dust
     k = Ars_L1k( H%ClearFr * SA, Rp, gamma, SR_MW(ind_N2O5) )
     k = k * Y_ClNO2
     !
     ! Assume N2O5 is limiting, so update the removal rate accordingly
-    k = kIIR1Ltd( C(ind_N2O5), DUST_CONC, k )
-  END FUNCTION N2O5uptkByDSTCL
+    k = kIIR1Ltd( C(ind_N2O5), C(ind_PLYA), k )
+  END FUNCTION N2O5uptkByPLYACL
 
 
   SUBROUTINE N2O5_InorgOrg( H,      volInorg, volOrg, H2Oinorg,              &
