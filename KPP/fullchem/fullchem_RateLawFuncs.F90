@@ -2751,7 +2751,7 @@ CONTAINS
     !
     ! Properties of playa dust (same as corresponding mineral dust)
     CALL N2O5_InorgOrg(                                                      &
-         H,      H%xVol(ind_DST),  0.0_dp,      H%xH2O(DU1),                 &
+         H,      H%xVol(ind_DST),  0.0_dp,      H%xH2O(ind_DST),             &
          0.0_dp, H%xRadi(ind_DST), C(ind_NITs), C(ind_PLYA),                 &
          gamma,  Y_ClNO2,          Rp,          SA                           )    
     !
