@@ -3347,7 +3347,7 @@ CONTAINS
     k = kIIR1Ltd( C(ind_OH), C(ind_SALCCL), k )
   END FUNCTION OHuptkBySALCCl
 
-  FUNCTION OHuptkByDSTCL( H,    BIN ) RESULT( k )
+  FUNCTION OHuptkByPLYACL( H,    BIN ) RESULT( k )
     !
     ! Computes uptake rate of OH + Cl on playa dust aerosols
     !
@@ -3355,29 +3355,70 @@ CONTAINS
     INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-4)
     REAL(dp)                   :: gamma, k       ! rxn prob [1], rxn rate [1/s]
     !
+    ! Grab concentration of dust in specified bin
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU1
+            ! Grid concentration of Cl in playa dust bin 1
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL2
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU2
+            ! Grid concentration of Cl in playa dust bin 2
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL2
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL3
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU3
+            ! Grid concentration of Cl in playa dust bin 3
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL3
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL4
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU4
+            ! Grid concentration of Cl in playa dust bin 4
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL4
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL5
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU5
+            ! Grid concentration of Cl in playa dust bin 5
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL5
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL6
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU6
+            ! Grid concentration of Cl in playa dust bin 6
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL6
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL7
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU7
+            ! Grid concentration of Cl in playa dust bin 7
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL7
+    END SELECT
+    !
     ! Exit if in the stratosphere
     k = 0.0_dp
     IF ( H%stratBox ) RETURN
     !
-    ! Grab concentration of dust in specified bin
-    SELECT CASE (BIN)
-        CASE (1)
-            DUST_CONC = C(ind_DSTCL1)
-        CASE (2)
-            DUST_CONC = C(ind_DSTCL2)
-        CASE (3)
-            DUST_CONC = C(ind_DSTCL3)
-        CASE (4)
-            DUST_CONC = C(ind_DSTCL4)
-    END SELECT
-    !
     ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-    gamma = 0.04_dp * H%Cl_conc_SSC
-    k = Ars_L1k( H%xArea(SSC), H%xRadi(SSC), gamma, SR_MW(ind_OH) )
+    gamma = 0.04_dp * Cl_conc_PLYACL
+    k = Ars_L1k( H%xArea(ind_DST), H%xRadi(ind_DST), gamma, SR_MW(ind_OH) )
     !
     ! Assume OH is limiting, so update the removal rate accordingly
-    k = kIIR1Ltd( C(ind_OH), DUST_CONC, k )
-  END FUNCTION OHuptkByDSTCL
+    k = kIIR1Ltd( C(ind_OH), C(ind_PLYACL), k )
+  END FUNCTION OHuptkByPLYACL
 
 
   !=========================================================================
