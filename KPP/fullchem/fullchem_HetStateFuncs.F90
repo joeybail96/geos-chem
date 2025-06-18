@@ -433,6 +433,48 @@ CONTAINS
                              r_w       = H%xRadi(12),                        &
                              conc_x    = H%Cl_conc_SSC                      )
 
+    ! Cl- concentration in bin 1 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL1),                     &
+                               surf_area = H%xArea(1),                       &
+                               r_w       = H%xRadi(1),                       &
+                               conc_x    = H%Cl_conc_PLYACL1                )
+
+    ! Cl- concentration in bin 2 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL2),                     &
+                               surf_area = H%xArea(2),                       &
+                               r_w       = H%xRadi(2),                       &
+                               conc_x    = H%Cl_conc_PLYACL2                )
+
+    ! Cl- concentration in bin 3 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL3),                     &
+                               surf_area = H%xArea(3),                       &
+                               r_w       = H%xRadi(3),                       &
+                               conc_x    = H%Cl_conc_PLYACL3                )
+
+    ! Cl- concentration in bin 4 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL4),                     &
+                               surf_area = H%xArea(4),                       &
+                               r_w       = H%xRadi(4),                       &
+                               conc_x    = H%Cl_conc_PLYACL4                )
+
+    ! Cl- concentration in bin 5 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL5),                     &
+                               surf_area = H%xArea(5),                       &
+                               r_w       = H%xRadi(5),                       &
+                               conc_x    = H%Cl_conc_PLYACL5                )
+
+    ! Cl- concentration in bin 6 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL6),                     &
+                               surf_area = H%xArea(6),                       &
+                               r_w       = H%xRadi(6),                       &
+                               conc_x    = H%Cl_conc_PLYACL6                )
+
+    ! Cl- concentration in bin 7 playa aerosol
+    CALL Get_Halide_PlayaConc( n_x     = C(ind_PLYACL7),                     &
+                               surf_area = H%xArea(7),                       &
+                               r_w       = H%xRadi(7),                       &
+                               conc_x    = H%Cl_conc_PLYACL7                )
+
     ! NO3- concentration in fine sea salt aerosol
     CALL Get_Halide_SSAConc( n_x       = C(ind_NIT),                         &
                              surf_area = H%aClArea,                          &
@@ -614,6 +656,60 @@ CONTAINS
     conc_x = MAX( conc_x, 0.0_dp )
 
   END SUBROUTINE Get_Halide_SsaConc
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Transport Model                  !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: Get_Halide_PlayaConc
+!
+! !DESCRIPTION: Calculates concentration of a halide in playa dust aerosol.
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE Get_Halide_PlayaConc( n_x, surf_area, r_w, conc_x )
+!
+! !USES:
+!
+    USE GcKpp_Global,  ONLY : HetState
+    USE PhysConstants, ONLY : AVO
+!
+! !INPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(IN)  :: n_x        ! Number density     [#/cm3  ]
+    REAL(dp),       INTENT(IN)  :: surf_area  ! Surface area       [cm2/cm3]
+    REAL(dp),       INTENT(IN)  :: r_w        ! Aerosol wet radius [cm     ]
+!
+! !OUTPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(OUT) :: conc_x     ! Halide conc in playa dust [mol/L]
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! !LOCAL VARIABLES:
+!
+    REAL(dp) :: V_tot
+
+    !==================================================================
+    ! Get_Halide_PlayaConc begins here!
+    !==================================================================
+
+    ! Cloud volume
+    V_tot = ( surf_area * r_w / 3.0_dp ) * 1e-3_dp ! L(liq)/cm3(air)
+
+    ! Skip if we are not in cloud
+    IF ( V_tot <= 1.0e-20_dp ) THEN
+       conc_x = 0.0_dp
+       RETURN
+    ENDIF
+
+    conc_x = ( n_x / AVO ) / V_tot    ! mol/L
+    conc_x = MAX( conc_x, 0.0_dp )
+
+  END SUBROUTINE Get_Halide_PlayaConc
 !EOC
 !------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Transport Model                  !

@@ -136,6 +136,13 @@
      REAL(dp) :: Cl_conc_Cld    ! Cl- total = A + C + G
      REAL(dp) :: Cl_conc_SSA    ! Cl- in fine   sea salt [mol/kg H2O]
      REAL(dp) :: Cl_conc_SSC    ! Cl- in coarse sea salt [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA1  ! Cl- in playa dust, bin1 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA2  ! Cl- in playa dust, bin2 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA3  ! Cl- in playa dust, bin3 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA4  ! Cl- in playa dust, bin4 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA5  ! Cl- in playa dust, bin5 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA6  ! Cl- in playa dust, bin6 [mol/kg H2O]
+     REAL(dp) :: Cl_conc_PLYA7  ! Cl- in playa dust, bin7 [mol/kg H2O]
      REAL(dp) :: cldFr          ! Cloud fraction
      REAL(dp) :: clearFr        ! Clear sky fraction
      REAL(dp) :: frac_Br_CldA   ! Frac of Br- in fine SSA(in cloud)
