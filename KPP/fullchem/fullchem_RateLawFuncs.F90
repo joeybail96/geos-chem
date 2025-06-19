@@ -3417,7 +3417,7 @@ CONTAINS
     k = Ars_L1k( H%xArea(DST_BIN), H%xRadi(DST_BIN), gamma, SR_MW(ind_OH) )
     !
     ! Assume OH is limiting, so update the removal rate accordingly
-    k = kIIR1Ltd( C(ind_OH), C(ind_PLYACL), k )
+    k = kIIR1Ltd( C(ind_OH), bin_fract*C(ind_PLYACL), k )
   END FUNCTION OHuptkByPLYACL
 
   !=========================================================================
