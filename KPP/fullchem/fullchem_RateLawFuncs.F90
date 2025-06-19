@@ -2706,56 +2706,57 @@ CONTAINS
     REAL(dp)                   :: k              ! Rxn rate [1/s]
     REAL(dp) :: gamma, Y_ClNO2, Rp, SA           ! local vars
     !
-    ! Grab concentration of dust in specified bin
+    ! Grab indices used to locate playa dust concentrations and mineral dust physical properties
+    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
     SELECT CASE (BIN)
         CASE (1)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
             ! Index referencing state_chm_mod.F90
             ind_DST = DU1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             bin_fract = 0.007e+0_fp
         CASE (2)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
             ! Index referencing state_chm_mod.F90
             ind_DST = DU2
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             bin_fract = 0.0332e+0_fp
         CASE (3)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
             ! Index referencing state_chm_mod.F90
             ind_DST = DU3
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             bin_fract = 0.2487e+0_fp
         CASE (4)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
             ! Index referencing state_chm_mod.F90
             ind_DST = DU4
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             bin_fract = 0.7111e+0_fp
         CASE (5)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL2
             ! Index referencing state_chm_mod.F90
             ind_DST = DU5
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             bin_fract = 1.0000e+0_fp
         CASE (6)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL3
             ! Index referencing state_chm_mod.F90
             ind_DST = DU6
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             bin_fract = 1.0000e+0_fp
         CASE (7)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL4
             ! Index referencing state_chm_mod.F90
             ind_DST = DU7
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             bin_fract = 1.0000e+0_fp
     END SELECT
     !
