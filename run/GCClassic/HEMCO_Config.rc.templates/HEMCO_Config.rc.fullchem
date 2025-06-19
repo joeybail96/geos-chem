@@ -3145,10 +3145,18 @@ VerboseOnCores:              root       # Accepted values: root all
 #==============================================================================
 (((OFFLINE_DUST
 (((.not.DustDead.or.DustGinoux
-0 EMIS_DST1 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST1 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST1 - 3 2
+0 EMIS_DST1     $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST1 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST1 - 3 2
+0 EMIS_PLYAAL1  -                                                                                                                             -         -                     -   -  -       PLYAAL1  618 3 2
+0 EMIS_PLYACL1  -                                                                                                                             -         -                     -   -  -       PLYACL1  619 3 2
 0 EMIS_DST2 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST2 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST2 - 3 2
+0 EMIS_PLYAAL2  -                                                                                                                             -         -                     -   -  -       PLYAAL2  618 3 2
+0 EMIS_PLYACL2  -                                                                                                                             -         -                     -   -  -       PLYACL2  619 3 2
 0 EMIS_DST3 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST3 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST3 - 3 2
+0 EMIS_PLYAAL3  -                                                                                                                             -         -                     -   -  -       PLYAAL3  618 3 2
+0 EMIS_PLYACL3  -                                                                                                                             -         -                     -   -  -       PLYACL3  619 3 2
 0 EMIS_DST4 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST4 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST4 - 3 2
+0 EMIS_PLYAAL4  -                                                                                                                             -         -                     -   -  -       PLYAAL4  618 3 2
+0 EMIS_PLYACL4  -                                                                                                                             -         -                     -   -  -       PLYACL4  619 3 2
 ))).not.DustDead.or.DustGinoux
 )))OFFLINE_DUST
 
@@ -4491,6 +4499,17 @@ ${RUNDIR_TES_CLIM_N2O}
 616 SSChloride   0.5504  - - - xy 1 1
 617 BrContent    2.11e-3 - - - xy 1 1
 )))OFFLINE_SEASALT
+
+#==============================================================================
+# --- Offline playa chloride factors ---
+#
+# NOTES:
+# - Playa alkalinity and chloride values
+#==============================================================================
+(((OFFLINE_PLAYA
+618 PlyaAlkalinity $ROOT/OFFLINE_DUST/v2021-08/0.25x0.3125/f_playa/DustEmis_RegionalScaleFactor_US_playa_025x03125.nc     - - - xy 1 1
+619 PlyaChloride   0.0412                                                                                                 - - - xy 1 1
+)))OFFLINE_PLAYA
 
 )))EMISSIONS
 
