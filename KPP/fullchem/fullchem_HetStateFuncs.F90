@@ -364,7 +364,7 @@ CONTAINS
 
     ! Br- and Cl- grid-box concentrations
     HBr = C(ind_HBr) + ( C(ind_BrSALA) * 0.7_dp ) + C(ind_BrSALC)
-    HCl = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL)
+    HCl = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL) + C(ind_PLYACL1) + C(ind_PLYACL2) + C(ind_PLYACL3) + C(ind_PLYACL4)
 
     ! Get overall Br- and Cl- grid box concentrations in cloud
     CALL Get_Halide_CldConc( H, HBr, HCl, Br_conc, Cl_conc )
