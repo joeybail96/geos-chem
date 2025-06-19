@@ -1063,6 +1063,88 @@ CONTAINS
     k = kIIR1Ltd( C(ind_ClNO2), C(ind_SALCCL), k )
   END FUNCTION ClNO2uptkBySALCCL
 
+  FUNCTION ClNO2uptkByPLYACL( H, DST_BIN ) RESULT( k )
+    !
+    ! Computes the uptake rate [1/s] of ClNO2 + PLAYACL.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: DST_BIN        ! Dust bin (1-7)
+    REAL(dp)                   :: k              ! Rxn rate [1/s]
+    !
+    REAL(dp) :: area,     gamma, branch
+    REAL(dp) :: branchCl, dummy, srMw
+    !
+    k    = 0.0_dp
+    srMw = SR_MW(ind_ClNO2)
+    !
+    ! Grab indices used to locate playa dust concentrations and mineral dust physical properties
+    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    ! Grab the fraction of total cloud chloride for each playa dust bin 1-4 and multiply by bin_fract to get the redistributed fraction when playa dust split among 7 bins
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.007e+0_fp
+            ! fraction of Cl from DST_BIN1 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.0332e+0_fp
+            ! fraction of Cl from DST_BIN2 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.2487e+0_fp
+            ! fraction of Cl from DST_BIN3 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.7111e+0_fp
+            ! fraction of Cl from DST_BIN4 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN5 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN6 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin  (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN7 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+    END SELECT
+
+    ! ClNO2 + PLYACL uptake rate [1/s] in tropospheric cloud
+    IF ( .not. H%stratBox ) THEN
+       CALL Gam_ClNO2(                                                       &
+            H,             H%rLiq, H%phCloud, H%Cl_conc_Cld,                 &
+            H%Br_conc_Cld, gamma,  branchCl,  dummy                         )
+       branch = branchCl * frac_Cl_CldP
+       k      = k + CloudHet( H, srMw, gamma, 0.0_dp, branch, 0.0_dp )
+    ENDIF
+    !
+    ! Assume ClNO2 is limiting, so recompute reaction rate accordingly
+    k = kIIR1Ltd( C(ind_ClNO2), bin_fract*C(ind_PLYACL), k )
+  END FUNCTION ClNO2uptkByPLYACL
+
   FUNCTION ClNO2uptkByHCl( H ) RESULT( k )
     !
     ! Computes the uptake rate [1/s] of ClNO2 + HCl.
