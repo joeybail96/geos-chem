@@ -2696,13 +2696,13 @@ CONTAINS
     k = kIIR1Ltd( C(ind_N2O5), C(ind_SALCCL), k )
   END FUNCTION N2O5uptkBySALCCl
 
-  FUNCTION N2O5uptkByPLYACL( H,    BIN ) RESULT( k )
+  FUNCTION N2O5uptkByPLYACL( H,    DST_BIN ) RESULT( k )
     !
     ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols.
     ! This reaction follows the N2O5 + Cl- channel.
     !
     TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
-    INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-7)
+    INTEGER, INTENT(IN)        :: DST_BIN        ! Dust bin (1-7)
     REAL(dp)                   :: k              ! Rxn rate [1/s]
     REAL(dp) :: gamma, Y_ClNO2, Rp, SA           ! local vars
     !
