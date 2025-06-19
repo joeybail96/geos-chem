@@ -3361,6 +3361,79 @@ CONTAINS
     k = kIIR1Ltd( C(ind_OH), C(ind_SALCCL), k )
   END FUNCTION OHuptkBySALCCl
 
+  FUNCTION OHuptkByPLYACL( H, DST_BIN ) RESULT( k )
+    !
+    ! Computes uptake rate of OH + Cl on playa dust
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: DST_BIN        ! Dust bin (1-7)
+    REAL(dp)                   :: gamma, k       ! rxn prob [1], rxn rate [1/s]
+    !
+    ! Grab indices used to locate playa dust concentrations and mineral dust physical properties
+    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            bin_fract = 0.007e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            bin_fract = 0.0332e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL2
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            bin_fract = 0.2487e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL3
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            bin_fract = 0.7111e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL4
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
+            bin_fract = 1.0000e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL5
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            bin_fract = 1.0000e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL6
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
+            bin_fract = 1.0000e+0_fp
+	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            gamma = 0.04_dp * H%Cl_conc_PLYACL17
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Compute uptake
+    k = Ars_L1k( H%xArea(DST_BIN), H%xRadi(DST_BIN), gamma, SR_MW(ind_OH) )
+    !
+    ! Assume OH is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_OH), C(ind_PLYACL), k )
+  END FUNCTION OHuptkByPLYACL
+
   !=========================================================================
   ! Hetchem rate-law functions for VOC species
   !=========================================================================
