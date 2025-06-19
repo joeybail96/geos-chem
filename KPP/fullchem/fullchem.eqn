@@ -420,6 +420,10 @@ PHAN       = IGNORE; {OCC(=O)OON(=O)=O; peroxyhydroxyacetic nitric anhydride}
 PHEN       = IGNORE; {phenol}
 PIO2       = IGNORE; {RO2 from MTPA}
 PIP        = IGNORE; {Peroxides from MTPA}
+PLYACL1    = IGNORE; {Cl; chloride in playa dust bin 1}
+PLYACL2    = IGNORE; {Cl; chloride in playa dust bin 2}
+PLYACL3    = IGNORE; {Cl; chloride in playa dust bin 3}
+PLYACL4    = IGNORE; {Cl; chloride in playa dust bin 4}
 PO2        = IGNORE; {HOCH2CH(OO)CH3; RO2 from propene}
 PP         = IGNORE; {HOCH2CH(OOH)CH3; Peroxide from PO2}
 PPN        = IGNORE; {CH3CH2C(O)OONO2; Peroxypropionylnitrate}
