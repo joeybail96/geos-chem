@@ -378,13 +378,17 @@ CONTAINS
        H%Br_conc_CldC = ( Br_conc * C(ind_BrSALC)          ) / denom
     ENDIF
 
-    ! Split Cl- into gas-phase (G), fine sea salt (A), coarse sea salt (C)
+    ! Split Cl- into gas-phase (G), fine sea salt (A), coarse sea salt (C), playa dust (P)
     ! Avoid div-by-zero (all three expressions use the same denominator)
-    denom = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL)
+    denom = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL) + C(ind_PLYACL1) + C(ind_PLYACL2) + C(ind_PLYACL3) + C(ind_PLYACL4)
     IF ( denom > 0.0_dp ) THEN
-       H%Cl_conc_CldG = ( Cl_conc * C(ind_HCl   )          ) / denom
-       H%Cl_conc_CldA = ( Cl_conc * C(ind_SALACL) * 0.7_dp ) / denom
-       H%Cl_conc_CldC = ( Cl_conc * C(ind_SALCCL)          ) / denom
+       H%Cl_conc_CldG  = ( Cl_conc * C(ind_HCl   )          ) / denom
+       H%Cl_conc_CldA  = ( Cl_conc * C(ind_SALACL) * 0.7_dp ) / denom
+       H%Cl_conc_CldC  = ( Cl_conc * C(ind_SALCCL)          ) / denom
+       H%Cl_conc_CldP1 = ( Cl_conc * C(ind_PLYACL1)         ) / denom
+       H%Cl_conc_CldP2 = ( Cl_conc * C(ind_PLYACL2)         ) / denom
+       H%Cl_conc_CldP3 = ( Cl_conc * C(ind_PLYACL3)         ) / denom
+       H%Cl_conc_CldP4 = ( Cl_conc * C(ind_PLYACL4)         ) / denom
     ENDIF
 
     ! Total Br- and Cl- in cloud
@@ -398,11 +402,15 @@ CONTAINS
        H%frac_Br_CldG = H%Br_conc_CldG / H%Br_conc_Cld
     ENDIF
 
-    ! Branching ratios for Br- in each of the CldA, CldG, CldC paths
+    ! Branching ratios for Cl- (this used to be Br-, but I changed to Cl-. I think comment was inaccurate) in each of the CldA, CldG, CldC, CldP paths
     IF ( H%Cl_Conc_Cld > 0.0_dp ) THEN
-       H%frac_Cl_CldA = H%Cl_conc_CldA / H%Cl_conc_Cld
-       H%frac_Cl_CldC = H%Cl_conc_CldC / H%Cl_conc_Cld
-       H%frac_Cl_CldG = H%Cl_conc_CldG / H%Cl_conc_Cld
+       H%frac_Cl_CldA  = H%Cl_conc_CldA  / H%Cl_conc_Cld
+       H%frac_Cl_CldC  = H%Cl_conc_CldC  / H%Cl_conc_Cld
+       H%frac_Cl_CldG  = H%Cl_conc_CldG  / H%Cl_conc_Cld
+       H%frac_Cl_CldP1 = H%Cl_conc_CldP1 / H%Cl_conc_Cld
+       H%frac_Cl_CldP2 = H%Cl_conc_CldP2 / H%Cl_conc_Cld
+       H%frac_Cl_CldP3 = H%Cl_conc_CldP3 / H%Cl_conc_Cld
+       H%frac_Cl_CldP4 = H%Cl_conc_CldP4 / H%Cl_conc_Cld      
     ENDIF
 
     !=======================================================================
