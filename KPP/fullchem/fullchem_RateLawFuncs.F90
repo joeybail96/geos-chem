@@ -2712,50 +2712,36 @@ CONTAINS
         CASE (1)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU1
             ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             bin_fract = 0.007e+0_fp
         CASE (2)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU2
             ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             bin_fract = 0.0332e+0_fp
         CASE (3)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU3
             ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             bin_fract = 0.2487e+0_fp
         CASE (4)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL1
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU4
             ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             bin_fract = 0.7111e+0_fp
         CASE (5)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL2
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU5
             ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             bin_fract = 1.0000e+0_fp
         CASE (6)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL3
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU6
             ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             bin_fract = 1.0000e+0_fp
         CASE (7)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACL = ind_PLYACL4
-            ! Index referencing state_chm_mod.F90
-            ind_DST = DU7
             ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             bin_fract = 1.0000e+0_fp
     END SELECT
@@ -2766,8 +2752,8 @@ CONTAINS
     !
     ! Properties of playa dust (same as corresponding mineral dust)
     CALL N2O5_InorgOrg(                                                      &
-         H,      H%xVol(ind_DST),  0.0_dp,      H%xH2O(ind_DST),             &
-         0.0_dp, H%xRadi(ind_DST), C(ind_NITs), bin_fract*C(ind_PLYACL),     &
+         H,      H%xVol(DST_BIN),  0.0_dp,      H%xH2O(DST_BIN),             &
+         0.0_dp, H%xRadi(DST_BIN), C(ind_NITs), bin_fract*C(ind_PLYACL),     &
          gamma,  Y_ClNO2,          Rp,          SA                           )    
     !
     ! Total loss rate of N2O5 (kN2O5) on playa dust
