@@ -433,6 +433,62 @@ CONTAINS
                              r_w       = H%xRadi(12),                        &
                              conc_x    = H%Cl_conc_SSC                      )
 
+    ! Cl- molar concentration for bin 1 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 1,                                &
+                               n_x       = C(ind_PLYACL1),                   &
+                               surf_area = H%xArea(1),                       &
+                               r_w       = H%xRadi(1),                       &
+                               conc_x    = H%Cl_conc_PLYACL1                )
+
+    ! Cl- molar concentration for bin 2 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 2,                                &
+                               n_x       = C(ind_PLYACL1),                   &
+                               surf_area = H%xArea(2),                       &
+                               r_w       = H%xRadi(2),                       &
+                               conc_x    = H%Cl_conc_PLYACL2                )
+
+    ! Cl- molar concentration for bin 3 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 3,                                &
+                               n_x       = C(ind_PLYACL1),                   &
+                               surf_area = H%xArea(3),                       &
+                               r_w       = H%xRadi(3),                       &
+                               conc_x    = H%Cl_conc_PLYACL3                )
+
+    ! Cl- molar concentration for bin 4 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 4,                                &
+                               n_x       = C(ind_PLYACL1),                   &
+                               surf_area = H%xArea(4),                       &
+                               r_w       = H%xRadi(4),                       &
+                               conc_x    = H%Cl_conc_PLYACL4                )
+
+    ! Cl- molar concentration for bin 5 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 5,                                &
+                               n_x       = C(ind_PLYACL2),                   &
+                               surf_area = H%xArea(5),                       &
+                               r_w       = H%xRadi(5),                       &
+                               conc_x    = H%Cl_conc_PLYACL5                )
+
+    ! Cl- molar concentration for bin 6 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 6,                                &
+                               n_x       = C(ind_PLYACL3),                   &
+                               surf_area = H%xArea(6),                       &
+                               r_w       = H%xRadi(6),                       &
+                               conc_x    = H%Cl_conc_PLYACL6                )
+
+    ! Cl- molar concentration for bin 7 of playa aerosol after distribution from 4 to 7 bins
+    ! C(ind_PLYACLx) is discretized among 4 bins and is distributed among 7 bins similar to DST (see aerosol_mod.F90)
+    CALL Get_Halide_PlayaConc( DST_BIN   = 7,                                &
+                               n_x       = C(ind_PLYACL4),                   &
+                               surf_area = H%xArea(7),                       &
+                               r_w       = H%xRadi(7),                       &
+                               conc_x    = H%Cl_conc_PLYACL7                )
+
     ! NO3- concentration in fine sea salt aerosol
     CALL Get_Halide_SSAConc( n_x       = C(ind_NIT),                         &
                              surf_area = H%aClArea,                          &
@@ -614,6 +670,93 @@ CONTAINS
     conc_x = MAX( conc_x, 0.0_dp )
 
   END SUBROUTINE Get_Halide_SsaConc
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Transport Model                  !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: Get_Halide_PlayaConc
+!
+! !DESCRIPTION: Calculates concentration of a halide in playa dust aerosol.
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE Get_Halide_PlayaConc( DST_BIN, n_x, surf_area, r_w, conc_x )
+!
+! !USES:
+!
+    USE GcKpp_Global,  ONLY : HetState
+    USE PhysConstants, ONLY : AVO
+!
+! !INPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(IN)  :: DST_BIN    ! Corresponding dust bin (1-7)
+    REAL(dp),       INTENT(IN)  :: n_x        ! Number density     [#/cm3  ]
+    REAL(dp),       INTENT(IN)  :: surf_area  ! Surface area       [cm2/cm3]
+    REAL(dp),       INTENT(IN)  :: r_w        ! Aerosol wet radius [cm     ]
+!
+! !OUTPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(OUT) :: conc_x     ! Halide conc in playa dust [mol/L]
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! !LOCAL VARIABLES:
+!
+    REAL(dp) :: V_tot
+
+    !==================================================================
+    ! Get_Halide_PlayaConc begins here!
+    !==================================================================
+
+    ! Cloud volume (This comment was taken directly from Get_Halide_SsaConc)
+    ! I am fairly sure V_tot is supposed to be vol_aerosol / vol_air (cm3/cm3)
+    V_tot = ( surf_area * r_w / 3.0_dp ) * 1e-3_dp ! L(liq)/cm3(air)
+
+    ! Skip if we are not in cloud  (This comment was taken directly from Get_Halide_SsaConc)
+    IF ( V_tot <= 1.0e-20_dp ) THEN
+       conc_x = 0.0_dp
+       RETURN
+    ENDIF
+    
+    ! Calculate how playa dust concentrations in bin 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    SELECT CASE (DST_BIN)
+        CASE (1)
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            bin_fract = 0.007e+0_fp
+        CASE (2)
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            bin_fract = 0.0332e+0_fp
+        CASE (3)
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            bin_fract = 0.2487e+0_fp
+        CASE (4)
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            bin_fract = 0.7111e+0_fp
+        CASE (5)
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin
+            bin_fract = 1.0000e+0_fp
+        CASE (6)
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            bin_fract = 1.0000e+0_fp
+        CASE (7)
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin
+            bin_fract = 1.0000e+0_fp
+    END SELECT
+    
+    ! update number concentration of playa dust to reflect how much dust is being distributed in DST_BIN
+    n_x = bin_fract*n_x
+    
+    ! this calculation is copied directly from Get_Halide_SsaConc
+    ! calculate the molar concentration of playa dust Cl
+    ! I am concerned that this calculation is not accurate and assumes 1 molec of Cl == 1 particle of playa dust
+    conc_x = ( n_x / AVO ) / V_tot    ! mol/L
+    conc_x = MAX( conc_x, 0.0_dp )
+
+  END SUBROUTINE Get_Halide_PlayaConc
 !EOC
 !------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Transport Model                  !
