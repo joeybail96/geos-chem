@@ -2696,6 +2696,87 @@ CONTAINS
     k = kIIR1Ltd( C(ind_N2O5), C(ind_SALCCL), k )
   END FUNCTION N2O5uptkBySALCCl
 
+  FUNCTION N2O5uptkByPLYACL( H,    BIN ) RESULT( k )
+    !
+    ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols.
+    ! This reaction follows the N2O5 + Cl- channel.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: BIN            ! Dust bin (1-7)
+    REAL(dp)                   :: k              ! Rxn rate [1/s]
+    REAL(dp) :: gamma, Y_ClNO2, Rp, SA           ! local vars
+    !
+    ! Grab concentration of dust in specified bin
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 0.007e+0_fp
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU2
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 0.0332e+0_fp
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU3
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 0.2487e+0_fp
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU4
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 0.7111e+0_fp
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL2
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU5
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 1.0000e+0_fp
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL3
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU6
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 1.0000e+0_fp
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL4
+            ! Index referencing state_chm_mod.F90
+            ind_DST = DU7
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin out of 7 total dust bins (see aerosol_mod.F90 for distribution)
+            bin_fract = 1.0000e+0_fp
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Properties of playa dust (same as corresponding mineral dust)
+    CALL N2O5_InorgOrg(                                                      &
+         H,      H%xVol(ind_DST),  0.0_dp,      H%xH2O(ind_DST),             &
+         0.0_dp, H%xRadi(ind_DST), C(ind_NITs), bin_fract*C(ind_PLYACL),     &
+         gamma,  Y_ClNO2,          Rp,          SA                           )    
+    !
+    ! Total loss rate of N2O5 (kN2O5) on playa dust
+    k = Ars_L1k( H%ClearFr * SA, Rp, gamma, SR_MW(ind_N2O5) )
+    k = k * Y_ClNO2
+    !
+    ! Assume N2O5 is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_N2O5), bin_fract*C(ind_PLYA), k )
+  END FUNCTION N2O5uptkByPLYACL
+
   SUBROUTINE N2O5_InorgOrg( H,      volInorg, volOrg, H2Oinorg,              &
                             H2Oorg, Rcore,    NIT,    Cl,                    &
                             gamma,  Y_ClNO2,  rp,     areaTotal             )
