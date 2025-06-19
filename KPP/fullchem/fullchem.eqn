@@ -1732,9 +1732,13 @@ ClNO3 + SALACL = Cl2 + HNO3 :   ClNO3uptkBySALACL( State_Het );                 
 ClNO3 + SALCCL = Cl2 + HNO3 :   ClNO3uptkBySALCCL( State_Het );                                              {2018/01/22; XW}
 ClNO2 + SALACL = Cl2 + HNO2 :   ClNO2uptkBySALACL( State_Het );                                              {2018/01/22; XW}
 ClNO2 + SALCCL = Cl2 + HNO2 :   ClNO2uptkBySALCCL( State_Het );                                              {2018/01/22; XW}
-
 ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 1);                                            {}
-
+ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 2);                                            {}
+ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 3);                                            {}
+ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 4);                                            {}
+ClNO2 + PLYACL2 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 5);                                            {}
+ClNO2 + PLYACL3 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 6);                                            {}
+ClNO2 + PLYACL4 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 7);                                            {}
 ClNO2 + HCl = Cl2 + HNO2 :      ClNO2uptkByHCl( State_Het );                                                 {2018/01/22; XW}
 ClNO2 + BrSALA = BrCl + HNO2 :  ClNO2uptkByBrSALA( State_Het );                                              {2018/01/22; XW}
 ClNO2 + BrSALC = BrCl + HNO2 :  ClNO2uptkByBrSALC( State_Het );                                              {2018/01/22; XW}
