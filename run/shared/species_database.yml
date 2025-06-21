@@ -140,6 +140,65 @@ DST4_PROP: &DST4properties
   WD_KcScaleFac: [1.0, 1.0, 1.0]
   WD_RainoutEff: [1.0, 1.0, 0.0]
   WD_RainoutEff_Luo: [1.0, 0.1, 0.0]
+PLYA1_PROP: &PLYA1properties
+  DD_DustDryDep: true
+  DD_F0: 0.0
+  DD_Hstar: 0.0
+  Density: 2500.0
+  Is_Advected: true
+  Is_Aerosol: true
+  Is_DryDep: true
+  Is_WetDep: true
+  Radius: 7.3e-7
+  WD_AerScavEff: 1.0
+  WD_KcScaleFac: [1.0, 1.0, 1.0]
+  WD_RainoutEff: [1.0, 1.0, 0.0]
+  WD_RainoutEff_Luo: [1.0, 0.1, 0.0]
+PLYA2_PROP: &PLYA2properties
+  DD_DustDryDep: true
+  DD_F0: 0.0
+  DD_Hstar: 0.0
+  Density: 2650.0
+  Is_Advected: true
+  Is_Aerosol: true
+  Is_DryDep: true
+  Is_WetDep: true
+  Radius: 1.4e-6
+  WD_AerScavEff: 1.0
+  WD_CoarseAer: true
+  WD_KcScaleFac: [1.0, 1.0, 1.0]
+  WD_RainoutEff: [1.0, 1.0, 0.0]
+  WD_RainoutEff_Luo: [1.0, 0.1, 0.0]
+PLYA3_PROP: &PLYA3properties
+  DD_DustDryDep: true
+  DD_F0: 0.0
+  DD_Hstar: 0.0
+  Density: 2650.0
+  Is_Advected: true
+  Is_Aerosol: true
+  Is_DryDep: true
+  Is_WetDep: true
+  Radius: 2.4e-6
+  WD_AerScavEff: 1.0
+  WD_CoarseAer: true
+  WD_KcScaleFac: [1.0, 1.0, 1.0]
+  WD_RainoutEff: [1.0, 1.0, 0.0]
+  WD_RainoutEff_Luo: [1.0, 0.1, 0.0]
+PLYA4_PROP: &PLYA4properties
+  DD_DustDryDep: true
+  DD_F0: 0.0
+  DD_Hstar: 0.0
+  Density: 2650.0
+  Is_Advected: true
+  Is_Aerosol: true
+  Is_DryDep: true
+  Is_WetDep: true
+  Radius: 4.5e-6
+  WD_AerScavEff: 1.0
+  WD_CoarseAer: true
+  WD_KcScaleFac: [1.0, 1.0, 1.0]
+  WD_RainoutEff: [1.0, 1.0, 0.0]
+  WD_RainoutEff_Luo: [1.0, 0.1, 0.0]
 AlF1:
   << : *DST1properties
   Formula: Al
@@ -1419,6 +1478,62 @@ DSTAL4:
   << : *DST4properties
   FullName: Dust alkalinity, Reff = 4.5 microns
   MW_g: 29.0
+PLYA1:
+  << : *PLYA1properties
+  FullName: Playa Dust aerosol, Reff = 0.7 microns
+  MW_g: 29.0
+PLYA2:
+  << : *PLYA2properties
+  FullName: Playa Dust aerosol, Reff = 1.4 microns
+  MW_g: 29.0
+PLYA3:
+  << : *PLYA3properties
+  FullName: Playa Dust aerosol, Reff = 2.4 microns
+  MW_g: 29.0
+PLYA4:
+  << : *PLYA4properties
+  FullName: Playa Dust aerosol, Reff = 4.5 microns
+  MW_g: 29.0
+PLYAAL1:
+  << : *PLYA1properties
+  FullName: Playa Dust alkalinity, Reff = 0.7 microns
+  MW_g: 29.0
+PLYAAL2:
+  << : *PLYA2properties
+  FullName: Playa Dust alkalinity, Reff = 1.4 microns
+  MW_g: 29.0
+PLYAAL3:
+  << : *PLYA3properties
+  FullName: Playa Dust alkalinity, Reff = 2.4 microns
+  MW_g: 29.0
+PLYAAL4:
+  << : *PLYA4properties
+  FullName: Playa Dust alkalinity, Reff = 4.5 microns
+  MW_g: 29.0
+PLYACL1:
+  << : *PLYA1properties
+  FullName: Chloride in bin #1 playa dust aerosol
+  Is_HygroGrowth: false
+  MW_g: 35.45
+  WD_CoarseAer: true
+PLYACL2:
+  << : *PLYA2properties
+  FullName: Chloride in bin #2 playa dust aerosol
+  Is_HygroGrowth: false
+  MW_g: 35.45
+  WD_CoarseAer: true
+PLYACL3:
+  << : *PLYA3properties
+  FullName: Chloride in bin #3 playa dust aerosol
+  Is_HygroGrowth: false
+  MW_g: 35.45
+  WD_CoarseAer: true
+PLYACL4:
+  << : *PLYA4properties
+  FullName: Chloride in bin #4 playa dust aerosol
+  Is_HygroGrowth: false
+  MW_g: 35.45
+  WD_CoarseAer: true
 DummyCH4trop:
   << : *CH4properties
   Background_VV: 1.8e-6
