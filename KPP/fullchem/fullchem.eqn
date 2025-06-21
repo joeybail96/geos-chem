@@ -495,6 +495,29 @@ SO2  + SALCAL + O3  = SO4s - SALCAL      : K_MT(4);
 HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
+// Playa Dust
+SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(7);
+HCl  + PLYAAL1       = PLYACL1           : K_MT(8);
+HNO3 + PLYAAL1       = NITs              : K_MT(9); 
+SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(10);
+HCl  + PLYAAL1       = PLYACL1           : K_MT(11);
+HNO3 + PLYAAL1       = NITs              : K_MT(12); 
+SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(13);
+HCl  + PLYAAL1       = PLYACL1           : K_MT(14);
+HNO3 + PLYAAL1       = NITs              : K_MT(15); 
+SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(16);
+HCl  + PLYAAL1       = PLYACL1           : K_MT(17);
+HNO3 + PLYAAL1       = NITs              : K_MT(18); 
+SO2  + PLYAAL2 + O3  = SO4s - PLYAAL2    : K_MT(19);
+HCl  + PLYAAL2       = PLYACL2           : K_MT(20);
+HNO3 + PLYAAL2       = NITs              : K_MT(21); 
+SO2  + PLYAAL3 + O3  = SO4s - PLYAAL3    : K_MT(22);
+HCl  + PLYAAL3       = PLYACL3           : K_MT(23);
+HNO3 + PLYAAL3       = NITs              : K_MT(24); 
+SO2  + PLYAAL4 + O3  = SO4s - PLYAAL4    : K_MT(25);
+HCl  + PLYAAL4       = PLYACL4           : K_MT(26);
+HNO3 + PLYAAL4       = NITs              : K_MT(27); 
+//
 // Cloud
 // S(IV) --> S(VI)
 SO2 + H2O2          = SO4                : K_CLD(1);
@@ -1747,6 +1770,13 @@ HOCl + HCl = Cl2 + H2O :        HOClUptkByHCl( State_Het );                     
 HOCl + HBr = BrCl + H2O :       HOClUptkByHBr( State_Het );                                                  {2014/02/03; Eastham2014; SDE}
 HOCl + SALACL = Cl2 + H2O :     HOClUptkBySALACL( State_Het );                                               {2018/01/22; XW}
 HOCl + SALCCL = Cl2 + H2O :     HOClUptkBySALCCL( State_Het );                                               {2018/01/22; XW}
+HOCl + PLYACL1 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 1 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 2 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 3 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 4 );                                            {}
+HOCl + PLYACL2 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 5 );                                            {}
+HOCl + PLYACL3 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 6 );                                            {}
+HOCl + PLYACL4 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 7 );                                            {}
 HOCl + SO2 = SO4 + HCl :        HOClUptkByHSO3m( State_Het ) + HOClUptkBySO3mm( State_Het ) + SRHOCl;        {2023/01/30; Add SRHOCL, BA; 2018/11/08; XW; June 6, 2021, MSL}
 HOBr + HBr = Br2 + H2O :        HOBrUptkByHBr( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
 HOBr + HCl = BrCl + H2O :       HOBrUptkByHCl( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
