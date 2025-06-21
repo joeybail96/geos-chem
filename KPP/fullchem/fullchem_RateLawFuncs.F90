@@ -2387,6 +2387,101 @@ CONTAINS
     k = kIIR1Ltd( C(ind_HOCl), C(ind_SALCCL), k )
   END FUNCTION HOClUptkBySALCCL
 
+
+
+  FUNCTION HOClUptkByPLYACL( H ) RESULT( k )
+    !
+    ! Computes the uptake rate [1/s] for the HOCl + PLYACL reaction.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: DST_BIN        ! Dust bin (1-7)
+    REAL(dp)                   :: k              ! rxn rate [1/s]
+    !
+    REAL(dp) :: area,  branch, branchCl
+    REAL(dp) :: dummy, gamma,  srMw
+    !
+    k    = 0.0_dp
+    srMw = SR_MW(ind_HOCl)
+    !
+    ! Grab indices used to locate playa dust concentrations and mineral dust physical properties
+    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    ! Grab the fraction of total cloud chloride for each playa dust bin 1-4 and multiply by bin_fract to get the redistributed fraction when playa dust split among 7 bins
+    SELECT CASE (BIN)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.007e+0_fp
+            ! fraction of Cl from DST_BIN1 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.0332e+0_fp
+            ! fraction of Cl from DST_BIN2 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.2487e+0_fp
+            ! fraction of Cl from DST_BIN3 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin (see aerosol_mod.F90)
+            bin_fract = 0.7111e+0_fp
+            ! fraction of Cl from DST_BIN4 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN5 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN6 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACL = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin  (see aerosol_mod.F90)
+            bin_fract = 1.0000e+0_fp
+            ! fraction of Cl from DST_BIN7 playa dust in clouds (see fullchem_HetStateFuncs)
+            frac_Cl_CldP = bin_fract*H%frac_Cl_CldP1
+    END SELECT
+    !
+    ! Compute HOCl + PLYACL uptake in tropospheric liquid cloud
+    IF ( .not. H%stratBox ) THEN
+       !
+       ! HOCl + PLYACL uptake coeff [1] & branch ratio [1], liquid path
+       CALL Gam_HOCl_Cld( H, gamma, branchCl, dummy )
+       branch = branchCl * frac_Cl_CldP
+       !
+       ! HOCl + HCl uptake rate [1/s] accounting for cloud fraction
+       k = k + CloudHet( H, srMw, gamma, 0.0_dp, branch, 0.0_dp )
+    ENDIF
+    !
+    ! Compute HOCl + PLYACL uptake rate [1/s] on acidic aerosols in clear-sky
+    IF ( H%SSC_is_Acid ) THEN
+       CALL Gam_HOCl_Aer( H, H%xRadi(SSC), H%H_conc_SSC, H%Cl_conc_SSC, gamma )
+       area = H%ClearFr * H%xArea(SSC) * H%f_Acid_SSC
+       k    = k + Ars_L1k( area, H%xRadi(SSC), gamma, srMw )
+    ENDIF
+    !
+    ! Assume HOCl is limiting, so recompute reaction rate accordingly
+    k = kIIR1Ltd( C(ind_HOCl), C(ind_SALCCL), k )
+  END FUNCTION HOClUptkBySALCCL
+
+
+
   FUNCTION HOClUptkByHSO3m( H ) RESULT( k )
     !
     ! Computes the uptake rate [1/s] for the HOCl + HSO3- reaction.
