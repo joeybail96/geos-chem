@@ -1268,6 +1268,7 @@ CONTAINS
     WERADIUS  => State_Chm%WetAeroRadi  ! Wet Aerosol Radius [cm]
     WTAREA    => State_Chm%WetAeroArea  ! Wet Aerosol Area   [cm2/cm3]
     DUST      => State_Chm%SoilDust     ! Dust aerosol Conc. [kg/m3]
+    PLYADUST  => State_Chm%PlyaDust     ! Playa dust aerosol conc. [kg/m3]
 
     ! Index for dust in ODAER and LUT arrays
     IDST      = 8
@@ -1280,6 +1281,15 @@ CONTAINS
     MSDENS(5) = 2650.0_fp
     MSDENS(6) = 2650.0_fp
     MSDENS(7) = 2650.0_fp
+
+    ! Playa dust density
+    PLYA_DENS(1) = 2500.0_fp
+    PLYA_DENS(2) = 2500.0_fp
+    PLYA_DENS(3) = 2500.0_fp
+    PLYA_DENS(4) = 2500.0_fp
+    PLYA_DENS(5) = 2650.0_fp
+    PLYA_DENS(6) = 2650.0_fp
+    PLYA_DENS(7) = 2650.0_fp
 
     ! Critical RH, above which heteorogeneous chem takes place (tmf, 6/14/07)
     CRITRH = 35.0e+0_fp   ! [%]
@@ -1405,20 +1415,29 @@ CONTAINS
        ! Skip non-chemistry boxes
        IF ( .not. State_Met%InChemGrid(I,J,L) ) CYCLE
 
-       ERADIUS(I,J,L,N) = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
+       ERADIUS(I,J,L,N)    = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
+       
+       TAREA(I,J,L,N)      = 3.e+0_fp / ERADIUS(I,J,L,N) * &
+                             DUST(I,J,L,N) / MSDENS(N)
 
-       TAREA(I,J,L,N)   = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                          DUST(I,J,L,N) / MSDENS(N)
+       TAREA(I,J,L,N+NAER) = 3.e+0_fp / ERADIUS(I,J,L,N) * &
+                             PLYA_DUST(I,J,L,N) / PLYA_DENS(N)
 
        ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
        ! Get RH
-       XRH                = State_Met%RH( I, J, L )  ! [%]
-       WTAREA(I,J,L, N)   = 0.e+0_fp
-       WERADIUS(I,J,L, N) = 0.e+0_fp
+       XRH                   = State_Met%RH( I, J, L )  ! [%]
+       WTAREA(I,J,L, N)      = 0.e+0_fp
+       WERADIUS(I,J,L, N)    = 0.e+0_fp
+       ! WTAREA and WERADIUS for playa dust
+       WTAREA(I,J,L, N+NAER)   = 0.e+0_fp
+       WERADIUS(I,J,L, N+NAER) = 0.e+0_fp
 
        IF ( XRH >= CRITRH ) THEN
           WTAREA(I,J,L, N)   = TAREA(I,J,L, N)
           WERADIUS(I,J,L, N) = ERADIUS(I,J,L, N)
+          ! WTAREA and WERADIUS for playa dust
+          WTAREA(I,J,L, N+NAER)   = 0.e+0_fp
+          WERADIUS(I,J,L, N+NAER) = 0.e+0_fp
        ENDIF
 
     ENDDO
