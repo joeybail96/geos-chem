@@ -163,6 +163,10 @@ MODULE State_Chm_Mod
      REAL(fp), POINTER :: QLxpHCloud   (:,:,:)  !
      REAL(fp), POINTER :: SoilDust   (:,:,:,:)  ! Soil dust [kg/m3]
      REAL(fp), POINTER :: ORVCsesq     (:,:,:)  ! Sesquiterpenes mass [kg/box]
+     REAL(fp), POINTER :: PlyaDust   (:,:,:,:)  ! Playa dust [kg/m3]
+     REAL(fp), POINTER :: PlyaAlk    (:,:,:,:)  ! Playa alkalinity [-]
+     REAL(fp), POINTER :: PlyaCl     (:,:,:,:)  ! Playa chloride [kg/m3]
+
 
      !-----------------------------------------------------------------------
      ! Fields for nitrogen deposition
@@ -546,6 +550,9 @@ CONTAINS
     State_Chm%BOH               => NULL()
     State_Chm%BCl               => NULL()
     State_Chm%SFC_CH4           => NULL()
+    State_Chm%PlyaDust          => NULL()
+    State_Chm%PlyaAlk           => NULL()
+    State_Chm%PlyaCl            => NULL()
 
     State_Chm%UCX_REGRID        => NULL()
     State_Chm%UCX_PLEVS         => NULL()
@@ -725,7 +732,7 @@ CONTAINS
 
     ! Initialize
     RC         =  GC_SUCCESS
-    nAerosol   =  NDUST + NAER
+    nAerosol   =  NDUST + NAER + NPLYA
     Ptr2data   => NULL()
     ThisSpc    => NULL()
     errMsg     =  ''
@@ -1053,7 +1060,11 @@ CONTAINS
                     'AeroAreaMDUST7   ', 'AeroAreaSULF     ',                &
                     'AeroAreaBC       ', 'AeroAreaOC       ',                &
                     'AeroAreaSSA      ', 'AeroAreaSSC      ',                &
-                    'AeroAreaBGSULF   ', 'AeroAreaICEI     '                /)
+                    'AeroAreaBGSULF   ', 'AeroAreaICEI     ',                &
+                    'AeroAreaPDUST1   ', 'AeroAreaPDUST2   ',                &
+                    'AeroAreaPDUST3   ', 'AeroAreaPDUST4   ',                &
+                    'AeroAreaPDUST5   ', 'AeroAreaPDUST6   ',                &
+                    'AeroAreaPDUST7   '                                    /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1083,7 +1094,11 @@ CONTAINS
                     'AeroRadiMDUST7   ', 'AeroRadiSULF     ',                &
                     'AeroRadiBC       ', 'AeroRadiOC       ',                &
                     'AeroRadiSSA      ', 'AeroRadiSSC      ',                &
-                    'AeroRadiBGSULF   ', 'AeroRadiICEI     '               /)
+                    'AeroRadiBGSULF   ', 'AeroRadiICEI     ',                &               
+                    'AeroRadiPDUST1   ', 'AeroRadiPDUST2   ',                &
+                    'AeroRadiPDUST3   ', 'AeroRadiPDUST4   ',                &
+                    'AeroRadiPDUST5   ', 'AeroRadiPDUST6   ',                &
+                    'AeroRadiPDUST7   '                                    /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1113,7 +1128,11 @@ CONTAINS
                     'WetAeroAreaMDUST7', 'WetAeroAreaSULF  ',                &
                     'WetAeroAreaBC    ', 'WetAeroAreaOC    ',                &
                     'WetAeroAreaSSA   ', 'WetAeroAreaSSC   ',                &
-                    'WetAeroAreaBGSULF', 'WetAeroAreaICEI  '               /)
+                    'WetAeroAreaBGSULF', 'WetAeroAreaICEI  ',                &               
+                    'WetAeroAreaPDUST1', 'WetAeroAreaPDUST2',                &
+                    'WetAeroAreaPDUST3', 'WetAeroAreaPDUST4',                &
+                    'WetAeroAreaPDUST5', 'WetAeroAreaPDUST6',                &
+                    'WetAeroAreaPDUST7'                                    /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1143,7 +1162,11 @@ CONTAINS
                     'WetAeroRadiMDUST7', 'WetAeroRadiSULF  ',                &
                     'WetAeroRadiBC    ', 'WetAeroRadiOC    ',                &
                     'WetAeroRadiSSA   ', 'WetAeroRadiSSC   ',                &
-                    'WetAeroRadiBGSULF', 'WetAeroRadiICEI  '               /)
+                    'WetAeroRadiBGSULF', 'WetAeroRadiICEI  ',                &               
+                    'WetAeroRadiPDUST1', 'WetAeroRadiPDUST2   ',             &
+                    'WetAeroRadiPDUST3', 'WetAeroRadiPDUST4   ',             &
+                    'WetAeroRadiPDUST5', 'WetAeroRadiPDUST6   ',             &
+                    'WetAeroRadiPDUST7'                                    /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1173,7 +1196,11 @@ CONTAINS
                     'AeroH2OMDUST7    ', 'AeroH2OSNA       ',                &
                     'AeroH2OBC        ', 'AeroH2OOC        ',                &
                     'AeroH2OSSA       ', 'AeroH2OSSC       ',                &
-                    'AeroH2OBGSULF    ', 'AeroH2OICEI      '               /)
+                    'AeroH2OBGSULF    ', 'AeroH2OICEI      ',                &               
+                    'AeroH2OPDUST1    ', 'AeroH2OPDUST2    ',                &
+                    'AeroH2OPDUST3    ', 'AeroH2OPDUST4    ',                &
+                    'AeroH2OPDUST5    ', 'AeroH2OPDUST6    ',                &
+                    'AeroH2OPDUST7    '                                    /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1223,6 +1250,97 @@ CONTAINS
              RETURN
           ENDIF
        ENDDO
+
+       !---------------------------------------------------------------------
+       ! PlyaDust
+       !---------------------------------------------------------------------
+       fieldId(1) = 'PlyaDUST1'
+       fieldId(2) = 'PlyaDUST2'
+       fieldId(3) = 'PlyaDUST3'
+       fieldId(4) = 'PlyaDUST4'
+       fieldId(5) = 'PlyaDUST5'
+       fieldId(6) = 'PlyaDUST6'
+       fieldId(7) = 'PlyaDUST7'
+
+       ! Allocate and register each field individually
+       DO N = 1, NPLYA
+          CALL Init_and_Register(                                               &
+               Input_Opt  = Input_Opt,                                          &
+               State_Chm  = State_Chm,                                          &
+               State_Grid = State_Grid,                                         &
+               chmId      = TRIM( fieldId(N) ),                                 &
+               Ptr2Data   = State_Chm%PlyaDust,                                 &
+               nSlots     = NPLYA,                                              &
+               nCat       = N,                                                  &
+               RC         = RC                                                 )
+
+          IF ( RC /= GC_SUCCESS ) THEN
+             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
+             CALL GC_Error( errMsg, RC, thisLoc )
+             RETURN
+          ENDIF
+       ENDDO
+
+       !---------------------------------------------------------------------
+       ! PlyaDust Alkalinity
+       !---------------------------------------------------------------------
+       fieldId(1) = 'PlyaAlk1'
+       fieldId(2) = 'PlyaAlk2'
+       fieldId(3) = 'PlyaAlk3'
+       fieldId(4) = 'PlyaAlk4'
+       fieldId(5) = 'PlyaAlk5'
+       fieldId(6) = 'PlyaAlk6'
+       fieldId(7) = 'PlyaAlk7'
+
+       ! Allocate and register each field individually
+       DO N = 1, NPLYA
+          CALL Init_and_Register(                                               &
+               Input_Opt  = Input_Opt,                                          &
+               State_Chm  = State_Chm,                                          &
+               State_Grid = State_Grid,                                         &
+               chmId      = TRIM( fieldId(N) ),                                 &
+               Ptr2Data   = State_Chm%PlyaAlk,                                  &
+               nSlots     = NPLYA,                                              &
+               nCat       = N,                                                  &
+               RC         = RC                                                 )
+
+          IF ( RC /= GC_SUCCESS ) THEN
+             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
+             CALL GC_Error( errMsg, RC, thisLoc )
+             RETURN
+          ENDIF
+       ENDDO
+
+       !---------------------------------------------------------------------
+       ! PlyaDust Chloride
+       !---------------------------------------------------------------------
+       fieldId(1) = 'PlyaCl1'
+       fieldId(2) = 'PlyaCl2'
+       fieldId(3) = 'PlyaCl3'
+       fieldId(4) = 'PlyaCl4'
+       fieldId(5) = 'PlyaCl5'
+       fieldId(6) = 'PlyaCl6'
+       fieldId(7) = 'PlyaCl7'
+
+       ! Allocate and register each field individually
+       DO N = 1, NPLYA
+          CALL Init_and_Register(                                               &
+               Input_Opt  = Input_Opt,                                          &
+               State_Chm  = State_Chm,                                          &
+               State_Grid = State_Grid,                                         &
+               chmId      = TRIM( fieldId(N) ),                                 &
+               Ptr2Data   = State_Chm%PlyaCl,                                  &
+               nSlots     = NPLYA,                                              &
+               nCat       = N,                                                  &
+               RC         = RC                                                 )
+
+          IF ( RC /= GC_SUCCESS ) THEN
+             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
+             CALL GC_Error( errMsg, RC, thisLoc )
+             RETURN
+          ENDIF
+       ENDDO
+
 
        !---------------------------------------------------------------------
        ! AClArea, xnw 1/20/18
@@ -3311,6 +3429,27 @@ CONTAINS
        State_Chm%SoilDust => NULL()
     ENDIF
 
+    IF ( ASSOCIATED( State_Chm%PlyaDust ) ) THEN
+       DEALLOCATE( State_Chm%PlyaDust, STAT=RC )
+       CALL GC_CheckVar( 'State_Chm%PlyaDust', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+       State_Chm%PlyaDust => NULL()
+    ENDIF
+
+    IF ( ASSOCIATED( State_Chm%PlyaAlk ) ) THEN
+       DEALLOCATE( State_Chm%PlyaAlk, STAT=RC )
+       CALL GC_CheckVar( 'State_Chm%PlyaAlk', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+       State_Chm%PlyaAlk => NULL()
+    ENDIF
+
+    IF ( ASSOCIATED( State_Chm%PlyaCl ) ) THEN
+       DEALLOCATE( State_Chm%PlyaCl, STAT=RC )
+       CALL GC_CheckVar( 'State_Chm%PlyaCl', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+       State_Chm%PlyaCl => NULL()
+    ENDIF
+
     IF ( ASSOCIATED( State_Chm%WetAeroArea ) ) THEN
        DEALLOCATE( State_Chm%WetAeroArea, STAT=RC )
        CALL GC_CheckVar( 'State_Chm%WetAeroArea', 2, RC )
@@ -4119,6 +4258,41 @@ CONTAINS
           IF ( isUnits ) Units = 'cm2 cm-3'
           IF ( isRank  ) Rank  = 3
 
+       CASE ( 'AEROAREAPDUST1' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (0.15 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST2' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (0.25 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST3' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (0.40 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST4' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (0.80 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST5' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (1.5 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST6' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (2.5 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROAREAPDUST7' )
+          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (4.0 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
        CASE ( 'AERORADIMDUST1' )
           IF ( isDesc  ) Desc  = &
                'Dry aerosol radius for mineral dust (0.15 um)'
@@ -4195,6 +4369,48 @@ CONTAINS
           IF ( isUnits ) Units = 'cm'
           IF ( isRank  ) Rank  = 3
 
+       CASE ( 'AERORADIPDUST1' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (0.15 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST2' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (0.25 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST3' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (0.40 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST4' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (0.80 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST5' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (1.5 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST6' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (2.5 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AERORADIPDUST7' )
+          IF ( isDesc  ) Desc  = &
+               'Dry aerosol radius for playa dust (4.0 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
        CASE ( 'WETAEROAREAMDUST1' )
           IF ( isDesc  ) Desc  = 'Wet aerosol area for mineral dust (0.15 um)'
           IF ( isUnits ) Units = 'cm2 cm-3'
@@ -4265,6 +4481,41 @@ CONTAINS
        CASE ( 'WETAEROAREAICEI' )
           IF ( isDesc  ) Desc  = 'Wet aerosol area for irregular ice cloud' &
                                  // ' (Mischenko)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST1' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (0.15 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST2' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (0.25 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST3' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (0.4 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST4' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (0.8 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST5' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (1.5 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST6' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (2.5 um)'
+          IF ( isUnits ) Units = 'cm2 cm-3'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAEROAREAPDUST7' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (4.0 um)'
           IF ( isUnits ) Units = 'cm2 cm-3'
           IF ( isRank  ) Rank  = 3
 
@@ -4365,6 +4616,41 @@ CONTAINS
           IF ( isUnits ) Units = 'cm'
           IF ( isRank  ) Rank  = 3
 
+       CASE ( 'WETAERORADIPDUST1' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (0.15 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST2' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (0.25 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST3' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (0.4 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST4' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (0.8 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST5' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (1.5 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST6' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (2.5 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'WETAERORADIPDUST7' )
+          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (4.0 um)'
+          IF ( isUnits ) Units = 'cm'
+          IF ( isRank  ) Rank  = 3
+
        CASE ( 'AEROH2OMDUST1' )
           IF ( isDesc  ) Desc  = 'Aerosol H2O content for mineral dust (0.15 um)'
           IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
@@ -4438,6 +4724,41 @@ CONTAINS
           IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
           IF ( isRank  ) Rank  = 3
 
+       CASE ( 'AEROH2OPDUST1' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (0.15 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST2' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (0.25 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST3' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (0.4 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST4' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (0.8 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST5' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (1.5 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST6' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (2.5 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
+       CASE ( 'AEROH2OPDUST7' )
+          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (4.0 um)'
+          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
+          IF ( isRank  ) Rank  = 3
+
        CASE ( 'SOILDUST1' )
           IF ( isDesc  ) Desc  = 'Dust aerosol concentration in bin 1'
           IF ( isUnits ) Units = 'kg/m3'
@@ -4470,6 +4791,111 @@ CONTAINS
 
        CASE ( 'SOILDUST7' )
           IF ( isDesc  ) Desc  = 'Dust aerosol concentration in bin 7'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST1' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 1'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST2' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 2'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST3' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 3'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST4' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 4'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST5' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 5'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST6' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 6'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYADUST7' )
+          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 7'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK1' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 1'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK2' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 2'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK3' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 3'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK4' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 4'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK5' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 5'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK6' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 6'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYAALK7' )
+          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 7'
+          IF ( isUnits ) Units = '-'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL1' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 1'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL2' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 2'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL3' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 3'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL4' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 4'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL5' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 5'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL6' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 6'
+          IF ( isUnits ) Units = 'kg/m3'
+          IF ( isRank  ) Rank  =  3
+
+       CASE ( 'PLYACL7' )
+          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 7'
           IF ( isUnits ) Units = 'kg/m3'
           IF ( isRank  ) Rank  =  3
 
