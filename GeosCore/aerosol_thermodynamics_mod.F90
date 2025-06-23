@@ -1,4 +1,4 @@
-!------------------------------------------------------------------------------
+ !------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Transport Model                  !
 !------------------------------------------------------------------------------
 !BOP
@@ -186,12 +186,17 @@ CONTAINS
     INTEGER, SAVE            :: id_NIT,  id_SALA, id_SO4
     INTEGER, SAVE            :: id_HMS ! jmm 12/5/18
     INTEGER, SAVE            :: id_SALACL, id_HCL, id_SALCCL
+    INTEGER, SAVE            :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
     INTEGER, SAVE            :: id_SO4s, id_NITs, id_SALC
+    INTEGER, SAVE            :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
     INTEGER, SAVE            :: id_SALAAL, id_SALCAL
+    INTEGER, SAVE            :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
 
     ! Scalars
     INTEGER                  :: I,    J,    L,    N,  NM
     REAL(fp)                 :: ANO3, GNO3, ACL, GCL
+    REAL(fp)                 :: SALCCL, PLYACL1, PLYACL3, PLYACL3, PLYACL4
+    REAL(fp)                 :: ACL_frSALCCL, ACL_frPLYACL1, ACL_frPLYACL2, ACL_frPLYACL3, ACL_frPLYACL4
     REAL(f8)                 :: RHI,  TEMPI, P_Pa
     REAL(fp)                 :: TCA,  TMG,  TK,   HNO3_DEN
     REAL(fp)                 :: TNA,  TCL,  TNH3, TNH4
@@ -203,6 +208,10 @@ CONTAINS
     REAL(f8)                 :: WI(NCOMPA)
     REAL(f8)                 :: WT(NCOMPA)
     REAL(f8)                 :: AlkR !Alkalinity % depleted
+    REAL(f8)                 :: Plya1_AlkR ! playa bin 1 alkalinity % depleted
+    REAL(f8)                 :: Plya2_AlkR ! playa bin 2 alkalinity % depleted
+    REAL(f8)                 :: Plya3_AlkR ! playa bin 3 alkalinity % depleted
+    REAL(f8)                 :: Plya4_AlkR ! playa bin 4 alkalinity % depleted
     REAL(f8)                 :: Qk, PHCl, F_HCl, F_HNO3
     REAL(f8)                 :: Hplus !H+ in SALC,mol/m3
     REAL(f8)                 :: Dcs !SALC diameter, m
@@ -280,22 +289,34 @@ CONTAINS
     IF ( FIRST ) THEN
 
        ! Make sure certain tracers are defined
-       id_HNO3   = Ind_('HNO3'  )
-       id_NH3    = Ind_('NH3'   )
-       id_NH4    = Ind_('NH4'   )
-       id_NIT    = Ind_('NIT'   )
-       id_SALA   = Ind_('SALA'  )
-       id_SO4    = Ind_('SO4'   )
-       id_HMS    = Ind_('HMS'   )
-       id_SALACL = Ind_('SALACL')
-       id_HCL    = Ind_('HCl'   )
-       id_SALC   = Ind_('SALC'  )
-       id_SALCCL = Ind_('SALCCL')
-       !id_NH4s  = Ind_('NH4s'  )
-       id_NITs   = Ind_('NITs'  )
-       id_SO4s   = Ind_('SO4s'  )
-       id_SALAAL = Ind_('SALAAL')
-       id_SALCAL = Ind_('SALCAL')
+       id_HNO3    = Ind_('HNO3'  )
+       id_NH3     = Ind_('NH3'   )
+       id_NH4     = Ind_('NH4'   )
+       id_NIT     = Ind_('NIT'   )
+       id_SALA    = Ind_('SALA'  )
+       id_SO4     = Ind_('SO4'   )
+       id_HMS     = Ind_('HMS'   )
+       id_SALACL  = Ind_('SALACL')
+       id_HCL     = Ind_('HCl'   )
+       id_SALC    = Ind_('SALC'  )
+       id_PLYA1   = Ind_('PLYA1' )
+       id_PLYA2   = Ind_('PLYA2' )
+       id_PLYA3   = Ind_('PLYA3' )
+       id_PLYA4   = Ind_('PLYA4' )
+       id_SALCCL  = Ind_('SALCCL')
+       id_PLYACL1 = Ind_('PLYACL1')
+       id_PLYACL2 = Ind_('PLYACL2')
+       id_PLYACL3 = Ind_('PLYACL3')
+       id_PLYACL4 = Ind_('PLYACL4')
+       !id_NH4s   = Ind_('NH4s'  )
+       id_NITs    = Ind_('NITs'  )
+       id_SO4s    = Ind_('SO4s'  )
+       id_SALAAL  = Ind_('SALAAL')
+       id_SALCAL  = Ind_('SALCAL')
+       id_PLYAAL1 = Ind_('PLYAAL1')
+       id_PLYAAL2 = Ind_('PLYAAL2')
+       id_PLYAAL3 = Ind_('PLYAAL3')
+       id_PLYAAL4 = Ind_('PLYAAL4')
 
        ! Set a flag if HMS is defined
        IS_HMS    = ( id_HMS > 0 )
@@ -341,8 +362,48 @@ CONTAINS
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
+       IF ( id_PLYA1 <= 0 ) THEN
+          ErrMsg = 'PLYA1 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYA2 <= 0 ) THEN
+          ErrMsg = 'PLYA2 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYA3 <= 0 ) THEN
+          ErrMsg = 'PLYA3 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYA4 <= 0 ) THEN
+          ErrMsg = 'PLYA4 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
        IF ( id_SALCCL <= 0 ) THEN
           ErrMsg = 'SALCCL is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYACL1 <= 0 ) THEN
+          ErrMsg = 'PLYACL1 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYACL2 <= 0 ) THEN
+          ErrMsg = 'PLYACL2 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYACL3 <= 0 ) THEN
+          ErrMsg = 'PLYACL3 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYACL4 <= 0 ) THEN
+          ErrMsg = 'PLYACL4 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
@@ -368,6 +429,26 @@ CONTAINS
        ENDIF
        IF ( id_SALCAL <= 0 ) THEN
           ErrMsg = 'SALCAL is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYAAL1 <= 0 ) THEN
+          ErrMsg = 'PLYAAL1 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYAAL2 <= 0 ) THEN
+          ErrMsg = 'PLYAAL2 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYAAL3 <= 0 ) THEN
+          ErrMsg = 'PLYAAL3 is an undefined species!'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( id_PLYAAL4 <= 0 ) THEN
+          ErrMsg = 'PLYAAL4 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
@@ -549,31 +630,40 @@ CONTAINS
 
           ! Zero PRIVATE variables that get assigned in this loop over NM.
           ! This will prevent values from prior iterations hanging around.
-          ACl       = 0.0_fp
-          AERLIQ    = 0.0_f8
-          AlkR      = 0.0_fp
-          ANO3      = 0.0_fp
-          F_HNO3    = 0.0_fp
-          F_HCl     = 0.0_fp
-          GAS       = 0.0_fp
-          GCl       = 0.0_fp
-          GNO3      = 0.0_fp
-          HNO3_UGM3 = 0.0_fp
-          OTHER     = 0.0_f8
-          Qk        = 0.0_f8
-          SCASI     = ''
-          TCa       = 0.0_fp
-          TCl       = 0.0_fp
-          TK        = 0.0_fp
-          TMg       = 0.0_fp
-          TNa       = 0.0_fp
-          TNH3      = 0.0_fp
-          TNH4      = 0.0_fp
-          TNIT      = 0.0_fp
-          TNO3      = 0.0_fp
-          TSO4      = 0.0_fp
-          WI        = 0.0_fp
-          WT        = 0.0_fp
+          ACl           = 0.0_fp
+          ACL_frSALCCL  = 0.0_fp
+          ACL_frPLYACL1 = 0.0_fp
+          ACL_frPLYACL2 = 0.0_fp
+          ACL_frPLYACL3 = 0.0_fp
+          ACL_frPLYACL4 = 0.0_fp
+          AERLIQ        = 0.0_f8
+          AlkR          = 0.0_fp
+          ANO3          = 0.0_fp
+          F_HNO3        = 0.0_fp
+          F_HCl         = 0.0_fp
+          GAS           = 0.0_fp
+          GCl           = 0.0_fp
+          GNO3          = 0.0_fp
+          HNO3_UGM3     = 0.0_fp
+          OTHER         = 0.0_f8
+          Plya1_AlkR    = 0.0_f8
+          Plya2_AlkR    = 0.0_f8
+          Plya3_AlkR    = 0.0_f8
+          Plya4_AlkR    = 0.0_f8
+          Qk            = 0.0_f8
+          SCASI         = ''
+          TCa           = 0.0_fp
+          TCl           = 0.0_fp
+          TK            = 0.0_fp
+          TMg           = 0.0_fp
+          TNa           = 0.0_fp
+          TNH3          = 0.0_fp
+          TNH4          = 0.0_fp
+          TNIT          = 0.0_fp
+          TNO3          = 0.0_fp
+          TSO4          = 0.0_fp
+          WI            = 0.0_fp
+          WT            = 0.0_fp
 
           !-----------------------------------------------
           ! Compute Alkalinity % consumed in the grid box
@@ -596,6 +686,40 @@ CONTAINS
                 AlkR = MAX( (1.0_fp-AlkR), CONMIN)
              ELSE
                 AlkR = 1.0_fp
+             ENDIF
+
+             ! Calculate alkalinity consumed in grid box for each plya bin
+             ! BIN 1
+             IF (Spc(id_PLYAAL1)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_PLYA1)%Conc(I,J,L) .GT. CONMIN) THEN
+                Plya1_AlkR = Spc(id_PLYAAL1)%Conc(I,J,L) / Spc(id_PLYA1)%Conc(I,J,L)
+                Plya1_AlkR = MAX( (1.0_fp-Plya1_AlkR), CONMIN)
+             ELSE
+                Plya1_AlkR = 1.0_fp
+             ENDIF
+             ! BIN 2
+             IF (Spc(id_PLYAAL2)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_PLYA2)%Conc(I,J,L) .GT. CONMIN) THEN
+                Plya2_AlkR = Spc(id_PLYAAL2)%Conc(I,J,L) / Spc(id_PLYA2)%Conc(I,J,L)
+                Plya2_AlkR = MAX( (1.0_fp-Plya2_AlkR), CONMIN)
+             ELSE
+                Plya2_AlkR = 1.0_fp
+             ENDIF
+             ! BIN 3
+             IF (Spc(id_PLYAAL3)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_PLYA3)%Conc(I,J,L) .GT. CONMIN) THEN
+                Plya3_AlkR = Spc(id_PLYAAL3)%Conc(I,J,L) / Spc(id_PLYA3)%Conc(I,J,L)
+                Plya3_AlkR = MAX( (1.0_fp-Plya3_AlkR), CONMIN)
+             ELSE
+                Plya3_AlkR = 1.0_fp
+             ENDIF
+             ! BIN 4
+             IF (Spc(id_PLYAAL4)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_PLYA4)%Conc(I,J,L) .GT. CONMIN) THEN
+                Plya4_AlkR = Spc(id_PLYAAL4)%Conc(I,J,L) / Spc(id_PLYA4)%Conc(I,J,L)
+                Plya4_AlkR = MAX( (1.0_fp-Plya4_AlkR), CONMIN)
+             ELSE
+                Plya4_AlkR = 1.0_fp
              ENDIF
           ENDIF
 
@@ -658,10 +782,28 @@ CONTAINS
           ELSE
 
              ! Changed 0.378 to 0.3061 (dry mass fraction of seasalt)
-             TNA = Spc(id_SALC)%Conc(I,J,L) * 0.3061_fp * 1.0e+3_fp           &
+             TNA = Spc(id_SALC)%Conc(I,J,L) * 0.3061_fp * 1.0e+3_fp             &
                    * AlkR / ( 23.0_fp  * VOL  )
-             ACL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
+             !ACL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /             &
+             !      ( 35.45_fp  * VOL  )
+             SALCCL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
                    ( 35.45_fp  * VOL  )
+             PLYACL1 = Spc(id_PLYACL1)%Conc(I,J,L) * 1.0e+3_fp * Plya1_AlkR /   &
+                   ( 35.45_fp  * VOL  )
+             PLYACL2 = Spc(id_PLYACL2)%Conc(I,J,L) * 1.0e+3_fp * Plya2_AlkR /           &
+                   ( 35.45_fp  * VOL  )
+             PLYACL3 = Spc(id_PLYACL3)%Conc(I,J,L) * 1.0e+3_fp * Plya3_AlkR /           &
+                   ( 35.45_fp  * VOL  )
+             PLYACL4 = Spc(id_PLYACL4)%Conc(I,J,L) * 1.0e+3_fp * Plya4_AlkR /           &
+                   ( 35.45_fp  * VOL  )
+             ACL = SALCCL  + PLYACL1  + PLYACL2  + PLYACL3  + PLYACL4
+
+             ! Store original ratios of chloride species to total chloride concentrations
+             ACL_frSALCCL  = SALCCL  / ACL
+             ACL_frPLYACL1 = PLYACL1 / ACL
+             ACL_frPLYACL2 = PLYACL2 / ACL
+             ACL_frPLYACL3 = PLYACL3 / ACL
+             ACL_frPLYACL4 = PLYACL4 / ACL
 
           ENDIF
 
@@ -907,8 +1049,25 @@ CONTAINS
             !               Spc(id_NH4s  )%Conc(I,J,L) * (1.0_fp-AlkR) + TNH4
              Spc(id_NITs  )%Conc(I,J,L) = &
                             Spc(id_NITs  )%Conc(I,J,L) * (1.0_fp-AlkR) + TNIT
-             Spc(id_SALCCL)%Conc(I,J,L) = &
-                            Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + ACL
+            !Spc(id_SALCCL)%Conc(I,J,L) = &
+            !               Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + ACL
+            ! Distribute ACL back into seasalt and playa dust using original ratios
+            Spc(id_SALCCL)%Conc(I,J,L) = &
+                            Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + &
+                            (ACL_frSALCCL * ACL)
+            Spc(id_PLYACL1)%Conc(I,J,L) = &
+                            Spc(id_PLYACL1)%Conc(I,J,L) * (1.0_fp-Plya1_AlkR) + &
+                            (ACL_frPLYACL1 * ACL)
+            Spc(id_PLYACL2)%Conc(I,J,L) = &
+                            Spc(id_PLYACL2)%Conc(I,J,L) * (1.0_fp-Plya2_AlkR) + &
+                            (ACL_frPLYACL2 * ACL)
+            Spc(id_PLYACL3)%Conc(I,J,L) = &
+                            Spc(id_PLYACL3)%Conc(I,J,L) * (1.0_fp-Plya3_AlkR) + &
+                            (ACL_frPLYACL3 * ACL)
+            Spc(id_PLYACL4)%Conc(I,J,L) = &
+                            Spc(id_PLYACL4)%Conc(I,J,L) * (1.0_fp-Plya4_AlkR) + &
+                            (ACL_frPLYACL4 * ACL)
+
           ENDIF
 
           ! Special handling for HNO3 [kg]
