@@ -1415,13 +1415,15 @@ CONTAINS
        ! Skip non-chemistry boxes
        IF ( .not. State_Met%InChemGrid(I,J,L) ) CYCLE
 
-       ERADIUS(I,J,L,N)    = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
+       ERADIUS(I,J,L,N)            = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
+       ! append playa radii into ERADIUS
+       ERADIUS(I,J,L,N+NDUST+NAER) = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp  
        
-       TAREA(I,J,L,N)      = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                             DUST(I,J,L,N) / MSDENS(N)
-
-       TAREA(I,J,L,N+NAER) = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                             PLYA_DUST(I,J,L,N) / PLYA_DENS(N)
+       TAREA(I,J,L,N)              = 3.e+0_fp / ERADIUS(I,J,L,N) * &
+                                     DUST(I,J,L,N) / MSDENS(N)
+       ! append playa surface areas into TAREA
+       TAREA(I,J,L,N+NDUST+NAER)   = 3.e+0_fp / ERADIUS(I,J,L,N) * &
+                                     PLYA_DUST(I,J,L,N) / PLYA_DENS(N)
 
        ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
        ! Get RH
@@ -1429,15 +1431,15 @@ CONTAINS
        WTAREA(I,J,L, N)      = 0.e+0_fp
        WERADIUS(I,J,L, N)    = 0.e+0_fp
        ! WTAREA and WERADIUS for playa dust
-       WTAREA(I,J,L, N+NAER)   = 0.e+0_fp
-       WERADIUS(I,J,L, N+NAER) = 0.e+0_fp
+       WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
+       WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
 
        IF ( XRH >= CRITRH ) THEN
           WTAREA(I,J,L, N)   = TAREA(I,J,L, N)
           WERADIUS(I,J,L, N) = ERADIUS(I,J,L, N)
           ! WTAREA and WERADIUS for playa dust
-          WTAREA(I,J,L, N+NAER)   = 0.e+0_fp
-          WERADIUS(I,J,L, N+NAER) = 0.e+0_fp
+          WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
+          WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
        ENDIF
 
     ENDDO
