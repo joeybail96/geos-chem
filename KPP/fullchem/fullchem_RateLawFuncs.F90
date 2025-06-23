@@ -25,7 +25,7 @@ MODULE fullchem_RateLawFuncs
 !
 ! !DEFINED PARAMETERS:
 !
-  ! Indices for aerosol type (1 .. NAEROTYPE=14)
+  ! Indices for aerosol type (1 .. NAEROTYPE=21)
   INTEGER,  PRIVATE, PARAMETER :: DU1            = 1  ! Dust (Reff = 0.151 um)
   INTEGER,  PRIVATE, PARAMETER :: DU2            = 2  ! Dust (Reff = 0.253 um)
   INTEGER,  PRIVATE, PARAMETER :: DU3            = 3  ! Dust (Reff = 0.402 um)
@@ -40,6 +40,13 @@ MODULE fullchem_RateLawFuncs
   INTEGER,  PRIVATE, PARAMETER :: SSC            = 12 ! Coarse-mode sea salt
   INTEGER,  PRIVATE, PARAMETER :: SLA            = 13 ! Strat sulfate liq aer
   INTEGER,  PRIVATE, PARAMETER :: IIC            = 14 ! Irregular ice cloud
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU1        = 15 ! Playa dust (Reff = 0.151 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU2        = 16 ! Playa dust (Reff = 0.253 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU3        = 17 ! Playa dust (Reff = 0.402 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU4        = 18 ! Playa dust (Reff = 0.818 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU5        = 19 ! Playa dust (Reff = 1.491 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU6        = 20 ! Playa dust (Reff = 2.417 um)
+  INTEGER,  PRIVATE, PARAMETER :: PLYADU7        = 21 ! Playa dust (Reff = 3.721 um)
 
   ! Indices for Fine and Coarse sea-salt indices
   INTEGER,  PRIVATE, PARAMETER :: SS_FINE        = 1
@@ -66,6 +73,17 @@ MODULE fullchem_RateLawFuncs
 
   ! Reference temperature used in Henry's law
   REAL(dp), PRIVATE, PARAMETER :: INV_T298       = 1.0_dp / 298.15_dp
+
+  ! distribution fractions of playa dust bins 1-4 among mineral dust bins 1-7
+  ! see aerosol_mod.F90 for distribution fractions
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_1     = 0.0070e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_2     = 0.0332e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_3     = 0.2487e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_4     = 0.7111e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA2_5     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA3_6     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA4_7     = 1.0000e+0_fp
+
 !
 ! !REFERENCES:
 !  Eastham et al., Development and evaluation of the unified tropospheric-
@@ -2695,6 +2713,88 @@ CONTAINS
     ! Assume N2O5 is limiting, so update the removal rate accordingly
     k = kIIR1Ltd( C(ind_N2O5), C(ind_SALCCL), k )
   END FUNCTION N2O5uptkBySALCCl
+
+  FUNCTION N2O5uptkByPLYACL( H,    PLYA_BINy ) RESULT( k )
+    !
+    ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols.
+    ! This reaction follows the N2O5 + Cl- channel.
+    !
+    TYPE(HetState), INTENT(IN) :: H                      ! Hetchem State
+    INTEGER, INTENT(IN)        :: PLYA_BINy              ! Playa bin (1-7)
+    REAL(dp)                   :: k                      ! Rxn rate [1/s]
+    REAL(dp)                   :: gamma, Y_ClNO2, Rp, SA ! local vars
+    !
+    ! Grab indices used to locate playa dust concentrations and playa dust properties
+    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            PLYAx_y = PLYA1_1
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            PLYAx_y = PLYA1_2
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU2
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            PLYAx_y = PLYA1_3
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU3
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            PLYAx_y = PLYA1_4
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU4
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
+            PLYAx_y = PLYA2_5
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU5
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            PLYAx_y = PLYA3_6
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU6
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
+            PLYAx_y = PLYA4_7
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU7
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Properties of playa dust (same as corresponding mineral dust)
+    CALL N2O5_InorgOrg(                                                      &
+         H,      H%xVol(PLYADUy),  0.0_dp,      H%xH2O(PLYADUy),           &
+         0.0_dp, H%xRadi(PLYADUy), C(ind_NITs), PLYAx_y*C(ind_PLYACLx),    &
+         gamma,  Y_ClNO2,          Rp,           SA                         )    
+    !
+    ! Total loss rate of N2O5 (kN2O5) on playa dust
+    k = Ars_L1k( H%ClearFr * SA, Rp, gamma, SR_MW(ind_N2O5) )
+    k = k * Y_ClNO2
+    !
+    ! Assume N2O5 is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_N2O5), PLYAx_y*C(ind_PLYACLx), k )
+  END FUNCTION N2O5uptkByPLYACL
 
   SUBROUTINE N2O5_InorgOrg( H,      volInorg, volOrg, H2Oinorg,              &
                             H2Oorg, Rcore,    NIT,    Cl,                    &
