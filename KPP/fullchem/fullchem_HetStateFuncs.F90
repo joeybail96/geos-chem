@@ -179,6 +179,51 @@ CONTAINS
     H%SSC_is_Alk    = ( ABS( H%f_Alk_SSC ) > 0.01_dp )
     H%SSC_is_Acid   = ( .not.  H%SSC_is_Alk          )
 
+    ! pH and alkalinity fields for playa dust
+    H%H_conc_PLYA1 = 10.0**( -5.0_dp              )
+    H%H_conc_PLYA2 = 10.0**( -5.0_dp              )
+    H%H_conc_PLYA3 = 10.0**( -5.0_dp              )
+    H%H_conc_PLYA4 = 10.0**( -5.0_dp              )
+
+    ! alkalinity fraction in playa dust
+    H%f_Alk_PLYA1   = SafeDiv( State_Chm%Species(id_PLYAAL1)%Conc(I,J,L),     &
+                               State_Chm%Species(id_PLYA1  )%Conc(I,J,L),     &
+                               0.0_dp                                       )
+
+    H%f_Alk_PLYA2   = SafeDiv( State_Chm%Species(id_PLYAAL2)%Conc(I,J,L),     &
+                               State_Chm%Species(id_PLYA2  )%Conc(I,J,L),     &
+                               0.0_dp                                       )
+
+    H%f_Alk_PLYA3   = SafeDiv( State_Chm%Species(id_PLYAAL3)%Conc(I,J,L),     &
+                               State_Chm%Species(id_PLYA3  )%Conc(I,J,L),     &
+                               0.0_dp                                       ) 
+ 
+    H%f_Alk_PLYA4   = SafeDiv( State_Chm%Species(id_PLYAAL4)%Conc(I,J,L),     &
+                               State_Chm%Species(id_PLYA4  )%Conc(I,J,L),     &
+                               0.0_dp                                       )
+    
+    ! ensure fractions are not above 1 or below 0
+    H%f_Alk_PLYA1   = MAX( MIN( H%f_Alk_PLYA1, 1.0_dp ), 0.0_dp )   
+    H%f_Alk_PLYA2   = MAX( MIN( H%f_Alk_PLYA2, 1.0_dp ), 0.0_dp )
+    H%f_Alk_PLYA3   = MAX( MIN( H%f_Alk_PLYA3, 1.0_dp ), 0.0_dp )
+    H%f_Alk_PLYA4   = MAX( MIN( H%f_Alk_PLYA4, 1.0_dp ), 0.0_dp )
+
+    ! acid fraction in playa dust
+    H%f_Acid_PLYA1  = 1.0_dp - H%f_Alk_PLYA1
+    H%f_Acid_PLYA2  = 1.0_dp - H%f_Alk_PLYA2
+    H%f_Acid_PLYA3  = 1.0_dp - H%f_Alk_PLYA3
+    H%f_Acid_PLYA4  = 1.0_dp - H%f_Alk_PLYA4
+
+    ! determine if playa dust is alkaline or acidic
+    H%PLYA1_is_Alk    = ( ABS( H%f_Alk_PLYA1 ) > 0.01_dp )
+    H%PLYA1_is_Acid   = ( .not.  H%PLYA1_is_Alk          )
+    H%PLYA2_is_Alk    = ( ABS( H%f_Alk_PLYA2 ) > 0.01_dp )
+    H%PLYA2_is_Acid   = ( .not.  H%PLYA2_is_Alk          )
+    H%PLYA3_is_Alk    = ( ABS( H%f_Alk_PLYA3 ) > 0.01_dp )
+    H%PLYA3_is_Acid   = ( .not.  H%PLYA3_is_Alk          )
+    H%PLYA4_is_Alk    = ( ABS( H%f_Alk_PLYA4 ) > 0.01_dp )
+    H%PLYA4_is_Acid   = ( .not.  H%PLYA4_is_Alk          )
+
     ! Other fields
     H%gamma_HO2     = Input_Opt%gamma_HO2
 
