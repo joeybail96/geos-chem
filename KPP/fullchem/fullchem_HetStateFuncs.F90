@@ -19,6 +19,17 @@ MODULE fullchem_HetStateFuncs
 
   IMPLICIT NONE
   PRIVATE
+
+! !DEFINED PARAMETERS:
+  ! distribution fractions of playa dust bins 1-4 among mineral dust bins 1-7
+  ! see aerosol_mod.F90 for distribution fractions
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_1     = 0.0070e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_2     = 0.0332e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_3     = 0.2487e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_4     = 0.7111e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA2_5     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA3_6     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA4_7     = 1.0000e+0_fp
 !
 ! !PUBLIC MEMBER FUNCTIONS:
 !
@@ -351,20 +362,30 @@ CONTAINS
     H%Cl_conc_CldG   = 0.0_dp
     H%Cl_conc_CldA   = 0.0_dp
     H%Cl_conc_CldC   = 0.0_dp
+    H%Cl_conc_CldP1  = 0.0_dp
+    H%Cl_conc_CldP2  = 0.0_dp
+    H%Cl_conc_CldP3  = 0.0_dp
+    H%Cl_conc_CldP4  = 0.0_dp
     H%frac_Br_CldA   = 0.0_dp
     H%frac_Br_CldC   = 0.0_dp
     H%frac_Br_CldG   = 0.0_dp
     H%frac_Cl_CldA   = 0.0_dp
     H%frac_Cl_CldC   = 0.0_dp
     H%frac_Cl_CldG   = 0.0_dp
+    H%frac_Cl_CldP1  = 0.0_dp
+    H%frac_Cl_CldP2  = 0.0_dp
+    H%frac_Cl_CldP3  = 0.0_dp
+    H%frac_Cl_CldP4  = 0.0_dp
 
     !=======================================================================
     ! Get halide conc's in cloud (gas-phase, fine & coarse sea salt)
     !=======================================================================
 
     ! Br- and Cl- grid-box concentrations
-    HBr = C(ind_HBr) + ( C(ind_BrSALA) * 0.7_dp ) + C(ind_BrSALC)
-    HCl = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL)
+    ! including playa chloride with Cl- box concentrations sum
+    HBr = C(ind_HBr)     + ( C(ind_BrSALA) * 0.7_dp )      + C(ind_BrSALC)
+    HCl = C(ind_HCl)     + ( C(ind_SALACL) * 0.7_dp )      + C(ind_SALCCL)  + &
+          C(ind_PLYACL1) + C(ind_PLYACL2) + C(ind_PLYACL3) + C(ind_PLYACL4)
 
     ! Get overall Br- and Cl- grid box concentrations in cloud
     CALL Get_Halide_CldConc( H, HBr, HCl, Br_conc, Cl_conc )
@@ -380,16 +401,22 @@ CONTAINS
 
     ! Split Cl- into gas-phase (G), fine sea salt (A), coarse sea salt (C)
     ! Avoid div-by-zero (all three expressions use the same denominator)
-    denom = C(ind_HCl) + ( C(ind_SALACL) * 0.7_dp ) + C(ind_SALCCL)
+    denom = C(ind_HCl)     + ( C(ind_SALACL) * 0.7_dp )      + C(ind_SALCCL)  + &
+            C(ind_PLYACL1) + C(ind_PLYACL2) + C(ind_PLYACL3) + C(ind_PLYACL4)
     IF ( denom > 0.0_dp ) THEN
        H%Cl_conc_CldG = ( Cl_conc * C(ind_HCl   )          ) / denom
        H%Cl_conc_CldA = ( Cl_conc * C(ind_SALACL) * 0.7_dp ) / denom
        H%Cl_conc_CldC = ( Cl_conc * C(ind_SALCCL)          ) / denom
+       H%Cl_conc_CldP1 = ( Cl_conc * C(ind_PLYACL1)         ) / denom
+       H%Cl_conc_CldP2 = ( Cl_conc * C(ind_PLYACL2)         ) / denom
+       H%Cl_conc_CldP3 = ( Cl_conc * C(ind_PLYACL3)         ) / denom
+       H%Cl_conc_CldP4 = ( Cl_conc * C(ind_PLYACL4)         ) / denom
     ENDIF
 
     ! Total Br- and Cl- in cloud
-    H%Br_conc_Cld = H%Br_conc_CldA + H%Br_conc_CldC + H%Br_conc_CldG
-    H%Cl_conc_Cld = H%Cl_conc_CldA + H%Cl_conc_CldC + H%Cl_conc_CldG
+    H%Br_conc_Cld = H%Br_conc_CldA  + H%Br_conc_CldC  + H%Br_conc_CldG
+    H%Cl_conc_Cld = H%Cl_conc_CldA  + H%Cl_conc_CldC  + H%Cl_conc_CldG  + &
+                    H%Cl_conc_CldP1 + H%Cl_conc_CldP2 + H%Cl_conc_CldP3 + H%Cl_conc_CldP4
 
     ! Fractions of Br- in each of the CldA, CldG, CldC paths
     IF ( H%Br_Conc_Cld > 0.0_dp ) THEN
@@ -403,6 +430,10 @@ CONTAINS
        H%frac_Cl_CldA = H%Cl_conc_CldA / H%Cl_conc_Cld
        H%frac_Cl_CldC = H%Cl_conc_CldC / H%Cl_conc_Cld
        H%frac_Cl_CldG = H%Cl_conc_CldG / H%Cl_conc_Cld
+       H%frac_Cl_CldP1 = H%Cl_conc_CldP1 / H%Cl_conc_Cld
+       H%frac_Cl_CldP2 = H%Cl_conc_CldP2 / H%Cl_conc_Cld
+       H%frac_Cl_CldP3 = H%Cl_conc_CldP3 / H%Cl_conc_Cld
+       H%frac_Cl_CldP4 = H%Cl_conc_CldP4 / H%Cl_conc_Cld   
     ENDIF
 
     !=======================================================================
@@ -432,6 +463,55 @@ CONTAINS
                              surf_area = H%xArea(12),                        &
                              r_w       = H%xRadi(12),                        &
                              conc_x    = H%Cl_conc_SSC                      )
+
+    ! Cl- molar concentration of bin x=1 into biny=1
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 1,                                &
+                               n_x         = C(ind_PLYACL1),                   &
+                               surf_area   = H%xArea(1),                       &
+                               r_w         = H%xRadi(1),                       &
+                               conc_x      = H%Cl_conc_PLYACL1                )
+
+    ! Cl- molar concentration of bin x=1 into biny=2
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 2,                                &
+                               n_x         = C(ind_PLYACL1),                   &
+                               surf_area   = H%xArea(2),                       &
+                               r_w         = H%xRadi(2),                       &
+                               conc_x      = H%Cl_conc_PLYACL2                )
+
+    ! Cl- molar concentration of bin x=1 into biny=3
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 3,                                &
+                               n_x         = C(ind_PLYACL1),                   &
+                               surf_area   = H%xArea(3),                       &
+                               r_w         = H%xRadi(3),                       &
+                               conc_x      = H%Cl_conc_PLYACL3                )
+
+    ! Cl- molar concentration of bin x=1 into biny=4
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 4,                                &
+                               n_x         = C(ind_PLYACL1),                   &
+                               surf_area   = H%xArea(4),                       &
+                               r_w         = H%xRadi(4),                       &
+                               conc_x      = H%Cl_conc_PLYACL4                )
+
+    ! Cl- molar concentration of bin x=2 into biny=5
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 5,                                &
+                               n_x         = C(ind_PLYACL2),                   &
+                               surf_area   = H%xArea(5),                       &
+                               r_w         = H%xRadi(5),                       &
+                               conc_x      = H%Cl_conc_PLYACL5                )
+
+    ! Cl- molar concentration of bin x=3 into biny=6
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 6,                                &
+                               n_x         = C(ind_PLYACL3),                   &
+                               surf_area   = H%xArea(6),                       &
+                               r_w         = H%xRadi(6),                       &
+                               conc_x      = H%Cl_conc_PLYACL6                )
+
+    ! Cl- molar concentration of bin x=4 into biny=7
+    CALL Get_Halide_PlayaConc( PLYA_BINy   = 7,                                &
+                               n_x         = C(ind_PLYACL4),                   &
+                               surf_area   = H%xArea(7),                       &
+                               r_w         = H%xRadi(7),                       &
+                               conc_x      = H%Cl_conc_PLYACL7                )
 
     ! NO3- concentration in fine sea salt aerosol
     CALL Get_Halide_SSAConc( n_x       = C(ind_NIT),                         &
@@ -614,6 +694,93 @@ CONTAINS
     conc_x = MAX( conc_x, 0.0_dp )
 
   END SUBROUTINE Get_Halide_SsaConc
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Transport Model                  !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: Get_Halide_PlayaConc
+!
+! !DESCRIPTION: Calculates concentration of a halide in playa dust aerosol.
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE Get_Halide_PlayaConc( DST_BIN, n_x, surf_area, r_w, conc_x )
+!
+! !USES:
+!
+    USE GcKpp_Global,  ONLY : HetState
+    USE PhysConstants, ONLY : AVO
+!
+! !INPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(IN)  :: PLYA_BINy  ! Corresponding dust bin (1-7)
+    REAL(dp),       INTENT(IN)  :: n_x        ! Number density     [#/cm3  ]
+    REAL(dp),       INTENT(IN)  :: surf_area  ! Surface area       [cm2/cm3]
+    REAL(dp),       INTENT(IN)  :: r_w        ! Aerosol wet radius [cm     ]
+!
+! !OUTPUT PARAMETERS:
+!
+    REAL(dp),       INTENT(OUT) :: conc_x     ! Halide conc in playa dust [mol/L]
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! !LOCAL VARIABLES:
+!
+    REAL(dp) :: V_tot
+
+    !==================================================================
+    ! Get_Halide_PlayaConc begins here!
+    !==================================================================
+
+    ! Cloud volume (This comment was taken directly from Get_Halide_SsaConc)
+    ! I am fairly sure V_tot is supposed to be vol_aerosol / vol_air (cm3/cm3)
+    V_tot = ( surf_area * r_w / 3.0_dp ) * 1e-3_dp ! L(liq)/cm3(air)
+
+    ! Skip if we are not in cloud  (This comment was taken directly from Get_Halide_SsaConc)
+    IF ( V_tot <= 1.0e-20_dp ) THEN
+       conc_x = 0.0_dp
+       RETURN
+    ENDIF
+    
+    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among dust bins y=1-7 (see aerosol_mod.F90 for distribution details)
+    SELECT CASE (DST_BIN)
+        CASE (1)
+            ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
+            PLYAx_y = PLYA1_1
+        CASE (2)
+            ! fraction of playa chloride contribution of PLYACL1 into #2 playa bin
+            PLYAx_y = PLYA1_2
+        CASE (3)
+            ! fraction of playa chloride contribution of PLYACL1 into #3 playa bin
+            PLYAx_y = PLYA1_3
+        CASE (4)
+            ! fraction of playa chloride contribution of PLYACL1 into #4 playa bin
+            PLYAx_y = PLYA1_4
+        CASE (5)
+            ! fraction of playa chloride contribution of PLYACL2 into #5 playa bin
+            PLYAx_y = PLYA2_5
+        CASE (6)
+            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
+            PLYAx_y = PLYA3_6
+        CASE (7)
+            ! fraction of playa chloride contribution of PLYACL4 into #7 playa bin
+            PLYAx_y = PLYA4_7
+    END SELECT
+    
+    ! update number concentration of playa dust to reflect how much dust is being distributed in PLYA_BINy
+    n_x = PLYAx_y*n_x
+    
+    ! this calculation is copied directly from Get_Halide_SsaConc
+    ! calculate the molar concentration of playa dust Cl
+    ! I am concerned that this calculation is not accurate and assumes 1 molec of Cl == 1 particle of playa dust
+    conc_x = ( n_x / AVO ) / V_tot    ! mol/L
+    conc_x = MAX( conc_x, 0.0_dp )
+
+  END SUBROUTINE Get_Halide_PlayaConc
 !EOC
 !------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Transport Model                  !
