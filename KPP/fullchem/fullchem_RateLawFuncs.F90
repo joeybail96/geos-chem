@@ -1106,49 +1106,49 @@ CONTAINS
             ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
             ! fraction of clouds containing biny=1 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldP = H%frac_Cl_CldP1
         CASE (2)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
             ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
             ! fraction of clouds containing biny=2 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldP = H%frac_Cl_CldP2
         CASE (3)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
             ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
             ! fraction of clouds containing biny=3 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldP = H%frac_Cl_CldP3
         CASE (4)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
             ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
             ! fraction of clouds containing biny=4 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldP = H%frac_Cl_CldP4
         CASE (5)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
             ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin
             PLYAx_y = PLYA2_5
             ! fraction of clouds containing biny=5 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
+            frac_Cl_CldP = H%frac_Cl_CldP5
         CASE (6)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
             ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
             ! fraction of clouds containing biny=6 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
+            frac_Cl_CldP = H%frac_Cl_CldP6
         CASE (7)
             ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
             ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin
             PLYAx_y = PLYA4_7
             ! fraction of clouds containing biny=4 chloride 
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
+            frac_Cl_CldP = H%frac_Cl_CldP7
     END SELECT
 
     ! ClNO2 + PLYACL uptake rate [1/s] in tropospheric cloud
