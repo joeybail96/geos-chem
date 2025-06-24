@@ -3007,6 +3007,110 @@ CONTAINS
     ENDIF
   END FUNCTION IbrkdnbyAcidSALCCl
 
+
+  FUNCTION IbrkdnByAcidPLYACL( srMw, conc, gamma, H, PLYA_BINy ) RESULT( k )
+    !
+    ! Breakdown of iodine species on acidic sea-salt (accumulation mode)
+    ! Assume a ratio of IBr:ICl = 0.15:0.85
+    !
+    REAL(dp),       INTENT(IN) :: srMw, conc, gamma
+    TYPE(HetState), INTENT(IN) :: H
+    INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
+    REAL(dp)                   :: k
+    REAL(dp)                   :: ssarea         ! acidic sea salt area
+    !
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            PLYAx_y = PLYA1_1
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU1
+            ! is playa dust in bin y=1 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            PLYAx_y = PLYA1_2
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU2
+            ! is playa dust in bin y=2 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            PLYAx_y = PLYA1_3
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU3
+            ! is playa dust in bin y=3 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            PLYAx_y = PLYA1_4
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU4
+            ! is playa dust in bin y=4 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
+            PLYAx_y = PLYA2_5
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU5
+            ! is playa dust in bin y=5 acidic?
+            PLYA_is_Acid = H&PLYA2_is_Acid
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA2   
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            PLYAx_y = PLYA3_6
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU6
+            ! is playa dust in bin y=6 acidic?
+            PLYA_is_Acid = H&PLYA3_is_Acid
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA2  
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
+            PLYAx_y = PLYA4_7
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU7
+            ! is playa dust in bin y=7 acidic?
+            PLYA_is_Acid = H&PLYA4_is_Acid
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA2  
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    IF ( H%PLYA_is_Acid ) THEN
+       ssarea = f_Acid_PLYA * H%xArea(PLYADUy)
+       k = 0.85_dp * ARs_L1K( ssarea, H%xRAdi(PLYADUy), gamma, srMw )
+       k = kIIR1Ltd( conc, PLYAx_y*C(ind_PLYACLx), k ) ! conc is limiting, so update k
+    ENDIF
+  END FUNCTION IbrkdnbyAcidPLYACL
+
+
   FUNCTION IONO2uptkByH2O( H ) RESULT( k )
     !
     ! Computes the reaction rate [1/s] for IONO2 + H2O = HOI + HNO3
