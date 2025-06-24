@@ -410,29 +410,36 @@ CONTAINS
     !=======================================================================
 
     ! Set Br and Cl fields of State_Het to zero
-    H%Br_conc_CldG   = 0.0_dp
-    H%Br_conc_CldA   = 0.0_dp
-    H%Br_conc_CldC   = 0.0_dp
-    H%Br_over_Cl_Cld = 0.0_dp
-    H%Br_over_Cl_SSA = 0.0_dp
-    H%Br_over_Cl_SSC = 0.0_dp
-    H%Cl_conc_CldG   = 0.0_dp
-    H%Cl_conc_CldA   = 0.0_dp
-    H%Cl_conc_CldC   = 0.0_dp
-    H%Cl_conc_CldP1  = 0.0_dp
-    H%Cl_conc_CldP2  = 0.0_dp
-    H%Cl_conc_CldP3  = 0.0_dp
-    H%Cl_conc_CldP4  = 0.0_dp
-    H%frac_Br_CldA   = 0.0_dp
-    H%frac_Br_CldC   = 0.0_dp
-    H%frac_Br_CldG   = 0.0_dp
-    H%frac_Cl_CldA   = 0.0_dp
-    H%frac_Cl_CldC   = 0.0_dp
-    H%frac_Cl_CldG   = 0.0_dp
-    H%frac_Cl_CldP1  = 0.0_dp
-    H%frac_Cl_CldP2  = 0.0_dp
-    H%frac_Cl_CldP3  = 0.0_dp
-    H%frac_Cl_CldP4  = 0.0_dp
+    H%Br_conc_CldG       = 0.0_dp
+    H%Br_conc_CldA       = 0.0_dp
+    H%Br_conc_CldC       = 0.0_dp
+    H%Br_over_Cl_Cld     = 0.0_dp
+    H%Br_over_Cl_SSA     = 0.0_dp
+    H%Br_over_Cl_SSC     = 0.0_dp
+    H%Br_over_Cl_PLYACL1 = 0.0_dp
+    H%Br_over_Cl_PLYACL2 = 0.0_dp
+    H%Br_over_Cl_PLYACL3 = 0.0_dp
+    H%Br_over_Cl_PLYACL4 = 0.0_dp
+    H%Br_over_Cl_PLYACL5 = 0.0_dp
+    H%Br_over_Cl_PLYACL6 = 0.0_dp
+    H%Br_over_Cl_PLYACL7 = 0.0_dp
+    H%Cl_conc_CldG       = 0.0_dp
+    H%Cl_conc_CldA       = 0.0_dp
+    H%Cl_conc_CldC       = 0.0_dp
+    H%Cl_conc_CldP1      = 0.0_dp
+    H%Cl_conc_CldP2      = 0.0_dp
+    H%Cl_conc_CldP3      = 0.0_dp
+    H%Cl_conc_CldP4      = 0.0_dp
+    H%frac_Br_CldA       = 0.0_dp
+    H%frac_Br_CldC       = 0.0_dp
+    H%frac_Br_CldG       = 0.0_dp
+    H%frac_Cl_CldA       = 0.0_dp
+    H%frac_Cl_CldC       = 0.0_dp
+    H%frac_Cl_CldG       = 0.0_dp
+    H%frac_Cl_CldP1      = 0.0_dp
+    H%frac_Cl_CldP2      = 0.0_dp
+    H%frac_Cl_CldP3      = 0.0_dp
+    H%frac_Cl_CldP4      = 0.0_dp
 
     !=======================================================================
     ! Get halide conc's in cloud (gas-phase, fine & coarse sea salt)
@@ -644,6 +651,34 @@ CONTAINS
 
     IF ( H%Cl_conc_SSC > 0.0_dp ) THEN
        H%Br_over_Cl_SSC = H%Br_conc_SSC / H%Cl_conc_SSC  ! in coarse sea salt
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL1 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL1 = H%Br_conc_PLYACL1 / H%Cl_conc_PLYACL1
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL2 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL2 = H%Br_conc_PLYACL2 / H%Cl_conc_PLYACL2
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL3 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL3 = H%Br_conc_PLYACL3 / H%Cl_conc_PLYACL3
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL4 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL4 = H%Br_conc_PLYACL4 / H%Cl_conc_PLYACL4
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL5 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL5 = H%Br_conc_PLYACL5 / H%Cl_conc_PLYACL5
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL6 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL6 = H%Br_conc_PLYACL6 / H%Cl_conc_PLYACL6
+    ENDIF
+
+    IF ( H%Cl_conc_PLYACL7 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL7 = H%Br_conc_PLYACL7 / H%Cl_conc_PLYACL7
     ENDIF
 
     !=======================================================================
