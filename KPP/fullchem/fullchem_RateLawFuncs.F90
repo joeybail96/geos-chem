@@ -1081,6 +1081,90 @@ CONTAINS
     k = kIIR1Ltd( C(ind_ClNO2), C(ind_SALCCL), k )
   END FUNCTION ClNO2uptkBySALCCL
 
+
+  FUNCTION ClNO2uptkByPLYACL( H, PLYA_BINy ) RESULT( k )
+    !
+    ! Computes the uptake rate [1/s] of ClNO2 + PLAYACL.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER,        INTENT(IN) :: PLYA_BINy      ! Playa bin (1-7)
+    REAL(dp)                   :: k              ! Rxn rate [1/s]
+    !
+    REAL(dp) :: area,     gamma, branch
+    REAL(dp) :: branchCl, dummy, srMw
+    !
+    k    = 0.0_dp
+    srMw = SR_MW(ind_ClNO2)
+    !
+    ! Grab indices used to locate playa dust concentrations and playa dust properties
+    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among dust bins y=1-7 (see aerosol_mod.F90 for distribution details)
+    ! Grab the fraction of total cloud chloride for each playa dust bin 1-4 and multiply by bin_fract to get the redistributed fraction when playa dust split among 7 bins
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            PLYAx_y = PLYA1_1
+            ! fraction of clouds containing biny=1 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            PLYAx_y = PLYA1_2
+            ! fraction of clouds containing biny=2 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            PLYAx_y = PLYA1_3
+            ! fraction of clouds containing biny=3 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            PLYAx_y = PLYA1_4
+            ! fraction of clouds containing biny=4 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin
+            PLYAx_y = PLYA2_5
+            ! fraction of clouds containing biny=5 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            PLYAx_y = PLYA3_6
+            ! fraction of clouds containing biny=6 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin
+            PLYAx_y = PLYA4_7
+            ! fraction of clouds containing biny=4 chloride 
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
+    END SELECT
+
+    ! ClNO2 + PLYACL uptake rate [1/s] in tropospheric cloud
+    IF ( .not. H%stratBox ) THEN
+       CALL Gam_ClNO2(                                                       &
+            H,             H%rLiq, H%phCloud, H%Cl_conc_Cld,                 &
+            H%Br_conc_Cld, gamma,  branchCl,  dummy                         )
+       branch = branchCl * frac_Cl_CldP
+       k      = k + CloudHet( H, srMw, gamma, 0.0_dp, branch, 0.0_dp )
+    ENDIF
+    !
+    ! Assume ClNO2 is limiting, so recompute reaction rate accordingly
+    k = kIIR1Ltd( C(ind_ClNO2), PLYAx_y*C(ind_PLYACL), k )
+  END FUNCTION ClNO2uptkByPLYACL
+
+
   FUNCTION ClNO2uptkByHCl( H ) RESULT( k )
     !
     ! Computes the uptake rate [1/s] of ClNO2 + HCl.
