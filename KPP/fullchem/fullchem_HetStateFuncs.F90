@@ -65,10 +65,13 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-  SUBROUTINE fullChem_SetStateHet( I,         J,         L,                  &
-                                   id_SALA,   id_SALAAL, id_SALC,            &
-                                   id_SALCAL, Input_Opt, State_Chm,          &
-                                   State_Met, H,         RC                 )
+  SUBROUTINE fullChem_SetStateHet( I,          J,          L,                  &
+                                   id_SALA,    id_SALAAL,  id_SALC,            &
+                                   id_SALCAL,  Input_Opt,  State_Chm,          &
+                                   State_Met,  H,          RC                  &
+                                   id_PLYA1,   id_PLYA2,   id_PLYA3,           &
+                                   id_PLYA4,   id_PLYAAL1, id_PLYAAL2,         &
+                                   id_PLYAAL3, id_PLYAAL4                     )
 !
 ! !USES:
 !
