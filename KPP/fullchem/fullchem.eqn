@@ -1774,6 +1774,16 @@ HOCl + HCl = Cl2 + H2O :       HOClUptkByHCl( State_Het );                      
 HOCl + HBr = BrCl + H2O :      HOClUptkByHBr( State_Het );                                                  {2014/02/03; Eastham2014; SDE}
 HOCl + SALACL = Cl2 + H2O :    HOClUptkBySALACL( State_Het );                                               {2018/01/22; XW}
 HOCl + SALCCL = Cl2 + H2O :    HOClUptkBySALCCL( State_Het );                                               {2018/01/22; XW}
+
+HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 1 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 2 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 3 );                                            {}
+HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 4 );                                            {}
+HOCl + PLYACL2 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 5 );                                            {}
+HOCl + PLYACL3 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 6 );                                            {}
+HOCl + PLYACL4 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 7 );                                            {}
+
+
 HOCl + SO2 = SO4 + HCl :       HOClUptkByHSO3m( State_Het ) + HOClUptkBySO3mm( State_Het ) + SRHOCl;        {2023/01/30; Add SRHOCL, BA; 2018/11/08; XW; June 6, 2021, MSL}
 HOBr + HBr = Br2 + H2O :       HOBrUptkByHBr( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
 HOBr + HCl = BrCl + H2O :      HOBrUptkByHCl( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
