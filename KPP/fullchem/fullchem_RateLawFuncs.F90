@@ -2098,6 +2098,219 @@ CONTAINS
     k = kIIR1Ltd( C(ind_HOBr), C(ind_SALCCL), k )
   END FUNCTION HOBrUptkBySALCCL
 
+  FUNCTION HOBrUptkByPLYACL( H, PLYABINy ) RESULT( k )
+    !
+    ! Computes the uptake rate [1/s] for the HOBr + SALCCL reaction.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
+    REAL(dp)                   :: k              ! rxn rate [1/s]
+    !
+    REAL(dp) :: area,         branch,    branch_0
+    REAL(dp) :: brLiq,        gammaAer,  gammaLiq
+    REAL(dp) :: k_HOBr_Cl,    k_HOBr_Br, k_HOBr_HSO3m
+    REAL(dp) :: k_HOBr_SO3mm, k_tot,     srMw
+    !
+    k        = 0.0_dp
+    brLiq    = 0.0_dp
+    gammaAer = 0.0_dp
+    gammaLiq = 0.0_dp
+    srMw     = SR_MW(ind_HOBr)
+    !
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
+            PLYAx_y = PLYA1_1
+            ! fraction of cloud that is playa cl- bin y=1
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            ! is playa dust in bin y=1 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU1
+            ! H concentration in playa bin y=1
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            ! Cl- in playa bin y=1 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL1 
+            ! Br- in playa bin y=1 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL1  
+            ! Ratio of Br:Cl in playa dust y=1 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL1
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 playa bin
+            PLYAx_y = PLYA1_2
+            ! fraction of cloud that is playa cl- bin y=2
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            ! is playa dust in bin y=2 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU2
+            ! H concentration in playa bin y=2
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            ! Cl- in playa bin y=2 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL2 
+            ! Br- in playa bin y=2 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL2  
+            ! Ratio of Br:Cl in playa dust y=2 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL2
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1   
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 playa bin
+            PLYAx_y = PLYA1_3
+            ! fraction of cloud that is playa cl- bin y=3
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            ! is playa dust in bin y=3 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU3
+            ! H concentration in playa bin y=3
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            ! Cl- in playa bin y=3 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL3
+            ! Br- in playa bin y=3 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL3  
+            ! Ratio of Br:Cl in playa dust y=3 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL3
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1  
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 playa bin
+            PLYAx_y = PLYA1_4
+            ! fraction of cloud that is playa cl- bin y=4
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            ! is playa dust in bin y=4 acidic? (bin x=1 is same for bin y=1-4)
+            PLYA_is_Acid = H&PLYA1_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU4
+            ! H concentration in playa bin y=4
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            ! Cl- in playa bin y=4 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL4
+            ! Br- in playa bin y=4 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL4  
+            ! Ratio of Br:Cl in playa dust y=4 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL4
+            ! acid fraction same for y=1-4 since it is intensive property
+            f_AcidPLYA = H%f_Acid_PLYA1  
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 playa bin
+            PLYAx_y = PLYA2_5
+            ! fraction of cloud that is playa cl- bin y=5
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
+            ! is playa dust in bin y=5 acidic?
+            PLYA_is_Acid = H&PLYA2_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU5
+            ! H concentration in playa bin y=5
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
+            ! Cl- in playa bin y=5 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL5
+            ! Br- in playa bin y=5 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL5  
+            ! Ratio of Br:Cl in playa dust y=5 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL5
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA2  
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
+            PLYAx_y = PLYA3_6
+            ! fraction of cloud that is playa cl- bin y=6
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
+            ! is playa dust in bin y=6 acidic?
+            PLYA_is_Acid = H&PLYA3_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU6
+            ! H concentration in playa bin y=6
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
+            ! Cl- in playa bin y=6 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL6
+            ! Br- in playa bin y=6 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL6  
+            ! Ratio of Br:Cl in playa dust y=6 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL6
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA3  
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
+            PLYAx_y = PLYA4_7
+            ! fraction of cloud that is playa cl- bin y=7
+            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
+            ! is playa dust in bin y=7 acidic?
+            PLYA_is_Acid = H&PLYA4_is_Acid
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU7
+            ! H concentration in playa bin y=7
+            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA4
+            ! Cl- in playa bin y=7 [mol/L]
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL7
+            ! Br- in playa bin y=7 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL7  
+            ! Ratio of Br:Cl in playa dust y=7 (should be 0 since currently no Br tracked in playa dust)
+            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL7
+            ! acid fraction
+            f_AcidPLYA = H%f_Acid_PLYA4  
+    END SELECT
+    !
+    IF ( .not. H%stratBox  ) THEN
+       !
+       ! HOBr + HBr rxn probability in tropospheric liquid cloud
+       CALL Gam_HOBr_CLD(                                                    &
+            H,         gammaLiq,  k_tot,                                     &
+            k_HOBr_Cl, k_HOBr_Br, k_HOBr_HSO3m, k_HOBr_SO3mm )
+       !
+       ! Branching ratio for liquid path of HOBr + SALACL in cloud
+       branch_0 = ( k_HOBr_Cl + k_HOBr_Br ) / k_tot
+       branch   = branch_0 * 0.1_dp
+       IF ( H%Br_over_Cl_Cld <= 5.0e-4_dp ) THEN
+          branch = branch_0 * ( 1.0_dp -  Br2_Yield( H%Br_over_Cl_Cld ) )
+       ENDIF
+       brLiq = branch * frac_Cl_CldP
+       !
+       ! Compute overall HOBr removal rate in cloud
+       k = k + CloudHet( H, srMw, gammaLiq, 0.0_dp, brLiq, 0.0_dp )
+       !
+    ENDIF
+    !
+    ! Now consider HOBr uptake by acidic playa cl in clear-sky
+    IF ( PLYA_is_Acid ) THEN
+       !
+       ! Uptake probability [1]
+       CALL Gam_HOBr_Aer( H,                H%xRadi(PLYADUy), H%H_conc_PLYA,  &
+                          H%Cl_conc_PLYACL, H%Br_conc_PLYACL, gammaAer        )
+       !
+       ! Branching ratio (depends on Br- / Cl- ratio)
+       branch = 0.1_dp
+       IF ( Br_over_Cl_PLYACL <= 5.0e-4_dp ) THEN
+          !branch = 1.0_dp - Br2_Yield( H%Br_over_Cl_PLYACL )
+          ! to avoid log10(0) error in Br2_Yield(), just set branch to 1.0. There should be no yield anyway.
+          branch = 1.0_dp
+       ENDIF
+       !
+       ! Uptake rate [1/s]
+       area = H%ClearFr * H%xArea(PLYADUy) * f_AcidPLYA
+       k    = k + Ars_L1K( area, H%xRadi(PLYADUy), gammaAer, srMw ) * branch
+    ENDIF
+
+    ! Assume HOBr is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_HOBr), PLYAx_y*C(ind_PLYACLx), k )
+  END FUNCTION HOBrUptkByPLYACL
+
   FUNCTION HOBrUptkByHSO3m( H ) RESULT( k )
     !
     ! Computes the uptake rate [1/s] for the HOBr + HSO3(-) reaction.
@@ -2437,7 +2650,7 @@ CONTAINS
             ! H concentration in playa bin y=1
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
             ! Cl- in playa bin y=1 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL1  
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL1  
             ! acid fraction in playa dust bin y=1 (x=1)
             ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1      
@@ -2453,7 +2666,7 @@ CONTAINS
             ! H concentration in playa bin y=1
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
             ! Cl- in playa bin y=2 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL2
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL2
             ! acid fraction in playa dust bin y=2 (x=1)
             ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
@@ -2469,7 +2682,7 @@ CONTAINS
             ! H concentration in playa bin y=3
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
             ! Cl- in playa bin y=3 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL3
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL3
             ! acid fraction in playa dust bin y=3 (x=1)
             ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
@@ -2485,7 +2698,7 @@ CONTAINS
             ! H concentration in playa bin y=4
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
             ! Cl- in playa bin y=4 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL4
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL4
             ! acid fraction in playa dust bin y=4 (x=1)
             ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
@@ -2501,7 +2714,7 @@ CONTAINS
             ! H concentration in playa bin y=5
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
             ! Cl- in playa bin y=5 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL5
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL5
             ! acid fraction in playa dust bin y=5 (x=2)
             f_AcidPLYA = H%f_Acid_PLYA2
         CASE (6)
@@ -2516,7 +2729,7 @@ CONTAINS
             ! H concentration in playa bin y=6
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
             ! Cl- in playa bin y=6 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL6
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL6
             ! acid fraction in playa dust bin y=6 (x=3)
             f_AcidPLYA = H%f_Acid_PLYA3
         CASE (7)
@@ -2531,7 +2744,7 @@ CONTAINS
             ! H concentration in playa bin y=7
             H_conc_PLYA = H%H_conc_PLYA4
             ! Cl- in playa bin y=7 [mol/L]
-            Cl_conc_PLYA = H%Cl_conc_PLYACL7
+            Cl_conc_PLYACL = H%Cl_conc_PLYACL7
             ! acid fraction in playa dust bin y=7 (x=4)
             f_AcidPLYA = H%f_Acid_PLYA4
     END SELECT
@@ -2549,7 +2762,7 @@ CONTAINS
     !
     ! Compute HOCl + PLYACL uptake rate [1/s] on acidic aerosols in clear-sky
     IF ( H%SSC_is_Acid ) THEN
-       CALL Gam_HOCl_Aer( H, H%xRadi(PLYADUy), H_conc_PLYA, Cl_conc_PLYA, gamma )
+       CALL Gam_HOCl_Aer( H, H%xRadi(PLYADUy), H_conc_PLYA, Cl_conc_PLYACL, gamma )
        area = H%ClearFr * H%xArea(PLYADUy) * f_Acid_PLYA
        k    = k + Ars_L1k( area, H%xRadi(PLYADUy), gamma, srMw )
     ENDIF
