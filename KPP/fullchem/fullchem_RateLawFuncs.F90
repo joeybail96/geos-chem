@@ -1518,6 +1518,97 @@ CONTAINS
     k = kIIR1Ltd( C(ind_ClNO3), C(ind_SALCCL), k )
   END FUNCTION ClNO3uptkBySALCCL
 
+  FUNCTION ClNO3uptkByPLYACL( H, PLYA_BINy ) RESULT( k )
+    !
+    ! Computes rxn rate [1/s] of ClNO3 + SALCCL.
+    !
+    TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
+    INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
+    REAL(dp)                   :: k              ! Rxn rate [1/s]
+    !
+    REAL(dp) :: area, branch, branchBr, gamma, srMw
+    !
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
+            PLYAx_y = PLYA1_1
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU1
+            ! Br- in playa bin y=1 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL1 
+        CASE (2)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
+            PLYAx_y = PLYA1_2
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU2
+            ! Br- in playa bin y=2 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL2 
+        CASE (3)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
+            PLYAx_y = PLYA1_3
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU3
+            ! Br- in playa bin y=3 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL3 
+        CASE (4)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL1
+            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
+            PLYAx_y = PLYA1_4
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU4
+            ! Br- in playa bin y=4 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL4
+        CASE (5)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL2
+            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
+            PLYAx_y = PLYA2_5
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU5
+            ! Br- in playa bin y=5 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL5 
+        CASE (6)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL3
+            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
+            PLYAx_y = PLYA3_6
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU6
+            ! Br- in playa bin y=6 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL6 
+        CASE (7)
+            ! Index referencing gckpp_Parameters.F90
+            ind_PLYACLx = ind_PLYACL4
+            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
+            PLYAx_y = PLYA4_7
+            ! index of aerosol properties defined by HetState
+            PLYADUy = PLYADU7
+            ! Br- in playa bin y=7 [mol/L] (should be 0 since currently no Br tracked in playa dust)
+            Br_conc_PLYACL = H%Br_conc_PLYACL7
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Compute uptake rate of ClNO3 + BrPLYA in clear sky
+    CALL Gam_ClNO3_Aer( H, Br_conc_PLYACL, gamma, branchBr )
+    srMw   = SR_MW(ind_ClNO3)
+    area   = H%ClearFr * H%xArea(PLYADUy)
+    branch = 1.0_dp - branchBr
+    k      = k + Ars_L1K( area, H%xRadi(PLYADUy), gamma, srMw ) * branch
+    !
+    ! Assume ClNO3 is limiting, so recompute reaction rate accordingly
+    k = kIIR1Ltd( C(ind_ClNO3), PLYAx_y*C(ind_PLYACLx), k )
+  END FUNCTION ClNO3uptkByPLYACL
+
   !=========================================================================
   ! Hetchem rate-law functions for HBr
   !=========================================================================
