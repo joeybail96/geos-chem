@@ -848,7 +848,7 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-  SUBROUTINE Get_Halide_PlayaConc( DST_BIN, n_x, surf_area, r_w, conc_x )
+  SUBROUTINE Get_Halide_PlayaConc( PLYA_BINy, n_x, surf_area, r_w, conc_x )
 !
 ! !USES:
 !
@@ -888,7 +888,7 @@ CONTAINS
     ENDIF
     
     ! Calculate how playa dust concentrations in bins x=1-4 are distributed among dust bins y=1-7 (see aerosol_mod.F90 for distribution details)
-    SELECT CASE (DST_BIN)
+    SELECT CASE (PLYA_BINy)
         CASE (1)
             ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
             PLYAx_y = PLYA1_1
