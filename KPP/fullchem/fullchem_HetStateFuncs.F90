@@ -98,6 +98,15 @@ CONTAINS
     TYPE(OptInput), INTENT(IN)    :: Input_Opt  ! Input Options object
     TYPE(ChmState), INTENT(IN)    :: State_Chm  ! Chemistry State object
     TYPE(MetState), INTENT(IN)    :: State_Met  ! Meterology State object
+    INTEGER,        INTENT(IN)    :: id_PLYA1   !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYA2   !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYA3   !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYA4   !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYAAL1 !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYAAL2 !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYAAL3 !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_PLYAAL4 !  in the State_Chm%Species
+
 !
 ! INPUT/OUTPUT PARAMETERS:
 !
@@ -386,7 +395,7 @@ CONTAINS
 ! !USES:
 !
     USE Gckpp_Global
-    USE GcKpp_Parameters
+    USE GcKpp_Parametersg
 !
 ! !INPUT PARAMETERS:
 !
@@ -871,7 +880,7 @@ CONTAINS
 !
 ! !LOCAL VARIABLES:
 !
-    REAL(dp) :: V_tot
+    REAL(dp) :: V_tot, PLYAx_y, n_x_y
 
     !==================================================================
     ! Get_Halide_PlayaConc begins here!
@@ -913,12 +922,12 @@ CONTAINS
     END SELECT
     
     ! update number concentration of playa dust to reflect how much dust is being distributed in PLYA_BINy
-    n_x = PLYAx_y*n_x
+    n_x_y = PLYAx_y*n_x
     
     ! this calculation is copied directly from Get_Halide_SsaConc
     ! calculate the molar concentration of playa dust Cl
     ! I am concerned that this calculation is not accurate and assumes 1 molec of Cl == 1 particle of playa dust
-    conc_x = ( n_x / AVO ) / V_tot    ! mol/L
+    conc_x = ( n_x_y / AVO ) / V_tot    ! mol/L
     conc_x = MAX( conc_x, 0.0_dp )
 
   END SUBROUTINE Get_Halide_PlayaConc
