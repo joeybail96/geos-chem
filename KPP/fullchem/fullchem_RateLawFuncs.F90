@@ -2185,7 +2185,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H&PLYA1_is_Acid
             PLYADUy = PLYADU1
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1 
             Br_conc_PLYACL = H%Br_conc_PLYACL1  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL1
@@ -2196,7 +2196,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H&PLYA1_is_Acid
             PLYADUy = PLYADU2
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2 
             Br_conc_PLYACL = H%Br_conc_PLYACL2  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL2
@@ -2207,7 +2207,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H&PLYA1_is_Acid
             PLYADUy = PLYADU3
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
             Br_conc_PLYACL = H%Br_conc_PLYACL3  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL3
@@ -2218,7 +2218,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H&PLYA1_is_Acid
             PLYADUy = PLYADU4
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
             Br_conc_PLYACL = H%Br_conc_PLYACL4  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL4
@@ -2229,7 +2229,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
             PLYA_is_Acid = H&PLYA2_is_Acid
             PLYADUy = PLYADU5
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
+            H_conc_PLYA = H%H_conc_PLYA2
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
             Br_conc_PLYACL = H%Br_conc_PLYACL5  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL5
@@ -2240,7 +2240,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
             PLYA_is_Acid = H&PLYA3_is_Acid
             PLYADUy = PLYADU6
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
+            H_conc_PLYA = H%H_conc_PLYA3
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
             Br_conc_PLYACL = H%Br_conc_PLYACL6  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL6
@@ -2251,7 +2251,7 @@ CONTAINS
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
             PLYA_is_Acid = H&PLYA4_is_Acid
             PLYADUy = PLYADU7
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA4
+            H_conc_PLYA = H%H_conc_PLYA4
             Cl_conc_PLYACL = H%Cl_conc_PLYACL7
             Br_conc_PLYACL = H%Br_conc_PLYACL7  
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL7
@@ -2640,7 +2640,7 @@ CONTAINS
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
             frac_Cl_CldP = H%frac_Cl_CldP1
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1  
             f_AcidPLYA = H%f_Acid_PLYA1      
         CASE (2)
@@ -2648,7 +2648,7 @@ CONTAINS
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
             frac_Cl_CldP = H%frac_Cl_CldP2
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (3)
@@ -2656,7 +2656,7 @@ CONTAINS
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
             frac_Cl_CldP = H%frac_Cl_CldP3
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (4)
@@ -2664,7 +2664,7 @@ CONTAINS
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
             frac_Cl_CldP = H%frac_Cl_CldP4
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
+            H_conc_PLYA = H%H_conc_PLYA1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (5)
@@ -2672,7 +2672,7 @@ CONTAINS
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
             frac_Cl_CldP = H%frac_Cl_CldP5
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
+            H_conc_PLYA = H%H_conc_PLYA2
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
             f_AcidPLYA = H%f_Acid_PLYA2
         CASE (6)
@@ -2680,7 +2680,7 @@ CONTAINS
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
             frac_Cl_CldP = H%frac_Cl_CldP6
-            H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
+            H_conc_PLYA = H%H_conc_PLYA3
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
             f_AcidPLYA = H%f_Acid_PLYA3
         CASE (7)
