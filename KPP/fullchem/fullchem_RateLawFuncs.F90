@@ -1081,7 +1081,6 @@ CONTAINS
     k = kIIR1Ltd( C(ind_ClNO2), C(ind_SALCCL), k )
   END FUNCTION ClNO2uptkBySALCCL
 
-
   FUNCTION ClNO2uptkByPLYACL( H, PLYA_BINy ) RESULT( k )
     !
     ! Computes the uptake rate [1/s] of ClNO2 + PLAYACL.
@@ -1092,65 +1091,46 @@ CONTAINS
     !
     REAL(dp) :: area,     gamma, branch
     REAL(dp) :: branchCl, dummy, srMw
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: frac_Cl_CldP           ! fraction of clouds containing chloride from PLYA_BINy
     !
     k    = 0.0_dp
     srMw = SR_MW(ind_ClNO2)
     !
-    ! Grab indices used to locate playa dust concentrations and playa dust properties
-    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among dust bins y=1-7 (see aerosol_mod.F90 for distribution details)
-    ! Grab the fraction of total cloud chloride for each playa dust bin 1-4 and multiply by bin_fract to get the redistributed fraction when playa dust split among 7 bins
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
-            ! fraction of clouds containing biny=1 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP1
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
-            ! fraction of clouds containing biny=2 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP2
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
-            ! fraction of clouds containing biny=3 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP3
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
-            ! fraction of clouds containing biny=4 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP4
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin
             PLYAx_y = PLYA2_5
-            ! fraction of clouds containing biny=5 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP5
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
-            ! fraction of clouds containing biny=6 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP6
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin
             PLYAx_y = PLYA4_7
-            ! fraction of clouds containing biny=4 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP7
     END SELECT
-
+    !
     ! ClNO2 + PLYACL uptake rate [1/s] in tropospheric cloud
     IF ( .not. H%stratBox ) THEN
        CALL Gam_ClNO2(                                                       &
@@ -1163,7 +1143,6 @@ CONTAINS
     ! Assume ClNO2 is limiting, so recompute reaction rate accordingly
     k = kIIR1Ltd( C(ind_ClNO2), PLYAx_y*C(ind_PLYACL), k )
   END FUNCTION ClNO2uptkByPLYACL
-
 
   FUNCTION ClNO2uptkByHCl( H ) RESULT( k )
     !
@@ -1527,70 +1506,48 @@ CONTAINS
     REAL(dp)                   :: k              ! Rxn rate [1/s]
     !
     REAL(dp) :: area, branch, branchBr, gamma, srMw
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: Br_conc_PLYACL         ! Br- in PLYA_BINy [mol/L] (should be 0 since currently no Br tracked in playa dust)
     !
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
-            ! Br- in playa bin y=1 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL1 
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
-            ! Br- in playa bin y=2 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL2 
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
-            ! Br- in playa bin y=3 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL3 
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
-            ! Br- in playa bin y=4 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL4
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             PLYAx_y = PLYA2_5
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
-            ! Br- in playa bin y=5 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL5 
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
-            ! Br- in playa bin y=6 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL6 
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             PLYAx_y = PLYA4_7
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
-            ! Br- in playa bin y=7 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL7
     END SELECT
     !
@@ -2202,159 +2159,102 @@ CONTAINS
     REAL(dp) :: k_HOBr_Cl,    k_HOBr_Br, k_HOBr_HSO3m
     REAL(dp) :: k_HOBr_SO3mm, k_tot,     srMw
     !
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    LOGICAL                    :: PLYA_is_Acid           ! is playa dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: frac_Cl_CldP           ! fraction of cloud that is from PLYA_BINy
+    REAL(dp)                   :: H_conc_PLYA            ! H+ concentration in PLYA_BINy (bin x=1 is same for bin y=1-4)
+    REAL(dp)                   :: Cl_conc_PLYACL         ! Cl- conc in PLYA_BINy [mol/L]
+    REAL(dp)                   :: Br_conc_PLYACL         ! Br- conc in PLYA_BINy [mol/L] (should be 0 bc no Br- currently tracked in playa dust)
+    REAL(dp)                   :: Br_over_Cl_PLYACL      ! Ratio of Br:Cl in PLYA_BINy (should be 0 since currently no Br- tracked in playa dust)
+    REAL(dp)                   :: f_AcidPLYA             ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
+    !
     k        = 0.0_dp
     brLiq    = 0.0_dp
     gammaAer = 0.0_dp
     gammaLiq = 0.0_dp
     srMw     = SR_MW(ind_HOBr)
     !
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
             PLYAx_y = PLYA1_1
-            ! fraction of cloud that is playa cl- bin y=1
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            ! is playa dust in bin y=1 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
-            ! H concentration in playa bin y=1
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=1 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1 
-            ! Br- in playa bin y=1 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL1  
-            ! Ratio of Br:Cl in playa dust y=1 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL1
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 playa bin
             PLYAx_y = PLYA1_2
-            ! fraction of cloud that is playa cl- bin y=2
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            ! is playa dust in bin y=2 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
-            ! H concentration in playa bin y=2
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=2 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2 
-            ! Br- in playa bin y=2 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL2  
-            ! Ratio of Br:Cl in playa dust y=2 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL2
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 playa bin
             PLYAx_y = PLYA1_3
-            ! fraction of cloud that is playa cl- bin y=3
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            ! is playa dust in bin y=3 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
-            ! H concentration in playa bin y=3
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=3 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
-            ! Br- in playa bin y=3 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL3  
-            ! Ratio of Br:Cl in playa dust y=3 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL3
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1  
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 playa bin
             PLYAx_y = PLYA1_4
-            ! fraction of cloud that is playa cl- bin y=4
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            ! is playa dust in bin y=4 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
-            ! H concentration in playa bin y=4
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=4 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
-            ! Br- in playa bin y=4 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL4  
-            ! Ratio of Br:Cl in playa dust y=4 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL4
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1  
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 playa bin
             PLYAx_y = PLYA2_5
-            ! fraction of cloud that is playa cl- bin y=5
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
-            ! is playa dust in bin y=5 acidic?
             PLYA_is_Acid = H&PLYA2_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
-            ! H concentration in playa bin y=5
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
-            ! Cl- in playa bin y=5 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
-            ! Br- in playa bin y=5 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL5  
-            ! Ratio of Br:Cl in playa dust y=5 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL5
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA2  
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
             PLYAx_y = PLYA3_6
-            ! fraction of cloud that is playa cl- bin y=6
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
-            ! is playa dust in bin y=6 acidic?
             PLYA_is_Acid = H&PLYA3_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
-            ! H concentration in playa bin y=6
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
-            ! Cl- in playa bin y=6 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
-            ! Br- in playa bin y=6 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL6  
-            ! Ratio of Br:Cl in playa dust y=6 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL6
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA3  
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
             PLYAx_y = PLYA4_7
-            ! fraction of cloud that is playa cl- bin y=7
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
-            ! is playa dust in bin y=7 acidic?
             PLYA_is_Acid = H&PLYA4_is_Acid
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
-            ! H concentration in playa bin y=7
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA4
-            ! Cl- in playa bin y=7 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL7
-            ! Br- in playa bin y=7 [mol/L] (should be 0 since currently no Br tracked in playa dust)
             Br_conc_PLYACL = H%Br_conc_PLYACL7  
-            ! Ratio of Br:Cl in playa dust y=7 (should be 0 since currently no Br tracked in playa dust)
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL7
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA4  
     END SELECT
     !
@@ -2721,122 +2621,75 @@ CONTAINS
     !
     REAL(dp) :: area,  branch, branchCl
     REAL(dp) :: dummy, gamma,  srMw
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: frac_Cl_CldP           ! fraction of cloud that is from PLYA_BINy
+    REAL(dp)                   :: H_conc_PLYA            ! H+ concentration in PLYA_BINy (bin x=1 is same for bin y=1-4)
+    REAL(dp)                   :: Cl_conc_PLYACL         ! Cl- conc in PLYA_BINy [mol/L]
+    REAL(dp)                   :: f_AcidPLYA             ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
     !
     k    = 0.0_dp
     srMw = SR_MW(ind_HOCl)
     !
-    ! Grab indices used to locate playa dust concentrations and physical properties
-    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among playa bins y=1-7 (see aerosol_mod.F90 for distribution details)
-    ! Grab the fraction of total cloud chloride for each playa dust bin 1-4 and multiply by bin_fract to get the redistributed fraction when playa dust split among 7 bins
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
             PLYAx_y = PLYA1_1
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
-            ! fraction of clouds containing biny=1 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP1
-            ! H concentration in playa bin y=1
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=1 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1  
-            ! acid fraction in playa dust bin y=1 (x=1)
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1      
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 playa bin
             PLYAx_y = PLYA1_2
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
-            ! fraction of clouds containing biny=2 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP2
-            ! H concentration in playa bin y=1
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=2 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2
-            ! acid fraction in playa dust bin y=2 (x=1)
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 playa bin
             PLYAx_y = PLYA1_3
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
-            ! fraction of clouds containing biny=3 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP3
-            ! H concentration in playa bin y=3
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=3 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
-            ! acid fraction in playa dust bin y=3 (x=1)
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 playa bin
             PLYAx_y = PLYA1_4
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
-            ! fraction of clouds containing biny=4 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP4
-            ! H concentration in playa bin y=4
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA1
-            ! Cl- in playa bin y=4 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
-            ! acid fraction in playa dust bin y=4 (x=1)
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 playa bin
             PLYAx_y = PLYA2_5
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
-            ! fraction of clouds containing biny=5 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP5
-            ! H concentration in playa bin y=5
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA2
-            ! Cl- in playa bin y=5 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
-            ! acid fraction in playa dust bin y=5 (x=2)
             f_AcidPLYA = H%f_Acid_PLYA2
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
             PLYAx_y = PLYA3_6
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
-            ! fraction of clouds containing biny=6 chloride 
             frac_Cl_CldP = H%frac_Cl_CldP6
-            ! H concentration in playa bin y=6
             H_conc_PLYA = PLYAx_y * H%H_conc_PLYA3
-            ! Cl- in playa bin y=6 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
-            ! acid fraction in playa dust bin y=6 (x=3)
             f_AcidPLYA = H%f_Acid_PLYA3
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 playa bin
             PLYAx_y = PLYA4_7
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
-            ! fraction of clouds containing biny=7 chloride 
             frac_Cl_CldP = PLYAx_y * H%frac_Cl_CldP7
-            ! H concentration in playa bin y=7
             H_conc_PLYA = H%H_conc_PLYA4
-            ! Cl- in playa bin y=7 [mol/L]
             Cl_conc_PLYACL = H%Cl_conc_PLYACL7
-            ! acid fraction in playa dust bin y=7 (x=4)
             f_AcidPLYA = H%f_Acid_PLYA4
     END SELECT
     !
@@ -3098,10 +2951,9 @@ CONTAINS
     ENDIF
   END FUNCTION IbrkdnbyAcidSALCCl
 
-
   FUNCTION IbrkdnByAcidPLYACL( srMw, conc, gamma, H, PLYA_BINy ) RESULT( k )
     !
-    ! Breakdown of iodine species on acidic sea-salt (accumulation mode)
+    ! Breakdown of iodine species on acidic playa dust
     ! Assume a ratio of IBr:ICl = 0.15:0.85
     !
     REAL(dp),       INTENT(IN) :: srMw, conc, gamma
@@ -3109,84 +2961,56 @@ CONTAINS
     INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
     REAL(dp)                   :: k
     REAL(dp)                   :: ssarea         ! acidic sea salt area
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    LOGICAL                    :: PLYA_is_Acid           ! is playa dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: f_AcidPLYA             ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
     !
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
-            ! is playa dust in bin y=1 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
-            ! is playa dust in bin y=2 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
-            ! is playa dust in bin y=3 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
-            ! is playa dust in bin y=4 acidic? (bin x=1 is same for bin y=1-4)
             PLYA_is_Acid = H&PLYA1_is_Acid
-            ! acid fraction same for y=1-4 since it is intensive property
             f_AcidPLYA = H%f_Acid_PLYA1   
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             PLYAx_y = PLYA2_5
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
-            ! is playa dust in bin y=5 acidic?
             PLYA_is_Acid = H&PLYA2_is_Acid
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA2   
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
-            ! is playa dust in bin y=6 acidic?
             PLYA_is_Acid = H&PLYA3_is_Acid
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA2  
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             PLYAx_y = PLYA4_7
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
-            ! is playa dust in bin y=7 acidic?
             PLYA_is_Acid = H&PLYA4_is_Acid
-            ! acid fraction
             f_AcidPLYA = H%f_Acid_PLYA2  
     END SELECT
     !
@@ -3200,7 +3024,6 @@ CONTAINS
        k = kIIR1Ltd( conc, PLYAx_y*C(ind_PLYACLx), k ) ! conc is limiting, so update k
     ENDIF
   END FUNCTION IbrkdnbyAcidPLYACL
-
 
   FUNCTION IONO2uptkByH2O( H ) RESULT( k )
     !
@@ -3366,58 +3189,40 @@ CONTAINS
     INTEGER, INTENT(IN)        :: PLYA_BINy              ! Playa bin (1-7)
     REAL(dp)                   :: k                      ! Rxn rate [1/s]
     REAL(dp)                   :: gamma, Y_ClNO2, Rp, SA ! local vars
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
     !
-    ! Grab indices used to locate playa dust concentrations and playa dust properties
-    ! Calculate how playa dust concentrations in bins 1-4 are distributed among dust bins 1-7 (see aerosol_mod.F90 for distribution details)
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             PLYAx_y = PLYA2_5
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             PLYAx_y = PLYA4_7
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
     END SELECT
     !
@@ -4029,73 +3834,53 @@ CONTAINS
     TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
     INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
     REAL(dp)                   :: gamma, k       ! rxn prob [1], rxn rate [1/s]
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
     !
-    ! Grab indices used to locate playa dust concentrations and playa dust properties
-    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among playa bins y=1-7 (see aerosol_mod.F90 for distribution details)
-    ! adjust gamma based on concentration of chloride in playa dust bins y=1-7 (mol/L; see HetState comment in Get_Halide_PlayaConc for units)
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #1 dust bin
             PLYAx_y = PLYA1_1
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU1
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL1
         CASE (2)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #2 dust bin
             PLYAx_y = PLYA1_2
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU2
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL2
         CASE (3)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #3 dust bin
             PLYAx_y = PLYA1_3
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU3
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
             gamma = 0.04_dp * H%Cl_conc_PLYACL3
         CASE (4)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL1
-            ! fraction of playa chloride contribution of PLYACL1 into #4 dust bin
             PLYAx_y = PLYA1_4
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU4
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL4
         CASE (5)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL2
-            ! fraction of playa chloride contribution of PLYACL2 into #5 dust bin 
             PLYAx_y = PLYA2_5
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU5
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL5
         CASE (6)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL3
-            ! fraction of playa chloride contribution of PLYACL3 into #6 dust bin
             PLYAx_y = PLYA3_6
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU6
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL6
         CASE (7)
-            ! Index referencing gckpp_Parameters.F90
             ind_PLYACLx = ind_PLYACL4
-            ! fraction of playa chloride contribution of PLYACL4 into #7 dust bin 
             PLYAx_y = PLYA4_7
-            ! index of aerosol properties defined by HetState
             PLYADUy = PLYADU7
-	    ! calculate gamma; gamma is from cf Knipping & Dabdub, 2002 (comment taken from OHuptkBySALCCl)
+            ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL7
     END SELECT
     !
@@ -4103,8 +3888,6 @@ CONTAINS
     k = 0.0_dp
     IF ( H%stratBox ) RETURN
     !
-    ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-    gamma = 0.04_dp * H%Cl_conc_SSC
     k = Ars_L1k( H%xArea(PLYADUy), H%xRadi(PLYADUy), gamma, SR_MW(ind_OH) )
     !
     ! Assume OH is limiting, so update the removal rate accordingly
