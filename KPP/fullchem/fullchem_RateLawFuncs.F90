@@ -2191,7 +2191,7 @@ CONTAINS
 
   FUNCTION HOBrUptkByPLYACL( H, PLYABINy ) RESULT( k )
     !
-    ! Computes the uptake rate [1/s] for the HOBr + SALCCL reaction.
+    ! Computes the uptake rate [1/s] for the HOBr + PLYACLx reaction.
     !
     TYPE(HetState), INTENT(IN) :: H              ! Hetchem State
     INTEGER, INTENT(IN)        :: PLYA_BINy      ! Playa bin (1-7)
