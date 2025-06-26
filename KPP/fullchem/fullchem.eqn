@@ -500,27 +500,27 @@ HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
 // Playa Dust
-SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(7);
+!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(7);
 HCl  + PLYAAL1       = PLYACL1           : K_MT(8);
-HNO3 + PLYAAL1       = NITs              : K_MT(9); 
-SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(10);
+!HNO3 + PLYAAL1       = NITs              : K_MT(9); 
+!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(10);
 HCl  + PLYAAL1       = PLYACL1           : K_MT(11);
-HNO3 + PLYAAL1       = NITs              : K_MT(12); 
-SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(13);
+!HNO3 + PLYAAL1       = NITs              : K_MT(12); 
+!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(13);
 HCl  + PLYAAL1       = PLYACL1           : K_MT(14);
-HNO3 + PLYAAL1       = NITs              : K_MT(15); 
-SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(16);
+!HNO3 + PLYAAL1       = NITs              : K_MT(15); 
+!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(16);
 HCl  + PLYAAL1       = PLYACL1           : K_MT(17);
-HNO3 + PLYAAL1       = NITs              : K_MT(18); 
-SO2  + PLYAAL2 + O3  = SO4s - PLYAAL2    : K_MT(19);
+!HNO3 + PLYAAL1       = NITs              : K_MT(18); 
+!SO2  + PLYAAL2 + O3  = SO4s - PLYAAL2    : K_MT(19);
 HCl  + PLYAAL2       = PLYACL2           : K_MT(20);
-HNO3 + PLYAAL2       = NITs              : K_MT(21); 
-SO2  + PLYAAL3 + O3  = SO4s - PLYAAL3    : K_MT(22);
+!HNO3 + PLYAAL2       = NITs              : K_MT(21); 
+!SO2  + PLYAAL3 + O3  = SO4s - PLYAAL3    : K_MT(22);
 HCl  + PLYAAL3       = PLYACL3           : K_MT(23);
-HNO3 + PLYAAL3       = NITs              : K_MT(24); 
-SO2  + PLYAAL4 + O3  = SO4s - PLYAAL4    : K_MT(25);
+!HNO3 + PLYAAL3       = NITs              : K_MT(24); 
+!SO2  + PLYAAL4 + O3  = SO4s - PLYAAL4    : K_MT(25);
 HCl  + PLYAAL4       = PLYACL4           : K_MT(26);
-HNO3 + PLYAAL4       = NITs              : K_MT(27); 
+!HNO3 + PLYAAL4       = NITs              : K_MT(27); 
 //
 // Cloud
 // S(IV) --> S(VI)
