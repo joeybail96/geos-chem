@@ -1284,12 +1284,9 @@ CONTAINS
 
     ! Playa dust density
     PLYA_DENS(1) = 2500.0_fp
-    PLYA_DENS(2) = 2500.0_fp
-    PLYA_DENS(3) = 2500.0_fp
-    PLYA_DENS(4) = 2500.0_fp
-    PLYA_DENS(5) = 2650.0_fp
-    PLYA_DENS(6) = 2650.0_fp
-    PLYA_DENS(7) = 2650.0_fp
+    PLYA_DENS(2) = 2650.0_fp
+    PLYA_DENS(3) = 2650.0_fp
+    PLYA_DENS(4) = 2650.0_fp
 
     ! Critical RH, above which heteorogeneous chem takes place (tmf, 6/14/07)
     CRITRH = 35.0e+0_fp   ! [%]
@@ -1416,30 +1413,19 @@ CONTAINS
        IF ( .not. State_Met%InChemGrid(I,J,L) ) CYCLE
 
        ERADIUS(I,J,L,N)            = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
-       ! append playa radii into ERADIUS
-       ERADIUS(I,J,L,N+NDUST+NAER) = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp  
        
        TAREA(I,J,L,N)              = 3.e+0_fp / ERADIUS(I,J,L,N) * &
                                      DUST(I,J,L,N) / MSDENS(N)
-       ! append playa surface areas into TAREA
-       TAREA(I,J,L,N+NDUST+NAER)   = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                                     PLYA_DUST(I,J,L,N) / PLYA_DENS(N)
 
        ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
        ! Get RH
        XRH                   = State_Met%RH( I, J, L )  ! [%]
        WTAREA(I,J,L, N)      = 0.e+0_fp
        WERADIUS(I,J,L, N)    = 0.e+0_fp
-       ! WTAREA and WERADIUS for playa dust
-       WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
-       WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
 
        IF ( XRH >= CRITRH ) THEN
           WTAREA(I,J,L, N)   = TAREA(I,J,L, N)
           WERADIUS(I,J,L, N) = ERADIUS(I,J,L, N)
-          ! WTAREA and WERADIUS for playa dust
-          WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
-          WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
        ENDIF
 
     ENDDO
@@ -1447,6 +1433,55 @@ CONTAINS
     ENDDO
     ENDDO
     !$OMP END PARALLEL DO
+
+    !==============================================================
+    ! Calculate Playa Dust Surface Area
+    !
+    ! Units ==> DUST     [ kg dust/m^3 air    ]
+    !           MSDENS   [ kg dust/m^3 dust   ]
+    !           RAA      [ um                 ]
+    !           TAREA    [ cm^2 dust/cm^3 air ]
+    !           ERADIUS  [ cm                 ]
+    !
+    ! NOTE: first find volume of dust (cm3 playa dust/cm3 air), then
+    !       multiply by 3/radius to convert to surface area in cm2
+    !
+    ! TAREA(:,1:NDUST) and ERADIUS(:,1:NDUST) are for
+    ! the NPLYA FAST-J dust wavelength bins (read into DUST)
+    !==============================================================
+    !$OMP PARALLEL DO       &
+    !$OMP DEFAULT( SHARED ) &
+    !$OMP PRIVATE( I, J, L, N, XRH )
+    DO N = 1, NPLYA
+    DO L = 1, State_Grid%NZ
+    DO J = 1, State_Grid%NY
+    DO I = 1, State_Grid%NX
+
+       ! Skip non-chemistry boxes
+       IF ( .not. State_Met%InChemGrid(I,J,L) ) CYCLE
+
+       ERADIUS(I,J,L,N+NDUST+NAER) = RDAA(N+NDUST+NAER,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
+       
+       TAREA(I,J,L,N+NDUST+NAER)   = 3.e+0_fp / ERADIUS(I,J,L,N+NDUST+NAER) * &
+                                     DUST(I,J,L,N+NDUST+NAER) / MSDENS(N+NDUST+NAER)
+
+       ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
+       ! Get RH
+       XRH                              = State_Met%RH( I, J, L )  ! [%]
+       WTAREA(I,J,L, N+NDUST+NAER)      = 0.e+0_fp
+       WERADIUS(I,J,L, N+NDUST+NAER)    = 0.e+0_fp
+
+       IF ( XRH >= CRITRH ) THEN
+          WTAREA(I,J,L, N+NDUST+NAER)   = TAREA(I,J,L, N+NDUST+NAER)
+          WERADIUS(I,J,L, N+NDUST+NAER) = ERADIUS(I,J,L, N+NDUST+NAER)
+       ENDIF
+
+    ENDDO
+    ENDDO
+    ENDDO
+    ENDDO
+    !$OMP END PARALLEL DO
+
 
     IF ( State_Diag%Archive_AOD .AND. ODSWITCH .EQ. 1 ) THEN
 

@@ -93,8 +93,6 @@ MODULE AEROSOL_MOD
   INTEGER :: id_SOAGX, id_SOAIE
   INTEGER :: id_INDIOL,id_LVOCOA
   INTEGER :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
-  INTEGER :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
-  INTEGER :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
 
   ! Index to map between NRHAER and species database hygroscopic species
   ! NOTE: Increasing value of NRHAER in CMN_SIZE_Mod.F90 (e.g. if there is
@@ -193,8 +191,6 @@ CONTAINS
     REAL(fp),      POINTER   :: T(:,:,:)
     REAL(fp),      POINTER   :: SOILDUST(:,:,:,:)
     REAL(fp),      POINTER   :: PLAYA_DUST(:,:,:,:)
-    REAL(fp),      POINTER   :: PLAYA_ALK(:,:,:,:)
-    REAL(fp),      POINTER   :: PLAYA_CL(:,:,:,:)
     REAL(fp),      POINTER   :: KG_STRAT_AER(:,:,:,:)
 
     ! Other variables
@@ -267,8 +263,6 @@ CONTAINS
     T            => State_Met%T
     SOILDUST     => State_Chm%SoilDust
     PLAYA_DUST   => State_Chm%PlyaDust
-    PLAYA_ALK    => State_Chm%PlyaAlk
-    PLAYA_CL     => State_Chm&PlyaCl
     KG_STRAT_AER => State_Chm%KG_AER
 
     !=================================================================
@@ -652,49 +646,15 @@ CONTAINS
        !-----------------------------------------------------------
        IF ( LDUST ) THEN
           
-          ! PLAYA DUST AEROSOL TRACER
-          ! Lump 1st dust tracer for het chem (see above for detailed comment)
-          PLAYA_DUST(I,J,L,1) = 0.007e+0_fp  * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,2) = 0.0332e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,3) = 0.2487e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,4) = 0.7111e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,5) = Spc(id_PLYA2)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,6) = Spc(id_PLYA3)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,7) = Spc(id_PLYA4)%Conc(I,J,L) / AIRVOL(I,J,L)
-
-          ! PLAYA DUST ALKALINITY TRACER
-          ! Lump 1st dust tracer for het chem (see above for detailed comment)
-          PLAYA_ALK(I,J,L,1) = 0.007e+0_fp  * Spc(id_PLYAAL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,2) = 0.0332e+0_fp * Spc(id_PLYAAL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,3) = 0.2487e+0_fp * Spc(id_PLYAAL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,4) = 0.7111e+0_fp * Spc(id_PLYAAL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,5) = Spc(id_PLYAAL2)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,6) = Spc(id_PLYAAL3)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_ALK(I,J,L,7) = Spc(id_PLYAAL4)%Conc(I,J,L) / AIRVOL(I,J,L)
-
-          ! PLAYA DUST CHLORIDE TRACER
-          ! Lump 1st dust tracer for het chem (see above for detailed comment)
-          PLAYA_CL(I,J,L,1) = 0.007e+0_fp  * Spc(id_PLYACL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_CL(I,J,L,2) = 0.0332e+0_fp * Spc(id_PLYACL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_CL(I,J,L,3) = 0.2487e+0_fp * Spc(id_PLYACL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_CL(I,J,L,4) = 0.7111e+0_fp * Spc(id_PLYACL1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-
-          ! Other hetchem bins
-          PLAYA_CL(I,J,L,5) = Spc(id_PLYACL2)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_CL(I,J,L,6) = Spc(id_PLYACL3)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_CL(I,J,L,7) = Spc(id_PLYACL4)%Conc(I,J,L) / AIRVOL(I,J,L)
+          ! GENERATING A SEPARATE LIST OF 4 PLAYA AEROSOL TRACERS
+          PLAYA_DUST(I,J,L,1) = Spc(id_PLYA1)%Conc(I,J,L) &
+                               / AIRVOL(I,J,L)
+          PLAYA_DUST(I,J,L,2) = Spc(id_PLYA2)%Conc(I,J,L) &
+                               / AIRVOL(I,J,L)
+          PLAYA_DUST(I,J,L,3) = Spc(id_PLYA3)%Conc(I,J,L) &
+                               / AIRVOL(I,J,L)
+          PLAYA_DUST(I,J,L,4) = Spc(id_PLYA4)%Conc(I,J,L) &
+                               / AIRVOL(I,J,L)
 
        ENDIF
 
@@ -1085,8 +1045,6 @@ CONTAINS
     T          => NULL()
     SOILDUST   => NULL()
     PLAYA_DUST => NULL()
-    PLAYA_ALK  => NULL()
-    PLAYA_CL   => NULL()
 
   END SUBROUTINE AEROSOL_CONC
 !EOC

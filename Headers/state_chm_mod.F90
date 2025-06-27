@@ -1258,9 +1258,6 @@ CONTAINS
        fieldId(2) = 'PlyaDUST2'
        fieldId(3) = 'PlyaDUST3'
        fieldId(4) = 'PlyaDUST4'
-       fieldId(5) = 'PlyaDUST5'
-       fieldId(6) = 'PlyaDUST6'
-       fieldId(7) = 'PlyaDUST7'
 
        ! Allocate and register each field individually
        DO N = 1, NPLYA
@@ -1288,9 +1285,6 @@ CONTAINS
        fieldId(2) = 'PlyaAlk2'
        fieldId(3) = 'PlyaAlk3'
        fieldId(4) = 'PlyaAlk4'
-       fieldId(5) = 'PlyaAlk5'
-       fieldId(6) = 'PlyaAlk6'
-       fieldId(7) = 'PlyaAlk7'
 
        ! Allocate and register each field individually
        DO N = 1, NPLYA
@@ -1318,9 +1312,6 @@ CONTAINS
        fieldId(2) = 'PlyaCl2'
        fieldId(3) = 'PlyaCl3'
        fieldId(4) = 'PlyaCl4'
-       fieldId(5) = 'PlyaCl5'
-       fieldId(6) = 'PlyaCl6'
-       fieldId(7) = 'PlyaCl7'
 
        ! Allocate and register each field individually
        DO N = 1, NPLYA
@@ -4278,21 +4269,6 @@ CONTAINS
           IF ( isUnits ) Units = 'cm2 cm-3'
           IF ( isRank  ) Rank  = 3
 
-       CASE ( 'AEROAREAPDUST5' )
-          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AEROAREAPDUST6' )
-          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AEROAREAPDUST7' )
-          IF ( isDesc  ) Desc  = 'Dry aerosol area for playa dust (4.0 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
        CASE ( 'AERORADIMDUST1' )
           IF ( isDesc  ) Desc  = &
                'Dry aerosol radius for mineral dust (0.15 um)'
@@ -4393,24 +4369,6 @@ CONTAINS
           IF ( isUnits ) Units = 'cm'
           IF ( isRank  ) Rank  = 3
 
-       CASE ( 'AERORADIPDUST5' )
-          IF ( isDesc  ) Desc  = &
-               'Dry aerosol radius for playa dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AERORADIPDUST6' )
-          IF ( isDesc  ) Desc  = &
-               'Dry aerosol radius for playa dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AERORADIPDUST7' )
-          IF ( isDesc  ) Desc  = &
-               'Dry aerosol radius for playa dust (4.0 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
        CASE ( 'WETAEROAREAMDUST1' )
           IF ( isDesc  ) Desc  = 'Wet aerosol area for mineral dust (0.15 um)'
           IF ( isUnits ) Units = 'cm2 cm-3'
@@ -4504,21 +4462,6 @@ CONTAINS
           IF ( isUnits ) Units = 'cm2 cm-3'
           IF ( isRank  ) Rank  = 3
 
-       CASE ( 'WETAEROAREAPDUST5' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAEROAREAPDUST6' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAEROAREAPDUST7' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol area for playa dust (4.0 um)'
-          IF ( isUnits ) Units = 'cm2 cm-3'
-          IF ( isRank  ) Rank  = 3
-
        CASE ( 'WETAERORADIMDUST1' )
           IF ( isDesc  ) Desc  = 'Wet aerosol radius for mineral dust (0.15 um)'
           IF ( isUnits ) Units = 'cm'
@@ -4536,21 +4479,6 @@ CONTAINS
 
        CASE ( 'WETAERORADIMDUST4' )
           IF ( isDesc  ) Desc  = 'Wet aerosol radius for mineral dust (0.8 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIMDUST5' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for mineral dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIMDUST6' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for mineral dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIMDUST7' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for mineral dust (4.0 um)'
           IF ( isUnits ) Units = 'cm'
           IF ( isRank  ) Rank  = 3
 
@@ -4633,21 +4561,6 @@ CONTAINS
 
        CASE ( 'WETAERORADIPDUST4' )
           IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (0.8 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIPDUST5' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIPDUST6' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'WETAERORADIPDUST7' )
-          IF ( isDesc  ) Desc  = 'Wet aerosol radius for playa dust (4.0 um)'
           IF ( isUnits ) Units = 'cm'
           IF ( isRank  ) Rank  = 3
 
@@ -4744,21 +4657,6 @@ CONTAINS
           IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
           IF ( isRank  ) Rank  = 3
 
-       CASE ( 'AEROH2OPDUST5' )
-          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (1.5 um)'
-          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AEROH2OPDUST6' )
-          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (2.5 um)'
-          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
-          IF ( isRank  ) Rank  = 3
-
-       CASE ( 'AEROH2OPDUST7' )
-          IF ( isDesc  ) Desc  = 'Aerosol H2O content for playa dust (4.0 um)'
-          IF ( isUnits ) Units = 'cm3(H2O) cm-3(air)'
-          IF ( isRank  ) Rank  = 3
-
        CASE ( 'SOILDUST1' )
           IF ( isDesc  ) Desc  = 'Dust aerosol concentration in bin 1'
           IF ( isUnits ) Units = 'kg/m3'
@@ -4814,21 +4712,6 @@ CONTAINS
           IF ( isUnits ) Units = 'kg/m3'
           IF ( isRank  ) Rank  =  3
 
-       CASE ( 'PLYADUST5' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 5'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST6' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 6'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST7' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 7'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
        CASE ( 'PLYAALK1' )
           IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 1'
           IF ( isUnits ) Units = '-'
@@ -4849,21 +4732,6 @@ CONTAINS
           IF ( isUnits ) Units = '-'
           IF ( isRank  ) Rank  =  3
 
-       CASE ( 'PLYAALK5' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 5'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK6' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 6'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK7' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 7'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
        CASE ( 'PLYACL1' )
           IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 1'
           IF ( isUnits ) Units = 'kg/m3'
@@ -4881,21 +4749,6 @@ CONTAINS
 
        CASE ( 'PLYACL4' )
           IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 4'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL5' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 5'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL6' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 6'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL7' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 7'
           IF ( isUnits ) Units = 'kg/m3'
           IF ( isRank  ) Rank  =  3
 

@@ -44,9 +44,6 @@ MODULE fullchem_RateLawFuncs
   INTEGER,  PRIVATE, PARAMETER :: PLYADU2        = 16 ! Playa dust (Reff = 0.253 um)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU3        = 17 ! Playa dust (Reff = 0.402 um)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU4        = 18 ! Playa dust (Reff = 0.818 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU5        = 19 ! Playa dust (Reff = 1.491 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU6        = 20 ! Playa dust (Reff = 2.417 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU7        = 21 ! Playa dust (Reff = 3.721 um)
 
   ! Indices for Fine and Coarse sea-salt indices
   INTEGER,  PRIVATE, PARAMETER :: SS_FINE        = 1
@@ -73,17 +70,6 @@ MODULE fullchem_RateLawFuncs
 
   ! Reference temperature used in Henry's law
   REAL(dp), PRIVATE, PARAMETER :: INV_T298       = 1.0_dp / 298.15_dp
-
-  ! distribution fractions of playa dust bins 1-4 among mineral dust bins 1-7
-  ! see aerosol_mod.F90 for distribution fractions
-  REAL(fp), PRIVATE, PARAMETER :: PLYA1_1     = 0.0070e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA1_2     = 0.0332e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA1_3     = 0.2487e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA1_4     = 0.7111e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA2_5     = 1.0000e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA3_6     = 1.0000e+0_fp
-  REAL(fp), PRIVATE, PARAMETER :: PLYA4_7     = 1.0000e+0_fp
-
 !
 ! !REFERENCES:
 !  Eastham et al., Development and evaluation of the unified tropospheric-
@@ -3192,38 +3178,21 @@ CONTAINS
     ! local vars continued...
     INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
     INTEGER                    :: PLYADUy                ! index of aerosol properties defined by HetState
-    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
     !
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
             ind_PLYACLx = ind_PLYACL1
-            PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
-            PLYAx_y = PLYA1_2
+            ind_PLYACLx = ind_PLYACL2
             PLYADUy = PLYADU2
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
-            PLYAx_y = PLYA1_3
+            ind_PLYACLx = ind_PLYACL3
             PLYADUy = PLYADU3
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
-            PLYAx_y = PLYA1_4
-            PLYADUy = PLYADU4
-        CASE (5)
-            ind_PLYACLx = ind_PLYACL2
-            PLYAx_y = PLYA2_5
-            PLYADUy = PLYADU5
-        CASE (6)
-            ind_PLYACLx = ind_PLYACL3
-            PLYAx_y = PLYA3_6
-            PLYADUy = PLYADU6
-        CASE (7)
             ind_PLYACLx = ind_PLYACL4
-            PLYAx_y = PLYA4_7
-            PLYADUy = PLYADU7
+            PLYADUy = PLYADU4
     END SELECT
     !
     ! Exit if in the stratosphere
@@ -3233,7 +3202,7 @@ CONTAINS
     ! Properties of playa dust (same as corresponding mineral dust)
     CALL N2O5_InorgOrg(                                                      &
          H,      H%xVol(PLYADUy),  0.0_dp,      H%xH2O(PLYADUy),           &
-         0.0_dp, H%xRadi(PLYADUy), C(ind_NITs), PLYAx_y*C(ind_PLYACLx),    &
+         0.0_dp, H%xRadi(PLYADUy), C(ind_NITs), C(ind_PLYACLx),    &
          gamma,  Y_ClNO2,          Rp,           SA                         )    
     !
     ! Total loss rate of N2O5 (kN2O5) on playa dust
