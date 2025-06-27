@@ -467,27 +467,10 @@ HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
 // Playa Dust
-!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(7);
-HCl  + PLYAAL1       = PLYACL1           : K_MT(8);
-!HNO3 + PLYAAL1       = NITs              : K_MT(9); 
-!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(10);
-HCl  + PLYAAL1       = PLYACL1           : K_MT(11);
-!HNO3 + PLYAAL1       = NITs              : K_MT(12); 
-!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(13);
-HCl  + PLYAAL1       = PLYACL1           : K_MT(14);
-!HNO3 + PLYAAL1       = NITs              : K_MT(15); 
-!SO2  + PLYAAL1 + O3  = SO4s - PLYAAL1    : K_MT(16);
-HCl  + PLYAAL1       = PLYACL1           : K_MT(17);
-!HNO3 + PLYAAL1       = NITs              : K_MT(18); 
-!SO2  + PLYAAL2 + O3  = SO4s - PLYAAL2    : K_MT(19);
+HCl  + PLYAAL1       = PLYACL1           : K_MT(8) + K_MT(11) + K_MT(14) + K_MT(17);
 HCl  + PLYAAL2       = PLYACL2           : K_MT(20);
-!HNO3 + PLYAAL2       = NITs              : K_MT(21); 
-!SO2  + PLYAAL3 + O3  = SO4s - PLYAAL3    : K_MT(22);
 HCl  + PLYAAL3       = PLYACL3           : K_MT(23);
-!HNO3 + PLYAAL3       = NITs              : K_MT(24); 
-!SO2  + PLYAAL4 + O3  = SO4s - PLYAAL4    : K_MT(25);
 HCl  + PLYAAL4       = PLYACL4           : K_MT(26);
-!HNO3 + PLYAAL4       = NITs              : K_MT(27); 
 //
 // Cloud
 // S(IV) --> S(VI)
@@ -1482,170 +1465,179 @@ FURA + OH = BUTDI :                          GCARR_ac(1.32d-11,334.0d0);        
 // %%%%% Heterogeneous chemistry reactions                               %%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-HO2 = H2O :                    HO2uptk1stOrd( State_Het );                                                  {2013/03/22; Paulot2009; FP,EAM,JMAO,MJE}
-NO2 = 0.500HNO3 + 0.500HNO2 :  NO2uptk1stOrdAndCloud( State_Het );
-NO3 = HNO3 :                   NO3uptk1stOrdAndCloud( State_Het );
-NO3 = NIT :                    NO3hypsisClonSALA( State_Het );                                              {2018/03/16; XW}
-NO3 = NITs :                   NO3hypsisClonSALC( State_Het );                                              {2018/03/16; XW}
-N2O5 + H2O = 2.000HNO3 :       N2O5uptkByH2O( State_Het );
-N2O5 + HCl = ClNO2 + HNO3 :    N2O5uptkByStratHCl( State_Het );                                             {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-N2O5 = 2.000HNO3 :             N2O5uptkByCloud( State_Het );                                                {2018/10/17; Cloud uptake, CDH}
-N2O5 + SALACL = ClNO2 + HNO3 : N2O5uptkBySALACl( State_Het );                                               {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
-N2O5 + SALCCL = ClNO2 + HNO3 : N2O5uptkBySALCCl( State_Het );                                               {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
-N2O5 + PLYACL1 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 1 );                                           {}
-N2O5 + PLYACL1 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 2 );                                           {}
-N2O5 + PLYACL1 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 3 );                                           {}
-N2O5 + PLYACL1 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 4 );                                           {}
-N2O5 + PLYACL2 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 5 );                                           {}
-N2O5 + PLYACL3 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 6 );                                           {}
-N2O5 + PLYACL4 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 7 );                                           {}
-OH + SALACL = 0.500Cl2 :       OHuptkBySALACl( State_Het );                                                 {2018/03/12; XW}
-OH + SALCCL = 0.500Cl2 :       OHuptkBySALCCl( State_Het );                                                 {2018/03/12; XW}
-OH + PLYACL1 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 1 );                                              {}
-OH + PLYACL1 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 2 );                                              {}
-OH + PLYACL1 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 3 );                                              {}
-OH + PLYACL1 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 4 );                                              {}
-OH + PLYACL2 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 5 );                                              {}
-OH + PLYACL3 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 6 );                                              {}
-OH + PLYACL4 = 0.500CL2 :      OHuptkByPLYACL( State_Het, 7 );                                              {}
-BrNO3 + H2O = HOBr + HNO3 :    BrNO3uptkByH2O( State_Het );                                                 {2014/02/03; Eastham2014; SDE}
-BrNO3 + HCl = BrCl + HNO3 :    BrNO3uptkByHCl( State_Het );                                                 {2014/02/03; Eastham2014; SDE}
-ClNO3 + H2O = HOCl + HNO3 :    ClNO3uptkByH2O( State_Het );                                                 {2014/02/03; Eastham2014; SDE}
-ClNO3 + HCl = Cl2 + HNO3 :     ClNO3uptkByHCl( State_Het );                                                 {2014/02/03; Eastham2014; SDE}
-ClNO3 + HBr = BrCl + HNO3 :    ClNO3uptkByHBr( State_Het );                                                 {2014/02/03; Eastham2014; SDE}
-ClNO3 + BrSALA = BrCl + HNO3 : ClNO3uptkByBrSALA( State_Het );                                              {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-ClNO3 + BrSALC = BrCl + HNO3 : ClNO3uptkByBrSALC( State_Het );                                              {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-ClNO3 + SALACL = Cl2 + HNO3 :  ClNO3uptkBySALACL( State_Het );                                              {2018/01/22; XW}
-ClNO3 + SALCCL = Cl2 + HNO3 :  ClNO3uptkBySALCCL( State_Het );                                              {2018/01/22; XW}
-ClNO3 + PLYACL1 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 1 );                                           {}
-ClNO3 + PLYACL1 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 2 );                                           {}
-ClNO3 + PLYACL1 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 3 );                                           {}
-ClNO3 + PLYACL1 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 4 );                                           {}
-ClNO3 + PLYACL2 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 5 );                                           {}
-ClNO3 + PLYACL3 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 6 );                                           {}
-ClNO3 + PLYACL4 = Cl2 + HNO3 : ClNO3uptkByPLYACL( State_Het, 7 );                                           {}
-ClNO2 + SALACL = Cl2 + HNO2 :  ClNO2uptkBySALACL( State_Het );                                              {2018/01/22; XW}
-ClNO2 + SALCCL = Cl2 + HNO2 :  ClNO2uptkBySALCCL( State_Het );                                              {2018/01/22; XW}
-ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 1 );                                          {}
-ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 2 );                                          {}
-ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 3 );                                          {}
-ClNO2 + PLYACL1 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 4 );                                          {}
-ClNO2 + PLYACL2 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 5 );                                          {}
-ClNO2 + PLYACL3 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 6 );                                          {}
-ClNO2 + PLYACL4 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 7 );                                          {}
-ClNO2 + HCl = Cl2 + HNO2 :     ClNO2uptkByHCl( State_Het );                                                 {2018/01/22; XW}
-ClNO2 + BrSALA = BrCl + HNO2 : ClNO2uptkByBrSALA( State_Het );                                              {2018/01/22; XW}
-ClNO2 + BrSALC = BrCl + HNO2 : ClNO2uptkByBrSALC( State_Het );                                              {2018/01/22; XW}
-ClNO2 + HBr = BrCl + HNO2 :    ClNO2uptkByHBr( State_Het );                                                 {2018/01/22; XW}
-HOCl + HCl = Cl2 + H2O :       HOClUptkByHCl( State_Het );                                                  {2014/02/03; Eastham2014; SDE}
-HOCl + HBr = BrCl + H2O :      HOClUptkByHBr( State_Het );                                                  {2014/02/03; Eastham2014; SDE}
-HOCl + SALACL = Cl2 + H2O :    HOClUptkBySALACL( State_Het );                                               {2018/01/22; XW}
-HOCl + SALCCL = Cl2 + H2O :    HOClUptkBySALCCL( State_Het );                                               {2018/01/22; XW}
-HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 1 );                                            {}
-HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 2 );                                            {}
-HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 3 );                                            {}
-HOCl + PLYACL1 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 4 );                                            {}
-HOCl + PLYACL2 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 5 );                                            {}
-HOCl + PLYACL3 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 6 );                                            {}
-HOCl + PLYACL4 = Cl2 + H2O :   HOClUptkByPLYACL( State_Het, 7 );                                            {}
-HOCl + SO2 = SO4 + HCl :       HOClUptkByHSO3m( State_Het ) + HOClUptkBySO3mm( State_Het ) + SRHOCl;        {2023/01/30; Add SRHOCL, BA; 2018/11/08; XW; June 6, 2021, MSL}
-HOBr + HBr = Br2 + H2O :       HOBrUptkByHBr( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HOBr + HCl = BrCl + H2O :      HOBrUptkByHCl( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HOBr + SALACL = BrCl + H2O :   HOBrUptkBySALACL( State_Het );                                               {2018/01/22; Sherwen2017;TS,JAS,SDE;XW}
-HOBr + SALCCL = BrCl + H2O :   HOBrUptkBySALCCL( State_Het );                                               {2018/01/22; Sherwen2017;TS,JAS,SDE,XW}
-HOBr + PLYACL1 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 1 );                                            {}
-HOBr + PLYACL1 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 2 );                                            {}
-HOBr + PLYACL1 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 3 );                                            {}
-HOBr + PLYACL1 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 4 );                                            {}
-HOBr + PLYACL2 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 5 );                                            {}
-HOBr + PLYACL3 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 6 );                                            {}
-HOBr + PLYACL4 = BrCl + H2O :  HOBrUptkByPLYACL( State_Het, 7 );                                            {}
-HOBr + BrSALA = Br2 :          HOBrUptkByBrSALA( State_Het );                                               {2017/09/22; Sherwen2017;TS,JAS,SDE}
-HOBr + BrSALC = Br2 :          HOBrUptkByBrSALC( State_Het );                                               {2017/09/22; Sherwen2017;TS,JAS,SDE}
-HOBr + SO2 = SO4 + HBr :       HOBrUptkByHSO3m( State_Het ) + HOBrUptkBySO3mm( State_Het ) + SRHOBr;        {2023/01/30; Add SRHOBrL, BA; 2017/11/15; Chen2017; QJC; June 6, 2021, MSL}
-O3 + HBr = HOBr :              O3uptkByHBr( State_Het );                                                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-O3 + BrSALA = HOBr :           O3uptkByBrSALA( State_Het );                                                 {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-O3 + BrSALC = HOBr :           O3uptkByBrSALC( State_Het );                                                 {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HBr = BrSALA :                 HBrUptkBySALA( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HBr = BrSALC :                 HBrUptkBySALC( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HI = AERI :                    IuptkBySulf1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HI = ISALA :                   IuptkBySALA1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HI = ISALC :                   IuptkBySALC1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-HOI = ISALA :                  IuptkByAlkSALA1stOrd( SR_MW(ind_HOI), 0.01_dp, State_Het );                  {2023/01/24; Restored deleted rxn:BA}
-HOI = ISALC :                  IuptkByAlkSALC1stOrd( SR_MW(ind_HOI), 0.01_dp, State_Het );                  {2022/12/02; Restored deleted rxn:BA}
-I2O2 = 2.000AERI :             IuptkBySulf1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O2 = 2.000ISALA :            IuptkBySALA1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O2 = 2.000ISALC :            IuptkBySALC1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O3 = 2.000AERI :             IuptkBySulf1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O3 = 2.000ISALA :            IuptkBySALA1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O3 = 2.000ISALC :            IuptkBySALC1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O4 = 2.000AERI :             IuptkBySulf1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O4 = 2.000ISALA :            IuptkBySALA1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-I2O4 = 2.000ISALC :            IuptkBySALC1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                    {2017/09/22; Sherwen2016b;TS,JAS,SDE}
-IONO = ISALA + HNO2 :          IuptkByAlkSALA1stOrd( SR_MW(ind_IONO), 0.02_dp, State_Het );                 {2022/12/02; Restored deleted rxn:BA}
-IONO = ISALC + HNO2 :          IuptkByAlkSALC1stOrd( SR_MW(ind_IONO), 0.02_dp, State_Het );                 {2022/12/02; Restored deleted rxn:BA}
-IONO2 = ISALA + HNO3 :         IuptkByAlkSALA1stOrd( SR_MW(ind_IONO2), 0.01_dp, State_Het );                {2022/12/02; Restored deleted rxn:BA}
-IONO2 = ISALC + HNO3 :         IuptkByAlkSALC1stOrd( SR_MW(ind_IONO2), 0.01_dp, State_Het );                {2022/12/02; Restored deleted rxn:BA}
-IONO2 + H2O = HOI + HNO3 :     IONO2uptkByH2O( State_Het );                                                 {2021/09/16 XW, TSherwen}
-IONO + BrSALA = IBr + HNO2 :   IbrkdnByAcidBrSALA( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );      {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO + BrSALC = IBr + HNO2 :   IbrkdnByAcidBrSALC( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );      {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO + SALACL = ICl + HNO2 :   IbrkdnByAcidSALACl( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );      {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO + SALCCL = ICl + HNO2 :   IbrkdnByAcidSALCCl( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );      {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO + PLYACL1 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 1 );   {}
-IONO + PLYACL1 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 2 );   {}
-IONO + PLYACL1 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 3 );   {}
-IONO + PLYACL1 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 4 );   {}
-IONO + PLYACL2 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 5 );   {}
-IONO + PLYACL3 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 6 );   {}
-IONO + PLYACL4 = ICl + HNO2 :  IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 7 );   {}
-IONO2 + BrSALA = IBr + HNO3 :  IbrkdnByAcidBrSALA( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );    {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO2 + BrSALC = IBr + HNO3 :  IbrkdnByAcidBrSALC( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );    {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO2 + SALACL = ICl + HNO3 :  IbrkdnByAcidSALACl( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );    {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO2 + SALCCL = ICl + HNO3 :  IbrkdnByAcidSALCCl( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );    {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-IONO2 + PLYACL1 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 1 ); {}
-IONO2 + PLYACL1 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 2 ); {}
-IONO2 + PLYACL1 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 3 ); {}
-IONO2 + PLYACL1 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 4 ); {}
-IONO2 + PLYACL2 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 5 ); {}
-IONO2 + PLYACL3 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 6 ); {}
-IONO2 + PLYACL4 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 7 ); {}
-HOI + BrSALA = IBr :           IbrkdnByAcidBrSALA( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );        {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-HOI + BrSALC = IBr :           IbrkdnByAcidBrSALC( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );        {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-HOI + SALACL = ICl :           IbrkdnByAcidSALACl( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );        {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-HOI + SALCCL = ICl :           IbrkdnByAcidSALCCl( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );        {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
-HOI + PLYACL1 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 1 );     {}
-HOI + PLYACL1 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 2 );     {}
-HOI + PLYACL1 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 3 );     {}
-HOI + PLYACL1 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 4 );     {}
-HOI + PLYACL2 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 5 );     {}
-HOI + PLYACL3 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 6 );     {}
-HOI + PLYACL4 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 7 );     {}
-GLYX = SOAGX :                 GLYXuptk1stOrd( SR_MW(ind_GLYX), State_Het);                                 {2017/06/15; Marais2016, EAM}
-MGLY = 1.500SOAGX :            MGLYuptk1stOrd( SR_MW(ind_MGLY), State_Het);                                 {2017/06/15; Marais2016, EAM; 2023/04/18; Bates2023; KHB}
-IEPOXA = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXA), .FALSE., State_Het );                    {2017/06/15; Marais2016, EAM}
-IEPOXB = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXB), .FALSE., State_Het );                    {2017/06/15; Marais2016, EAM}
-IEPOXD = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXD), .FALSE., State_Het );                    {2017/06/15; Marais2016, EAM}
-LVOC = LVOCOA :                VOCuptk1stOrd( SR_MW(ind_LVOC), 1.0_dp, State_Het );                         {2017/06/15; Marais2016, EAM}
-MVKN = IONITA :                VOCuptk1stOrd( SR_MW(ind_MVKN), 5.0E-3_dp, State_Het );                      {2017/06/15; Marais2016, EAM}
-R4N2 = IONITA :                VOCuptk1stOrd( SR_MW(ind_R4N2), 5.0E-3_dp, State_Het );                      {2017/06/15; Marais2016, EAM}
-MONITS = MONITA :              VOCuptk1stOrd( SR_MW(ind_MONITS), 1.0E-2_dp, State_Het );                    {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
-MONITU = MONITA :              VOCuptk1stOrd( SR_MW(ind_MONITU), 1.0E-2_dp, State_Het );                    {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
-HONIT = MONITA :               VOCuptk1stOrd( SR_MW(ind_HONIT), 1.0E-2_dp, State_Het );                     {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
-PYAC = 1.500SOAGX :            MGLYuptk1stOrd( SR_MW(ind_PYAC), State_Het );                                {2019/11/06; Bates2019; KHB; 2023/04/18; Bates2023; KHB}
-HMML = 0.800SOAIE :            IEPOXuptk1stOrd( SR_MW(ind_HMML), .TRUE., State_Het);                        {2019/11/06; Bates2019; KHB; 2023/04/18; Bates2023; KHB}
-IHN1 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN1), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-IHN2 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN2), 5.0E-2_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-IHN3 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN3), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-IHN4 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN4), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-ICHE = SOAIE :                 IEPOXuptk1stOrd( SR_MW(ind_ICHE), .FALSE., State_Het );                      {2019/11/06; Bates2019; KHB}
-INPD = IONITA :                VOCuptk1stOrd( SR_MW(ind_INPD), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-INPB = IONITA :                VOCuptk1stOrd( SR_MW(ind_INPB), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-IDN = IONITA :                 VOCuptk1stOrd( SR_MW(ind_IDN), 5.0E-3_dp, State_Het );                       {2019/11/06; Bates2019; KHB}
-ITCN = IONITA :                VOCuptk1stOrd( SR_MW(ind_ITCN), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-ITHN = IONITA :                VOCuptk1stOrd( SR_MW(ind_ITHN), 5.0E-3_dp, State_Het );                      {2019/11/06; Bates2019; KHB}
-MCRHNB = IONITA :              VOCuptk1stOrd( SR_MW(ind_MCRHNB), 5.0E-3_dp, State_Het );                    {2019/11/06; Bates2019; KHB}
-MCRHN = IONITA :               VOCuptk1stOrd( SR_MW(ind_MCRHN), 5.0E-3_dp, State_Het );                     {2019/11/06; Bates2019; KHB}
-NPHEN = AONITA :               VOCuptk1stOrd( SR_MW(ind_NPHEN), 1.0E-2_dp, State_Het );                     {2021/09/29; Bates2021b; KHB,MSL}
+HO2 = H2O :                     HO2uptk1stOrd( State_Het );                                                      {2013/03/22; Paulot2009; FP,EAM,JMAO,MJE}
+NO2 = 0.500HNO3 + 0.500HNO2 :   NO2uptk1stOrdAndCloud( State_Het );
+NO3 = HNO3 :                    NO3uptk1stOrdAndCloud( State_Het );
+NO3 = NIT :                     NO3hypsisClonSALA( State_Het );                                                  {2018/03/16; XW}
+NO3 = NITs :                    NO3hypsisClonSALC( State_Het );                                                  {2018/03/16; XW}
+N2O5 + H2O = 2.000HNO3 :        N2O5uptkByH2O( State_Het );
+N2O5 + HCl = ClNO2 + HNO3 :     N2O5uptkByStratHCl( State_Het );                                                 {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+N2O5 = 2.000HNO3 :              N2O5uptkByCloud( State_Het );                                                    {2018/10/17; Cloud uptake, CDH}
+N2O5 + SALACL = ClNO2 + HNO3 :  N2O5uptkBySALACl( State_Het );                                                   {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
+N2O5 + SALCCL = ClNO2 + HNO3 :  N2O5uptkBySALCCl( State_Het );                                                   {2018/01/19; Sherwen2017;TS,JAS,SDE,XW}
+N2O5 + PLYACL1 = ClNO2 + HNO3 : &
+                                N2O5uptkByPLYACL( State_Het, 1 ) + &
+                                N2O5uptkByPLYACL( State_Het, 2 ) + &
+                                N2O5uptkByPLYACL( State_Het, 3 ) + &
+                                N2O5uptkByPLYACL( State_Het, 4 );                                                {}
+N2O5 + PLYACL2 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 5 );                                                {}
+N2O5 + PLYACL3 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 6 );                                                {}
+N2O5 + PLYACL4 = ClNO2 + HNO3 : N2O5uptkByPLYACL( State_Het, 7 );                                                {}
+OH + SALACL = 0.500Cl2 :        OHuptkBySALACl( State_Het );                                                     {2018/03/12; XW}
+OH + SALCCL = 0.500Cl2 :        OHuptkBySALCCl( State_Het );                                                     {2018/03/12; XW}
+OH + PLYACL1 = 0.500Cl2 :       &
+                                OHuptkByPLYACL( State_Het, 1 ) + &
+                                OHuptkByPLYACL( State_Het, 2 ) + &
+                                OHuptkByPLYACL( State_Het, 3 ) + &
+                                OHuptkByPLYACL( State_Het, 4 );                                                  {}
+OH + PLYACL2 = 0.500CL2 :       OHuptkByPLYACL( State_Het, 5 );                                                  {}
+OH + PLYACL3 = 0.500CL2 :       OHuptkByPLYACL( State_Het, 6 );                                                  {}
+OH + PLYACL4 = 0.500CL2 :       OHuptkByPLYACL( State_Het, 7 );                                                  {}
+BrNO3 + H2O = HOBr + HNO3 :     BrNO3uptkByH2O( State_Het );                                                     {2014/02/03; Eastham2014; SDE}
+BrNO3 + HCl = BrCl + HNO3 :     BrNO3uptkByHCl( State_Het );                                                     {2014/02/03; Eastham2014; SDE}
+ClNO3 + H2O = HOCl + HNO3 :     ClNO3uptkByH2O( State_Het );                                                     {2014/02/03; Eastham2014; SDE}
+ClNO3 + HCl = Cl2 + HNO3 :      ClNO3uptkByHCl( State_Het );                                                     {2014/02/03; Eastham2014; SDE}
+ClNO3 + HBr = BrCl + HNO3 :     ClNO3uptkByHBr( State_Het );                                                     {2014/02/03; Eastham2014; SDE}
+ClNO3 + BrSALA = BrCl + HNO3 :  ClNO3uptkByBrSALA( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+ClNO3 + BrSALC = BrCl + HNO3 :  ClNO3uptkByBrSALC( State_Het );                                                  {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+ClNO3 + SALACL = Cl2 + HNO3 :   ClNO3uptkBySALACL( State_Het );                                                  {2018/01/22; XW}
+ClNO3 + SALCCL = Cl2 + HNO3 :   ClNO3uptkBySALCCL( State_Het );                                                  {2018/01/22; XW}
+ClNO3 + PLYACL1 = Cl2 + HNO3 :  &
+                                ClNO3uptkByPLYACL( State_Het, 1 ) + &
+                                ClNO3uptkByPLYACL( State_Het, 2 ) + &
+                                ClNO3uptkByPLYACL( State_Het, 3 ) + &
+                                ClNO3uptkByPLYACL( State_Het, 4 );                                               {}
+ClNO3 + PLYACL2 = Cl2 + HNO3 :  ClNO3uptkByPLYACL( State_Het, 5 );                                               {}
+ClNO3 + PLYACL3 = Cl2 + HNO3 :  ClNO3uptkByPLYACL( State_Het, 6 );                                               {}
+ClNO3 + PLYACL4 = Cl2 + HNO3 :  ClNO3uptkByPLYACL( State_Het, 7 );                                               {}
+ClNO2 + SALACL = Cl2 + HNO2 :   ClNO2uptkBySALACL( State_Het );                                                  {2018/01/22; XW}
+ClNO2 + SALCCL = Cl2 + HNO2 :   ClNO2uptkBySALCCL( State_Het );                                                  {2018/01/22; XW}
+ClNO2  + PLYACL1 = Cl2 + HNO2 : &
+                                ClNO2uptkByPLYACL( State_Het, 1 ) + &
+                                ClNO2uptkByPLYACL( State_Het, 2 ) + &
+                                ClNO2uptkByPLYACL( State_Het, 3 ) + &
+                                ClNO2uptkByPLYACL( State_Het, 4 );                                               {}
+ClNO2 + PLYACL2 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 5 );                                               {}
+ClNO2 + PLYACL3 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 6 );                                               {}
+ClNO2 + PLYACL4 = Cl2 + HNO2 :  ClNO2uptkByPLYACL( State_Het, 7 );                                               {}
+ClNO2 + HCl = Cl2 + HNO2 :      ClNO2uptkByHCl( State_Het );                                                     {2018/01/22; XW}
+ClNO2 + BrSALA = BrCl + HNO2 :  ClNO2uptkByBrSALA( State_Het );                                                  {2018/01/22; XW}
+ClNO2 + BrSALC = BrCl + HNO2 :  ClNO2uptkByBrSALC( State_Het );                                                  {2018/01/22; XW}
+ClNO2 + HBr = BrCl + HNO2 :     ClNO2uptkByHBr( State_Het );                                                     {2018/01/22; XW}
+HOCl + HCl = Cl2 + H2O :        HOClUptkByHCl( State_Het );                                                      {2014/02/03; Eastham2014; SDE}
+HOCl + HBr = BrCl + H2O :       HOClUptkByHBr( State_Het );                                                      {2014/02/03; Eastham2014; SDE}
+HOCl + SALACL = Cl2 + H2O :     HOClUptkBySALACL( State_Het );                                                   {2018/01/22; XW}
+HOCl + SALCCL = Cl2 + H2O :     HOClUptkBySALCCL( State_Het );                                                   {2018/01/22; XW}
+HOCl + PLYACL1 = Cl2 + H2O :    &
+                                HOClUptkByPLYACL( State_Het, 1 ) + &
+                                HOClUptkByPLYACL( State_Het, 2 ) + &
+                                HOClUptkByPLYACL( State_Het, 3 ) + &
+                                HOClUptkByPLYACL( State_Het, 4 );                                                {}
+HOCl + PLYACL2 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 5 );                                                {}
+HOCl + PLYACL3 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 6 );                                                {}
+HOCl + PLYACL4 = Cl2 + H2O :    HOClUptkByPLYACL( State_Het, 7 );                                                {}
+HOCl + SO2 = SO4 + HCl :        HOClUptkByHSO3m( State_Het ) + HOClUptkBySO3mm( State_Het ) + SRHOCl;            {2023/01/30; Add SRHOCL, BA; 2018/11/08; XW; June 6, 2021, MSL}
+HOBr + HBr = Br2 + H2O :        HOBrUptkByHBr( State_Het );                                                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HOBr + HCl = BrCl + H2O :       HOBrUptkByHCl( State_Het );                                                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HOBr + SALACL = BrCl + H2O :    HOBrUptkBySALACL( State_Het );                                                   {2018/01/22; Sherwen2017;TS,JAS,SDE;XW}
+HOBr + SALCCL = BrCl + H2O :    HOBrUptkBySALCCL( State_Het );                                                   {2018/01/22; Sherwen2017;TS,JAS,SDE,XW}
+HOBr + PLYACL1 = BrCl + H2O :   &
+                                HOBrUptkByPLYACL( State_Het, 1 ) + &
+                                HOBrUptkByPLYACL( State_Het, 2 ) + &
+                                HOBrUptkByPLYACL( State_Het, 3 ) + &
+                                HOBrUptkByPLYACL( State_Het, 4 );                                                {}
+HOBr + PLYACL2 = BrCl + H2O :   HOBrUptkByPLYACL( State_Het, 5 );                                                {}
+HOBr + PLYACL3 = BrCl + H2O :   HOBrUptkByPLYACL( State_Het, 6 );                                                {}
+HOBr + PLYACL4 = BrCl + H2O :   HOBrUptkByPLYACL( State_Het, 7 );                                                {}
+HOBr + BrSALA = Br2 :           HOBrUptkByBrSALA( State_Het );                                                   {2017/09/22; Sherwen2017;TS,JAS,SDE}
+HOBr + BrSALC = Br2 :           HOBrUptkByBrSALC( State_Het );                                                   {2017/09/22; Sherwen2017;TS,JAS,SDE}
+HOBr + SO2 = SO4 + HBr :        HOBrUptkByHSO3m( State_Het ) + HOBrUptkBySO3mm( State_Het ) + SRHOBr;            {2023/01/30; Add SRHOBrL, BA; 2017/11/15; Chen2017; QJC; June 6, 2021, MSL}
+O3 + HBr = HOBr :               O3uptkByHBr( State_Het );                                                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+O3 + BrSALA = HOBr :            O3uptkByBrSALA( State_Het );                                                     {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+O3 + BrSALC = HOBr :            O3uptkByBrSALC( State_Het );                                                     {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HBr = BrSALA :                  HBrUptkBySALA( State_Het );                                                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HBr = BrSALC :                  HBrUptkBySALC( State_Het );                                                      {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HI = AERI :                     IuptkBySulf1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                          {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HI = ISALA :                    IuptkBySALA1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                          {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HI = ISALC :                    IuptkBySALC1stOrd( SR_MW(ind_HI), 0.10_dp, State_Het );                          {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+HOI = ISALA :                   IuptkByAlkSALA1stOrd( SR_MW(ind_HOI), 0.01_dp, State_Het );                      {2023/01/24; Restored deleted rxn:BA}
+HOI = ISALC :                   IuptkByAlkSALC1stOrd( SR_MW(ind_HOI), 0.01_dp, State_Het );                      {2022/12/02; Restored deleted rxn:BA}
+I2O2 = 2.000AERI :              IuptkBySulf1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O2 = 2.000ISALA :             IuptkBySALA1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O2 = 2.000ISALC :             IuptkBySALC1stOrd( SR_MW(ind_I2O2), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O3 = 2.000AERI :              IuptkBySulf1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O3 = 2.000ISALA :             IuptkBySALA1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O3 = 2.000ISALC :             IuptkBySALC1stOrd( SR_MW(ind_I2O3), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O4 = 2.000AERI :              IuptkBySulf1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O4 = 2.000ISALA :             IuptkBySALA1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+I2O4 = 2.000ISALC :             IuptkBySALC1stOrd( SR_MW(ind_I2O4), 0.02_dp, State_Het );                        {2017/09/22; Sherwen2016b;TS,JAS,SDE}
+IONO = ISALA + HNO2 :           IuptkByAlkSALA1stOrd( SR_MW(ind_IONO), 0.02_dp, State_Het );                     {2022/12/02; Restored deleted rxn:BA}
+IONO = ISALC + HNO2 :           IuptkByAlkSALC1stOrd( SR_MW(ind_IONO), 0.02_dp, State_Het );                     {2022/12/02; Restored deleted rxn:BA}
+IONO2 = ISALA + HNO3 :          IuptkByAlkSALA1stOrd( SR_MW(ind_IONO2), 0.01_dp, State_Het );                    {2022/12/02; Restored deleted rxn:BA}
+IONO2 = ISALC + HNO3 :          IuptkByAlkSALC1stOrd( SR_MW(ind_IONO2), 0.01_dp, State_Het );                    {2022/12/02; Restored deleted rxn:BA}
+IONO2 + H2O = HOI + HNO3 :      IONO2uptkByH2O( State_Het );                                                     {2021/09/16 XW, TSherwen}
+IONO + BrSALA = IBr + HNO2 :    IbrkdnByAcidBrSALA( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );          {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO + BrSALC = IBr + HNO2 :    IbrkdnByAcidBrSALC( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );          {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO + SALACL = ICl + HNO2 :    IbrkdnByAcidSALACl( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );          {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO + SALCCL = ICl + HNO2 :    IbrkdnByAcidSALCCl( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het );          {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO + PLYACL1 = ICl + HNO2 :   &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 1 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 2 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 3 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 4 );      {}
+IONO + PLYACL2 = ICl + HNO2 :   IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 5 );      {}
+IONO + PLYACL3 = ICl + HNO2 :   IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 6 );      {}
+IONO + PLYACL4 = ICl + HNO2 :   IbrkdnByAcidPLYACL( SR_MW(ind_IONO), C(ind_IONO), 0.02_dp, State_Het, 7 );      {}
+IONO2 + BrSALA = IBr + HNO3 :   IbrkdnByAcidBrSALA( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );       {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO2 + BrSALC = IBr + HNO3 :   IbrkdnByAcidBrSALC( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );       {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO2 + SALACL = ICl + HNO3 :   IbrkdnByAcidSALACl( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );       {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO2 + SALCCL = ICl + HNO3 :   IbrkdnByAcidSALCCl( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het );       {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+IONO2 + PLYACL1 = ICl + HNO3 :  &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 1 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 2 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 3 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 4 );    {}
+IONO2 + PLYACL2 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 5 );     {}
+IONO2 + PLYACL3 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 6 );     {}
+IONO2 + PLYACL4 = ICl + HNO3 : IbrkdnByAcidPLYACL( SR_MW(ind_IONO2), C(ind_IONO2), 0.01_dp, State_Het, 7 );     {}
+HOI + BrSALA = IBr :           IbrkdnByAcidBrSALA( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );            {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+HOI + BrSALC = IBr :           IbrkdnByAcidBrSALC( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );            {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+HOI + SALACL = ICl :           IbrkdnByAcidSALACl( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );            {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+HOI + SALCCL = ICl :           IbrkdnByAcidSALCCl( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het );            {2017/09/22; Sherwen2017;TS,JAS,SDE,XW}
+HOI + PLYACL1 = ICl :  &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 1 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 2 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 3 ) + &
+                                IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 4 );        {}
+HOI + PLYACL2 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 5 );         {}
+HOI + PLYACL3 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 6 );         {}
+HOI + PLYACL4 = ICl :          IbrkdnByAcidPLYACL( SR_MW(ind_HOI), C(ind_HOI), 0.01_dp, State_Het, 7 );         {}
+GLYX = SOAGX :                 GLYXuptk1stOrd( SR_MW(ind_GLYX), State_Het);                                     {2017/06/15; Marais2016, EAM}
+MGLY = 1.500SOAGX :            MGLYuptk1stOrd( SR_MW(ind_MGLY), State_Het);                                     {2017/06/15; Marais2016, EAM; 2023/04/18; Bates2023; KHB}
+IEPOXA = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXA), .FALSE., State_Het );                        {2017/06/15; Marais2016, EAM}
+IEPOXB = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXB), .FALSE., State_Het );                        {2017/06/15; Marais2016, EAM}
+IEPOXD = SOAIE :               IEPOXuptk1stOrd( SR_MW(ind_IEPOXD), .FALSE., State_Het );                        {2017/06/15; Marais2016, EAM}
+LVOC = LVOCOA :                VOCuptk1stOrd( SR_MW(ind_LVOC), 1.0_dp, State_Het );                             {2017/06/15; Marais2016, EAM}
+MVKN = IONITA :                VOCuptk1stOrd( SR_MW(ind_MVKN), 5.0E-3_dp, State_Het );                          {2017/06/15; Marais2016, EAM}
+R4N2 = IONITA :                VOCuptk1stOrd( SR_MW(ind_R4N2), 5.0E-3_dp, State_Het );                          {2017/06/15; Marais2016, EAM}
+MONITS = MONITA :              VOCuptk1stOrd( SR_MW(ind_MONITS), 1.0E-2_dp, State_Het );                        {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
+MONITU = MONITA :              VOCuptk1stOrd( SR_MW(ind_MONITU), 1.0E-2_dp, State_Het );                        {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
+HONIT = MONITA :               VOCuptk1stOrd( SR_MW(ind_HONIT), 1.0E-2_dp, State_Het );                         {2017/07/14; Fisher2016; KRT,JAF,CCM,EAM,KHB,RHS}
+PYAC = 1.500SOAGX :            MGLYuptk1stOrd( SR_MW(ind_PYAC), State_Het );                                    {2019/11/06; Bates2019; KHB; 2023/04/18; Bates2023; KHB}
+HMML = 0.800SOAIE :            IEPOXuptk1stOrd( SR_MW(ind_HMML), .TRUE., State_Het);                            {2019/11/06; Bates2019; KHB; 2023/04/18; Bates2023; KHB}
+IHN1 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN1), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+IHN2 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN2), 5.0E-2_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+IHN3 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN3), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+IHN4 = IONITA :                VOCuptk1stOrd( SR_MW(ind_IHN4), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+ICHE = SOAIE :                 IEPOXuptk1stOrd( SR_MW(ind_ICHE), .FALSE., State_Het );                          {2019/11/06; Bates2019; KHB}
+INPD = IONITA :                VOCuptk1stOrd( SR_MW(ind_INPD), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+INPB = IONITA :                VOCuptk1stOrd( SR_MW(ind_INPB), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+IDN = IONITA :                 VOCuptk1stOrd( SR_MW(ind_IDN), 5.0E-3_dp, State_Het );                           {2019/11/06; Bates2019; KHB}
+ITCN = IONITA :                VOCuptk1stOrd( SR_MW(ind_ITCN), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+ITHN = IONITA :                VOCuptk1stOrd( SR_MW(ind_ITHN), 5.0E-3_dp, State_Het );                          {2019/11/06; Bates2019; KHB}
+MCRHNB = IONITA :              VOCuptk1stOrd( SR_MW(ind_MCRHNB), 5.0E-3_dp, State_Het );                        {2019/11/06; Bates2019; KHB}
+MCRHN = IONITA :               VOCuptk1stOrd( SR_MW(ind_MCRHN), 5.0E-3_dp, State_Het );                         {2019/11/06; Bates2019; KHB}
+NPHEN = AONITA :               VOCuptk1stOrd( SR_MW(ind_NPHEN), 1.0E-2_dp, State_Het );                         {2021/09/29; Bates2021b; KHB,MSL}
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%% Photolysis reactions                                            %%%%%
