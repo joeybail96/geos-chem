@@ -3409,6 +3409,18 @@ CONTAINS
                         H2Oorg, Rcore,     gamma,   Y_ClNO2,    &
                         rp,     areaTotal                       )
     !
+    TYPE(HetState), INTENT(IN) :: H    ! HetState Object
+    REAL(dp), INTENT(IN)  :: volInorg  ! vol of wet inorg aerosol core  [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: volOrg    ! vol of wet org aerosol coating [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: H2Oinorg  ! vol of H2O in inorg core [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: H2Oorg    ! vol of H2O in org coating [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: Rcore     ! radius of inorg core [cm]
+    REAL(dp), INTENT(OUT) :: gamma     ! [1]
+    REAL(dp), INTENT(OUT) :: Y_ClNO2   ! [1]
+    REAL(dp), INTENT(OUT) :: rp        ! [cm]
+    REAL(dp), INTENT(OUT) :: areaTotal ! [cm2/cm3]
+    REAL(dp) :: volTotal, H2Ototal, volRatioDry, M_H2O
+    !
     !------------------------------------------------------------------------
     ! Concentrations, thickness, etc.
     !------------------------------------------------------------------------
@@ -3430,28 +3442,34 @@ CONTAINS
     ! Total particle surface area, cm2/cm3
     areaTotal = 3.0_dp * volTotal / Rp
     !
-    ! Determine gamma and ClNO2 yield based on Christie et al 2025
-    IF (RELHUM > 45) THEN
-       ! max observed gamma and yield at RH>45%
-       gamma   = 0.0651
-       Y_ClNO2 = 1.51
-
-    ELSE IF (RELHUM > 40)
-       ! max observed gamma and yield at RH between 40-45%
-       gamma   = 0.0880 
-       Y_ClNO2 = 1.41
-
-    ELSE IF (RELHUM > 30)
-       ! max observed gamma and yield at RH between 40-45%
-       gamma   = 0.054 
-       Y_ClNO2 = 1.32
-
-    ELSE 
-       ! gamma and yield 0 at RH under 30%
-       gamma   = 0
-       Y_ClNO2 = 0
-    END IF
+    ! Concentrations [mol/L]
+    M_H2O = H2Ototal / 18e+0_dp / volTotal * 1000.0_dp 
     !
+    ! Determine gamma and ClNO2 yield based on Christie et al 2025
+    IF ( M_H2O > 0.1_dp ) THEN
+       IF (RELHUM > 45) THEN
+          ! max observed gamma and yield at RH>45%
+          gamma   = 0.0303_dp
+          Y_ClNO2 = 0.9786_dp
+       ELSE IF (RELHUM > 40) THEN
+          ! max observed gamma and yield at RH between 40-45%
+          gamma   = 0.0303_dp
+          Y_ClNO2 = 0.9364_dp
+       ELSE IF (RELHUM > 30) THEN
+          ! max observed gamma and yield at RH between 30-40%
+          gamma   = 0.0303_dp
+          Y_ClNO2 = 0.9171_dp  
+       END IF
+    ELSE
+       ! When H2O is nearly zero, use dry aerosol value
+       IF (RELHUM > 30) THEN
+          gamma   = 0.005_dp
+          Y_ClNO2 = 0.0_dp
+       ELSE
+          gamma   = 0.0_dp
+          Y_ClNO2 = 0.0_dp
+       END IF
+    END IF    !
   END SUBROUTINE N2O5_PLYA
 
 
