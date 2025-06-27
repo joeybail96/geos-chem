@@ -3231,10 +3231,10 @@ CONTAINS
     IF ( H%stratBox ) RETURN
     !
     ! Properties of playa dust (same as corresponding mineral dust)
-    CALL N2O5_InorgOrg(                                                      &
-         H,      H%xVol(PLYADUy),  0.0_dp,      H%xH2O(PLYADUy),           &
-         0.0_dp, H%xRadi(PLYADUy), C(ind_NITs), PLYAx_y*C(ind_PLYACLx),    &
-         gamma,  Y_ClNO2,          Rp,           SA                         )    
+    !  
+    CALL N2O5_PLYA( H,      H%xVol(PLYADUy),  0.0_dp,  H%xH2O(PLYADUy),   &
+                    0.0_dp, H%xRadi(PLYADUy), gamma,   Y_ClNO2,           &
+                    rp,     areaTotal                                     )
     !
     ! Total loss rate of N2O5 (kN2O5) on playa dust
     k = Ars_L1k( H%ClearFr * SA, Rp, gamma, SR_MW(ind_N2O5) )
@@ -3404,6 +3404,56 @@ CONTAINS
     ! Calculate the ClNO2 yield following Bertram and Thornton 2009 ACP
     Y_ClNO2 = ClNO2_BT( M_Cl, M_H2O )
   END SUBROUTINE N2O5_InorgOrg
+
+  SUBROUTINE N2O5_PLYA( H,      volInorg,  volOrg,  H2Oinorg,   &
+                        H2Oorg, Rcore,     gamma,   Y_ClNO2,    &
+                        rp,     areaTotal                       )
+    !
+    !------------------------------------------------------------------------
+    ! Concentrations, thickness, etc.
+    !------------------------------------------------------------------------
+    !
+    ! Total volume (organic + inorganic), cm3(aerosol)/cm3(air)
+    volTotal = volInorg + volOrg
+    !
+    ! Total H2O (organic + inorganic), cm3(H2O)/cm3(air)
+    H2Ototal = H2Oinorg + H2Oorg
+    !
+    ! Ratio of inorganic to total (organic+inorganic) volumes when dry, unitless
+    volRatioDry = SafeDiv( MAX( volInorg - H2Oinorg, 0.0_dp ),               &
+                           MAX( volTotal - H2Ototal, 0.0_dp ), 0.0_dp       )
+    !
+    ! Particle radius, cm
+    ! see N2O5_InorgOrg comments
+    Rp = SafeDiv( Rcore, volRatioDry**ONE_THIRD, Rcore )
+    !
+    ! Total particle surface area, cm2/cm3
+    areaTotal = 3.0_dp * volTotal / Rp
+    !
+    ! Determine gamma and ClNO2 yield based on Christie et al 2025
+    IF (RELHUM > 45) THEN
+       ! max observed gamma and yield at RH>45%
+       gamma   = 0.0651
+       Y_ClNO2 = 1.51
+
+    ELSE IF (RELHUM > 40)
+       ! max observed gamma and yield at RH between 40-45%
+       gamma   = 0.0880 
+       Y_ClNO2 = 1.41
+
+    ELSE IF (RELHUM > 30)
+       ! max observed gamma and yield at RH between 40-45%
+       gamma   = 0.054 
+       Y_ClNO2 = 1.32
+
+    ELSE 
+       ! gamma and yield 0 at RH under 30%
+       gamma   = 0
+       Y_ClNO2 = 0
+    END IF
+    !
+  END SUBROUTINE N2O5_PLYA
+
 
   FUNCTION ClNO2_BT( Cl, H2O ) RESULT( phi )
     !
