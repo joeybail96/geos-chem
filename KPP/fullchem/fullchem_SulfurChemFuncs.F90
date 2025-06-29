@@ -40,7 +40,7 @@ MODULE fullchem_SulfurChemFuncs
   INTEGER                :: id_SALA,    id_SALAAL,  id_SALACL,  id_SALC
   INTEGER                :: id_SALCAL,  id_SALCCL,  id_SO2,     id_SO4
   INTEGER                :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
-  INTEGER                :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
+  INTEGER                :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
   INTEGER                :: id_SO4s
 !
 ! !DEFINED_PARAMETERS
@@ -57,6 +57,17 @@ MODULE fullchem_SulfurChemFuncs
   INTEGER,  PRIVATE, PARAMETER :: PLYADU5        = 19 ! Playa dust (Reff = 1.491 um)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU6        = 20 ! Playa dust (Reff = 2.417 um)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU7        = 21 ! Playa dust (Reff = 3.721 um)
+
+  ! distribution fractions of playa dust bins x=1-4 among playa dust bins y=1-7
+  ! see aerosol_mod.F90 for distribution fractions
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_1     = 0.0070e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_2     = 0.0332e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_3     = 0.2487e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA1_4     = 0.7111e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA2_5     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA3_6     = 1.0000e+0_fp
+  REAL(fp), PRIVATE, PARAMETER :: PLYA4_7     = 1.0000e+0_fp
+
 
 CONTAINS
 !EOC
@@ -198,16 +209,6 @@ CONTAINS
     k_ex = 0.0_dp
     K_MT = 0.0_dp
 
-    ! distribution fractions of playa dust bins 1-4 among mineral dust bins 1-7
-    ! see aerosol_mod.F90 for distribution fractions
-    fr_PLYA1_1 = 0.0070e+0_fp
-    fr_PLYA1_2 = 0.0332e+0_fp
-    fr_PLYA1_3 = 0.2487e+0_fp
-    fr_PLYA1_4 = 0.7111e+0_fp
-    fr_PLYA2_5 = 1.0000e+0_fp
-    fr_PLYA3_6 = 1.0000e+0_fp
-    fr_PLYA4_7 = 1.0000e+0_fp
-
     !----------------------------------------------------------------------
     ! to skip the SALAAL + SO2 and SALCAL + SO2 reactions or 
     ! PLYAALx + SO2 reactions if:
@@ -224,13 +225,13 @@ CONTAINS
     SALAAL_gt_0_1 = ( C(ind_SALAAL) > 0.1_dp     )
     SALCAL_gt_0_1 = ( C(ind_SALCAL) > 0.1_dp     )
     O3_gt_1e10    = ( C(ind_O3)     > 1.0e+10_dp )
-    PLYAAL1_1_gt_0_1 = ( fr_PLYA1_1*C(ind_PLYAAL1)  > 0.1_dp     )
-    PLYAAL1_2_gt_0_1 = ( fr_PLYA1_2*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL1_3_gt_0_1 = ( fr_PLYA1_3*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL1_4_gt_0_1 = ( fr_PLYA1_4*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL2_5_gt_0_1 = ( fr_PLYA2_5*C(ind_PLYAAL2)  > 0.1_dp     ) 
-    PLYAAL3_6_gt_0_1 = ( fr_PLYA3_6*C(ind_PLYAAL3)  > 0.1_dp     ) 
-    PLYAAL4_7_gt_0_1 = ( fr_PLYA4_7*C(ind_PLYAAL4)  > 0.1_dp     ) 
+    PLYAAL1_1_gt_0_1 = ( PLYA1_1*C(ind_PLYAAL1)  > 0.1_dp     )
+    PLYAAL1_2_gt_0_1 = ( PLYA1_2*C(ind_PLYAAL1)  > 0.1_dp     ) 
+    PLYAAL1_3_gt_0_1 = ( PLYA1_3*C(ind_PLYAAL1)  > 0.1_dp     ) 
+    PLYAAL1_4_gt_0_1 = ( PLYA1_4*C(ind_PLYAAL1)  > 0.1_dp     ) 
+    PLYAAL2_5_gt_0_1 = ( PLYA2_5*C(ind_PLYAAL2)  > 0.1_dp     ) 
+    PLYAAL3_6_gt_0_1 = ( PLYA3_6*C(ind_PLYAAL3)  > 0.1_dp     ) 
+    PLYAAL4_7_gt_0_1 = ( PLYA4_7*C(ind_PLYAAL4)  > 0.1_dp     ) 
 
     !======================================================================
     ! Reaction rates [1/s] for fine sea salt alkalinity (aka SALAAL)
@@ -358,7 +359,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(7) = kIIR1Ltd( C(ind_SO2), fr_PLYA1_1*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
+       K_MT(7) = kIIR1Ltd( C(ind_SO2), PLYA1_1*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -373,7 +374,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(8) = kIIR1Ltd( C(ind_HCl), fr_PLYA1_1*C(ind_PLYAAL1), k_ex )
+       K_MT(8) = kIIR1Ltd( C(ind_HCl), PLYA1_1*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -388,7 +389,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(9) = kIIR1Ltd( C(ind_HNO3), fr_PLYA1_1*C(ind_PLYAAL1), k_ex )
+       K_MT(9) = kIIR1Ltd( C(ind_HNO3), PLYA1_1*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !========================================================================
@@ -411,7 +412,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(10) = kIIR1Ltd( C(ind_SO2), fr_PLYA1_2*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
+       K_MT(10) = kIIR1Ltd( C(ind_SO2), PLYA1_2*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -426,7 +427,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(11) = kIIR1Ltd( C(ind_HCl), fr_PLYA1_2*C(ind_PLYAAL1), k_ex )
+       K_MT(11) = kIIR1Ltd( C(ind_HCl), PLYA1_2*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -441,7 +442,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(12) = kIIR1Ltd( C(ind_HNO3), fr_PLYA1_2*C(ind_PLYAAL1), k_ex )
+       K_MT(12) = kIIR1Ltd( C(ind_HNO3), PLYA1_2*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !========================================================================
@@ -464,7 +465,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(13) = kIIR1Ltd( C(ind_SO2), fr_PLYA1_3*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
+       K_MT(13) = kIIR1Ltd( C(ind_SO2), PLYA1_3*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -479,7 +480,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(14) = kIIR1Ltd( C(ind_HCl), fr_PLYA1_3*C(ind_PLYAAL1), k_ex )
+       K_MT(14) = kIIR1Ltd( C(ind_HCl), PLYA1_3*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -494,7 +495,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(15) = kIIR1Ltd( C(ind_HNO3), fr_PLYA1_3*C(ind_PLYAAL1), k_ex )
+       K_MT(15) = kIIR1Ltd( C(ind_HNO3), PLYA1_3*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !========================================================================
@@ -517,7 +518,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(16) = kIIR1Ltd( C(ind_SO2), fr_PLYA1_4*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
+       K_MT(16) = kIIR1Ltd( C(ind_SO2), PLYA1_4*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -532,7 +533,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(17) = kIIR1Ltd( C(ind_HCl), fr_PLYA1_4*C(ind_PLYAAL1), k_ex )
+       K_MT(17) = kIIR1Ltd( C(ind_HCl), PLYA1_4*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -547,7 +548,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(18) = kIIR1Ltd( C(ind_HNO3), fr_PLYA1_4*C(ind_PLYAAL1), k_ex )
+       K_MT(18) = kIIR1Ltd( C(ind_HNO3), PLYA1_4*C(ind_PLYAAL1), k_ex )
     ENDIF
 
     !========================================================================
@@ -570,7 +571,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(19) = kIIR1Ltd( C(ind_SO2), fr_PLYA2_5*C(ind_PLYAAL2), k_ex ) / C(ind_O3)
+       K_MT(19) = kIIR1Ltd( C(ind_SO2), PLYA2_5*C(ind_PLYAAL2), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -585,7 +586,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(20) = kIIR1Ltd( C(ind_HCl), fr_PLYA2_5*C(ind_PLYAAL2), k_ex )
+       K_MT(20) = kIIR1Ltd( C(ind_HCl), PLYA2_5*C(ind_PLYAAL2), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -600,7 +601,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(21) = kIIR1Ltd( C(ind_HNO3), fr_PLYA2_5*C(ind_PLYAAL2), k_ex )
+       K_MT(21) = kIIR1Ltd( C(ind_HNO3), PLYA2_5*C(ind_PLYAAL2), k_ex )
     ENDIF
 
     !========================================================================
@@ -614,7 +615,7 @@ CONTAINS
     !------------------------------------------------------------------------
     ! PLYAAL3 + SO2 + O3 = SO4s - PLYAAL3
     !------------------------------------------------------------------------
-    IF ( PLYAAL3_DST5_gt_0_1 .AND. O3_gt_1e10 ) THEN
+    IF ( PLYAAL2_5_gt_0_1 .AND. O3_gt_1e10 ) THEN
 
        ! 1st order uptake
        k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU6),  &
@@ -623,7 +624,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(22) = kIIR1Ltd( C(ind_SO2), fr_PLYA3_6*C(ind_PLYAAL3), k_ex ) / C(ind_O3)
+       K_MT(22) = kIIR1Ltd( C(ind_SO2), PLYA3_6*C(ind_PLYAAL3), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -638,7 +639,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(23) = kIIR1Ltd( C(ind_HCl), fr_PLYA3_6*C(ind_PLYAAL3), k_ex )
+       K_MT(23) = kIIR1Ltd( C(ind_HCl), PLYA3_6*C(ind_PLYAAL3), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -653,7 +654,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(24) = kIIR1Ltd( C(ind_HNO3), fr_PLYA3_6*C(ind_PLYAAL3), k_ex )
+       K_MT(24) = kIIR1Ltd( C(ind_HNO3), PLYA3_6*C(ind_PLYAAL3), k_ex )
     ENDIF
 
     !========================================================================
@@ -676,7 +677,7 @@ CONTAINS
                        srMw   = SR_MW(ind_SO2)                              )
 
        ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(25) = kIIR1Ltd( C(ind_SO2), fr_PLYA4_7*C(ind_PLYAAL4), k_ex ) / C(ind_O3)
+       K_MT(25) = kIIR1Ltd( C(ind_SO2), PLYA4_7*C(ind_PLYAAL4), k_ex ) / C(ind_O3)
     ENDIF
 
     !------------------------------------------------------------------------
@@ -691,7 +692,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(26) = kIIR1Ltd( C(ind_HCl), fr_PLYA4_7*C(ind_PLYAAL4), k_ex )
+       K_MT(26) = kIIR1Ltd( C(ind_HCl), PLYA4_7*C(ind_PLYAAL4), k_ex )
     ENDIF
 
     !------------------------------------------------------------------------
@@ -706,7 +707,7 @@ CONTAINS
                        srMw   = SR_MW(ind_HNO3)                             )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(27) = kIIR1Ltd( C(ind_HNO3), fr_PLYA4_7*C(ind_PLYAAL4), k_ex )
+       K_MT(27) = kIIR1Ltd( C(ind_HNO3), PLYA4_7*C(ind_PLYAAL4), k_ex )
     ENDIF
 
   END SUBROUTINE fullchem_SulfurAqChem

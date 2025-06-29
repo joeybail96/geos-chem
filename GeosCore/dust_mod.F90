@@ -1164,7 +1164,7 @@ CONTAINS
 !
 ! !USES:
 !
-    USE CMN_Size_MOD,       ONLY : NDUST
+    USE CMN_Size_MOD,       ONLY : NDUST, NAER, NPLYA
 #ifdef RRTMG
     USE CMN_Size_MOD,       ONLY : NAER
 #endif
@@ -1212,6 +1212,7 @@ CONTAINS
     ! Arrays
     LOGICAL           :: LINTERPARR(Input_Opt%NWVSELECT)
     REAL(fp)          :: MSDENS(NDUST)
+    REAL(fp)          :: PLYA_DENS(NPLYA)
     REAL(fp)          :: tempOD(State_Grid%NX,State_Grid%NY,               &
                                 State_Grid%NZ,NDUST,         3)
 
@@ -1237,6 +1238,7 @@ CONTAINS
     REAL(fp), POINTER :: WERADIUS(:,:,:,:)
     REAL(fp), POINTER :: WTAREA(:,:,:,:)
     REAL(fp), POINTER :: DUST(:,:,:,:)
+    REAL(fp), POINTER :: PLYADUST(:,:,:,:)
 
     !=================================================================
     ! RDUST_ONLINE begins here!
@@ -1423,7 +1425,7 @@ CONTAINS
                                      DUST(I,J,L,N) / MSDENS(N)
        ! append playa surface areas into TAREA
        TAREA(I,J,L,N+NDUST+NAER)   = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                                     PLYA_DUST(I,J,L,N) / PLYA_DENS(N)
+                                     PLYADUST(I,J,L,N) / PLYA_DENS(N)
 
        ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
        ! Get RH

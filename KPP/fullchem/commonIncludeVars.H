@@ -196,6 +196,61 @@
      REAL(dp) :: xH2O(14)       ! Aerosol water content [cm3/cm3]
      REAL(dp) :: xRadi(14)      ! Aerosol effective radius [cm]
      REAL(dp) :: xVol(14)       ! Aerosol specific volume [cm3/cm3]
+     REAL(dp) :: H_conc_PLYA1
+     REAL(dp) :: H_conc_PLYA2
+     REAL(dp) :: H_conc_PLYA3
+     REAL(dp) :: H_conc_PLYA4
+     REAL(dp) :: f_Alk_PLYA1
+     REAL(dp) :: f_Alk_PLYA2
+     REAL(dp) :: f_Alk_PLYA3
+     REAL(dp) :: f_Alk_PLYA4
+     REAL(dp) :: f_Acid_PLYA1
+     REAL(dp) :: f_Acid_PLYA2
+     REAL(dp) :: f_Acid_PLYA3
+     REAL(dp) :: f_Acid_PLYA4
+     LOGICAL  :: PLYA1_is_Alk
+     LOGICAL  :: PLYA2_is_Alk
+     LOGICAL  :: PLYA3_is_Alk
+     LOGICAL  :: PLYA4_is_Alk
+     LOGICAL  :: PLYA1_is_Acid
+     LOGICAL  :: PLYA2_is_Acid
+     LOGICAL  :: PLYA3_is_Acid
+     LOGICAL  :: PLYA4_is_Acid
+     REAL(dp) :: Br_over_Cl_PLYACL1
+     REAL(dp) :: Br_over_Cl_PLYACL2
+     REAL(dp) :: Br_over_Cl_PLYACL3
+     REAL(dp) :: Br_over_Cl_PLYACL4
+     REAL(dp) :: Br_over_Cl_PLYACL5
+     REAL(dp) :: Br_over_Cl_PLYACL6
+     REAL(dp) :: Br_over_Cl_PLYACL7
+     REAL(dp) :: Cl_conc_CldP1
+     REAL(dp) :: Cl_conc_CldP2
+     REAL(dp) :: Cl_conc_CldP3
+     REAL(dp) :: Cl_conc_CldP4
+     REAL(dp) :: Cl_conc_CldP5
+     REAL(dp) :: Cl_conc_CldP6
+     REAL(dp) :: Cl_conc_CldP7
+     REAL(dp) :: frac_Cl_CldP1
+     REAL(dp) :: frac_Cl_CldP2
+     REAL(dp) :: frac_Cl_CldP3
+     REAL(dp) :: frac_Cl_CldP4
+     REAL(dp) :: frac_Cl_CldP5
+     REAL(dp) :: frac_Cl_CldP6
+     REAL(dp) :: frac_Cl_CldP7
+     REAL(dp) :: Br_conc_PLYACL1
+     REAL(dp) :: Br_conc_PLYACL2
+     REAL(dp) :: Br_conc_PLYACL3
+     REAL(dp) :: Br_conc_PLYACL4
+     REAL(dp) :: Br_conc_PLYACL5
+     REAL(dp) :: Br_conc_PLYACL6
+     REAL(dp) :: Br_conc_PLYACL7
+     REAL(dp) :: Cl_conc_PLYACL1
+     REAL(dp) :: Cl_conc_PLYACL2
+     REAL(dp) :: Cl_conc_PLYACL3
+     REAL(dp) :: Cl_conc_PLYACL4
+     REAL(dp) :: Cl_conc_PLYACL5
+     REAL(dp) :: Cl_conc_PLYACL6
+     REAL(dp) :: Cl_conc_PLYACL7
      !
      ! Additional fields only used by the Hg simulation
      !

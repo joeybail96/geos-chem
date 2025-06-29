@@ -678,7 +678,7 @@ CONTAINS
 !
     USE ErrCode_Mod
     USE CharPak_Mod,          ONLY : To_UpperCase
-    USE CMN_Size_Mod,         ONLY : NDUST, NAER
+    USE CMN_Size_Mod,         ONLY : NDUST, NAER, NPLYA
     USE GCKPP_Parameters,     ONLY : NSPEC
     USE Input_Opt_Mod,        ONLY : OptInput
     USE Species_Database_Mod, ONLY : Init_Species_Database
@@ -719,7 +719,7 @@ CONTAINS
     CHARACTER(LEN=255)      :: chmId,      thisLoc
 
     ! String arrays
-    CHARACTER(LEN=31)       :: fieldId(14)
+    CHARACTER(LEN=31)       :: fieldId(21)
 
     ! Objects
     TYPE(Species),  POINTER :: ThisSpc
@@ -1156,17 +1156,17 @@ CONTAINS
        !---------------------------------------------------------------------
        ! WetAeroRadi
        !---------------------------------------------------------------------
-       fieldId = (/ 'WetAeroRadiMDUST1', 'WetAeroRadiMDUST2',                &
-                    'WetAeroRadiMDUST3', 'WetAeroRadiMDUST4',                &
-                    'WetAeroRadiMDUST5', 'WetAeroRadiMDUST6',                &
-                    'WetAeroRadiMDUST7', 'WetAeroRadiSULF  ',                &
-                    'WetAeroRadiBC    ', 'WetAeroRadiOC    ',                &
-                    'WetAeroRadiSSA   ', 'WetAeroRadiSSC   ',                &
-                    'WetAeroRadiBGSULF', 'WetAeroRadiICEI  ',                &               
-                    'WetAeroRadiPDUST1', 'WetAeroRadiPDUST2   ',             &
-                    'WetAeroRadiPDUST3', 'WetAeroRadiPDUST4   ',             &
-                    'WetAeroRadiPDUST5', 'WetAeroRadiPDUST6   ',             &
-                    'WetAeroRadiPDUST7'                                    /)
+       fieldId = (/ 'WetAeroRadiMDUST1   ', 'WetAeroRadiMDUST2   ',    &
+                    'WetAeroRadiMDUST3   ', 'WetAeroRadiMDUST4   ',    &
+                    'WetAeroRadiMDUST5   ', 'WetAeroRadiMDUST6   ',    &
+                    'WetAeroRadiMDUST7   ', 'WetAeroRadiSULF     ',    &
+                    'WetAeroRadiBC       ', 'WetAeroRadiOC       ',    &
+                    'WetAeroRadiSSA      ', 'WetAeroRadiSSC      ',    &
+                    'WetAeroRadiBGSULF   ', 'WetAeroRadiICEI     ',    &               
+                    'WetAeroRadiPDUST1   ', 'WetAeroRadiPDUST2   ',    &
+                    'WetAeroRadiPDUST3   ', 'WetAeroRadiPDUST4   ',    &
+                    'WetAeroRadiPDUST5   ', 'WetAeroRadiPDUST6   ',    &
+                    'WetAeroRadiPDUST7   '                             /)
 
        ! Allocate and register each field individually
        DO N = 1, State_Chm%nAeroType
@@ -1910,7 +1910,11 @@ CONTAINS
                     'KhetiSLABrNO3HCl ', 'KhetiSLAHOClHCl  ',             &
                     'KhetiSLAHOClHBr  ', 'KhetiSLAHOBrHCl  ',             &
                     'KhetiSLAHOBrHBr  ', '                 ',             &
-                    '                 ', '                 '            /)
+                    '                 ', '                 ',             &
+                    '                 ', '                 ',             &
+                    '                 ', '                 ',             &
+                    '                 ', '                 ',             &
+                    '                 '                                  /)
 
        ! Allocate and register each field individually
        nKHLSA = 11

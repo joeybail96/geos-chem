@@ -195,7 +195,7 @@ CONTAINS
     ! Scalars
     INTEGER                  :: I,    J,    L,    N,  NM
     REAL(fp)                 :: ANO3, GNO3, ACL, GCL
-    REAL(fp)                 :: SALCCL, PLYACL1, PLYACL3, PLYACL3, PLYACL4
+    REAL(fp)                 :: SALCCL, PLYACL1, PLYACL2, PLYACL3, PLYACL4
     REAL(fp)                 :: ACL_frSALCCL, ACL_frPLYACL1, ACL_frPLYACL2, ACL_frPLYACL3, ACL_frPLYACL4
     REAL(f8)                 :: RHI,  TEMPI, P_Pa
     REAL(fp)                 :: TCA,  TMG,  TK,   HNO3_DEN

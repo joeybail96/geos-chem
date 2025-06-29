@@ -39,6 +39,8 @@ MODULE FullChem_Mod
   INTEGER               :: id_OH,  id_HO2,  id_O3P,  id_O1D, id_CH4
   INTEGER               :: id_PCO, id_LCH4, id_NH3,  id_SO4
   INTEGER               :: id_SALAAL, id_SALCAL, id_SALC, id_SALA
+  INTEGER               :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
+  INTEGER               :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
   INTEGER               :: id_PSO4
 #ifdef TOMAS
   INTEGER               :: id_NK05, id_NK08, id_NK10, id_NK20
@@ -882,18 +884,26 @@ CONTAINS
        !=====================================================================
 
        ! Populate fields of the State_Het object
-       CALL fullchem_SetStateHet( I         = I,                             &
-                                  J         = J,                             &
-                                  L         = L,                             &
-                                  id_SALA   = id_SALA,                       &
-                                  id_SALAAL = id_SALAAL,                     &
-                                  id_SALC   = id_SALC,                       &
-                                  id_SALCAL = id_SALCAL,                     &
-                                  Input_Opt = Input_Opt,                     &
-                                  State_Chm = State_Chm,                     &
-                                  State_Met = State_Met,                     &
-                                  H         = State_Het,                     &
-                                  RC        = RC                            )
+       CALL fullchem_SetStateHet( I          = I,                             &
+                                  J          = J,                             &
+                                  L          = L,                             &
+                                  id_SALA    = id_SALA,                       &
+                                  id_SALAAL  = id_SALAAL,                     &
+                                  id_SALC    = id_SALC,                       &
+                                  id_SALCAL  = id_SALCAL,                     &
+                                  id_PLYA1   = id_PLYA1,                      &
+                                  id_PLYA2   = id_PLYA2,                      &
+                                  id_PLYA3   =  id_PLYA3,                      &
+                                  id_PLYA4   = id_PLYA4,                      &
+                                  id_PLYAAL1 = id_PLYAAL1,                    &
+                                  id_PLYAAL2 = id_PLYAAL2,                    &
+                                  id_PLYAAL3 = id_PLYAAL3,                    &
+                                  id_PLYAAL4 = id_PLYAAL4,                    &
+                                  Input_Opt  = Input_Opt,                     &
+                                  State_Chm  = State_Chm,                     &
+                                  State_Met  = State_Met,                     &
+                                  H          = State_Het,                     &
+                                  RC         = RC                            )
 
        !=====================================================================
        ! CHEMISTRY MECHANISM INITIALIZATION (#5)
