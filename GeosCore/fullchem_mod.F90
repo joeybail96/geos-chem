@@ -40,7 +40,6 @@ MODULE FullChem_Mod
   INTEGER               :: id_PCO, id_LCH4, id_NH3,  id_SO4
   INTEGER               :: id_SALAAL, id_SALCAL, id_SALC, id_SALA
   INTEGER               :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
-  INTEGER               :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
   INTEGER               :: id_PSO4
 #ifdef TOMAS
   INTEGER               :: id_NK05, id_NK08, id_NK10, id_NK20
@@ -895,10 +894,6 @@ CONTAINS
                                   id_PLYA2   = Ind_('PLYA2'),                 &
                                   id_PLYA3   = Ind_('PLYA3'),                 &
                                   id_PLYA4   = Ind_('PLYA4'),                 &
-                                  id_PLYAAL1 = Ind_('PLYAAL1'),               &
-                                  id_PLYAAL2 = Ind_('PLYAAL2'),               &
-                                  id_PLYAAL3 = Ind_('PLYAAL3'),               &
-                                  id_PLYAAL4 = Ind_('PLYAAL4'),               &
                                   Input_Opt  = Input_Opt,                     &
                                   State_Chm  = State_Chm,                     &
                                   State_Met  = State_Met,                     &
