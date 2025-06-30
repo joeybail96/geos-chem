@@ -1235,19 +1235,15 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(792) = (N2O5uptkByCloud(State_Het))
   RCONST(793) = (N2O5uptkBySALACl(State_Het))
   RCONST(794) = (N2O5uptkBySALCCl(State_Het))
-  RCONST(795) = (N2O5uptkByPLYACL(State_Het,1)+&
-                 N2O5uptkByPLYACL(State_Het,2)+&
-                 N2O5uptkByPLYACL(State_Het,3)+&
-                 N2O5uptkByPLYACL(State_Het,4))
+  RCONST(795) = (N2O5uptkByPLYACL(State_Het,1)+&N2O5uptkByPLYACL(State_Het,2)+&N2O5uptkByPLYACL(State_Het,&
+                  &3)+&N2O5uptkByPLYACL(State_Het,4))
   RCONST(796) = (N2O5uptkByPLYACL(State_Het,5))
   RCONST(797) = (N2O5uptkByPLYACL(State_Het,6))
   RCONST(798) = (N2O5uptkByPLYACL(State_Het,7))
   RCONST(799) = (OHuptkBySALACl(State_Het))
   RCONST(800) = (OHuptkBySALCCl(State_Het))
-  RCONST(801) = (OHuptkByPLYACL(State_Het,1)+&
-                 OHuptkByPLYACL(State_Het,2)+&
-                 OHuptkByPLYACL(State_Het,3)+&
-                 OHuptkByPLYACL(State_Het,4))
+  RCONST(801) = (OHuptkByPLYACL(State_Het,1)+&OHuptkByPLYACL(State_Het,2)+&OHuptkByPLYACL(State_Het,&
+                  &3)+&OHuptkByPLYACL(State_Het,4))
   RCONST(802) = (OHuptkByPLYACL(State_Het,5))
   RCONST(803) = (OHuptkByPLYACL(State_Het,6))
   RCONST(804) = (OHuptkByPLYACL(State_Het,7))
@@ -1260,19 +1256,15 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(811) = (ClNO3uptkByBrSALC(State_Het))
   RCONST(812) = (ClNO3uptkBySALACL(State_Het))
   RCONST(813) = (ClNO3uptkBySALCCL(State_Het))
-  RCONST(814) = (ClNO3uptkByPLYACL(State_Het,1)+&
-                 ClNO3uptkByPLYACL(State_Het,2)+&
-                 ClNO3uptkByPLYACL(State_Het,3)+&
-                 ClNO3uptkByPLYACL(State_Het,4))
+  RCONST(814) = (ClNO3uptkByPLYACL(State_Het,1)+&ClNO3uptkByPLYACL(State_Het,2)+&ClNO3uptkByPLYACL(State_Het,&
+                  &3)+&ClNO3uptkByPLYACL(State_Het,4))
   RCONST(815) = (ClNO3uptkByPLYACL(State_Het,5))
   RCONST(816) = (ClNO3uptkByPLYACL(State_Het,6))
   RCONST(817) = (ClNO3uptkByPLYACL(State_Het,7))
   RCONST(818) = (ClNO2uptkBySALACL(State_Het))
   RCONST(819) = (ClNO2uptkBySALCCL(State_Het))
-  RCONST(820) = (ClNO2uptkByPLYACL(State_Het,1)+&
-                 ClNO2uptkByPLYACL(State_Het,2)+&
-                 ClNO2uptkByPLYACL(State_Het,3)+&
-                 ClNO2uptkByPLYACL(State_Het,4))
+  RCONST(820) = (ClNO2uptkByPLYACL(State_Het,1)+&ClNO2uptkByPLYACL(State_Het,2)+&ClNO2uptkByPLYACL(State_Het,&
+                  &3)+&ClNO2uptkByPLYACL(State_Het,4))
   RCONST(821) = (ClNO2uptkByPLYACL(State_Het,5))
   RCONST(822) = (ClNO2uptkByPLYACL(State_Het,6))
   RCONST(823) = (ClNO2uptkByPLYACL(State_Het,7))
@@ -1284,10 +1276,8 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(829) = (HOClUptkByHBr(State_Het))
   RCONST(830) = (HOClUptkBySALACL(State_Het))
   RCONST(831) = (HOClUptkBySALCCL(State_Het))
-  RCONST(832) = (HOClUptkByPLYACL(State_Het,1)+&
-                 HOClUptkByPLYACL(State_Het,2)+&
-                 HOClUptkByPLYACL(State_Het,3)+&
-                 HOClUptkByPLYACL(State_Het,4))
+  RCONST(832) = (HOClUptkByPLYACL(State_Het,1)+&HOClUptkByPLYACL(State_Het,2)+&HOClUptkByPLYACL(State_Het,&
+                  &3)+&HOClUptkByPLYACL(State_Het,4))
   RCONST(833) = (HOClUptkByPLYACL(State_Het,5))
   RCONST(834) = (HOClUptkByPLYACL(State_Het,6))
   RCONST(835) = (HOClUptkByPLYACL(State_Het,7))
@@ -1296,10 +1286,8 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(838) = (HOBrUptkByHCl(State_Het))
   RCONST(839) = (HOBrUptkBySALACL(State_Het))
   RCONST(840) = (HOBrUptkBySALCCL(State_Het))
-  RCONST(841) = (HOBrUptkByPLYACL(State_Het,1)+&
-                 HOBrUptkByPLYACL(State_Het,2)+&
-                 HOBrUptkByPLYACL(State_Het,3)+&
-                 HOBrUptkByPLYACL(State_Het,4))
+  RCONST(841) = (HOBrUptkByPLYACL(State_Het,1)+&HOBrUptkByPLYACL(State_Het,2)+&HOBrUptkByPLYACL(State_Het,&
+                  &3)+&HOBrUptkByPLYACL(State_Het,4))
   RCONST(842) = (HOBrUptkByPLYACL(State_Het,5))
   RCONST(843) = (HOBrUptkByPLYACL(State_Het,6))
   RCONST(844) = (HOBrUptkByPLYACL(State_Het,7))
@@ -1334,10 +1322,9 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(873) = (IbrkdnByAcidBrSALC(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het))
   RCONST(874) = (IbrkdnByAcidSALACl(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het))
   RCONST(875) = (IbrkdnByAcidSALCCl(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het))
-  RCONST(876) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,1)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO), C(ind_IONO),0.02_dp,State_Het,2)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,3)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,4))
+  RCONST(876) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,1)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO),&
+                  &C(ind_IONO),0.02_dp,State_Het,2)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,&
+                  &3)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,4))
   RCONST(877) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,5))
   RCONST(878) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,6))
   RCONST(879) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,7))
@@ -1345,10 +1332,10 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(881) = (IbrkdnByAcidBrSALC(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het))
   RCONST(882) = (IbrkdnByAcidSALACl(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het))
   RCONST(883) = (IbrkdnByAcidSALCCl(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het))
-  RCONST(884) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,1)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,2)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,3)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,4))
+  RCONST(884) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,&
+                  &1)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,&
+                  &2)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,&
+                  &3)+&IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,4))
   RCONST(885) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,5))
   RCONST(886) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,6))
   RCONST(887) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO2),C(ind_IONO2),0.01_dp,State_Het,7))
@@ -1356,10 +1343,9 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(889) = (IbrkdnByAcidBrSALC(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het))
   RCONST(890) = (IbrkdnByAcidSALACl(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het))
   RCONST(891) = (IbrkdnByAcidSALCCl(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het))
-  RCONST(892) = (IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,1)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,2)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,3)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,4))
+  RCONST(892) = (IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,1)+&IbrkdnByAcidPLYACL(SR_MW(ind_HOI),&
+                  &C(ind_HOI),0.01_dp,State_Het,2)+&IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,&
+                  &3)+&IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,4))
   RCONST(893) = (IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,5))
   RCONST(894) = (IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,6))
   RCONST(895) = (IbrkdnByAcidPLYACL(SR_MW(ind_HOI),C(ind_HOI),0.01_dp,State_Het,7))
