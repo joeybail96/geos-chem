@@ -163,10 +163,6 @@ MODULE State_Chm_Mod
      REAL(fp), POINTER :: QLxpHCloud   (:,:,:)  !
      REAL(fp), POINTER :: SoilDust   (:,:,:,:)  ! Soil dust [kg/m3]
      REAL(fp), POINTER :: ORVCsesq     (:,:,:)  ! Sesquiterpenes mass [kg/box]
-     REAL(fp), POINTER :: PlyaDust   (:,:,:,:)  ! Playa dust [kg/m3]
-     REAL(fp), POINTER :: PlyaAlk    (:,:,:,:)  ! Playa alkalinity [-]
-     REAL(fp), POINTER :: PlyaCl     (:,:,:,:)  ! Playa chloride [kg/m3]
-
 
      !-----------------------------------------------------------------------
      ! Fields for nitrogen deposition
@@ -550,9 +546,6 @@ CONTAINS
     State_Chm%BOH               => NULL()
     State_Chm%BCl               => NULL()
     State_Chm%SFC_CH4           => NULL()
-    State_Chm%PlyaDust          => NULL()
-    State_Chm%PlyaAlk           => NULL()
-    State_Chm%PlyaCl            => NULL()
 
     State_Chm%UCX_REGRID        => NULL()
     State_Chm%UCX_PLEVS         => NULL()
@@ -678,7 +671,7 @@ CONTAINS
 !
     USE ErrCode_Mod
     USE CharPak_Mod,          ONLY : To_UpperCase
-    USE CMN_Size_Mod,         ONLY : NDUST, NAER, NPLYA
+    USE CMN_Size_Mod,         ONLY : NDUST, NAER
     USE GCKPP_Parameters,     ONLY : NSPEC
     USE Input_Opt_Mod,        ONLY : OptInput
     USE Species_Database_Mod, ONLY : Init_Species_Database
@@ -732,7 +725,7 @@ CONTAINS
 
     ! Initialize
     RC         =  GC_SUCCESS
-    nAerosol   =  NDUST + NAER + NPLYA
+    nAerosol   =  NDUST + NAER
     Ptr2data   => NULL()
     ThisSpc    => NULL()
     errMsg     =  ''
@@ -1241,96 +1234,6 @@ CONTAINS
                chmId      = TRIM( fieldId(N) ),                                 &
                Ptr2Data   = State_Chm%SoilDust,                                 &
                nSlots     = NDUST,                                              &
-               nCat       = N,                                                  &
-               RC         = RC                                                 )
-
-          IF ( RC /= GC_SUCCESS ) THEN
-             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
-             CALL GC_Error( errMsg, RC, thisLoc )
-             RETURN
-          ENDIF
-       ENDDO
-
-       !---------------------------------------------------------------------
-       ! PlyaDust
-       !---------------------------------------------------------------------
-       fieldId(1) = 'PlyaDUST1'
-       fieldId(2) = 'PlyaDUST2'
-       fieldId(3) = 'PlyaDUST3'
-       fieldId(4) = 'PlyaDUST4'
-       fieldId(5) = 'PlyaDUST5'
-       fieldId(6) = 'PlyaDUST6'
-       fieldId(7) = 'PlyaDUST7'
-
-       ! Allocate and register each field individually
-       DO N = 1, NPLYA
-          CALL Init_and_Register(                                               &
-               Input_Opt  = Input_Opt,                                          &
-               State_Chm  = State_Chm,                                          &
-               State_Grid = State_Grid,                                         &
-               chmId      = TRIM( fieldId(N) ),                                 &
-               Ptr2Data   = State_Chm%PlyaDust,                                 &
-               nSlots     = NPLYA,                                              &
-               nCat       = N,                                                  &
-               RC         = RC                                                 )
-
-          IF ( RC /= GC_SUCCESS ) THEN
-             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
-             CALL GC_Error( errMsg, RC, thisLoc )
-             RETURN
-          ENDIF
-       ENDDO
-
-       !---------------------------------------------------------------------
-       ! PlyaDust Alkalinity
-       !---------------------------------------------------------------------
-       fieldId(1) = 'PlyaAlk1'
-       fieldId(2) = 'PlyaAlk2'
-       fieldId(3) = 'PlyaAlk3'
-       fieldId(4) = 'PlyaAlk4'
-       fieldId(5) = 'PlyaAlk5'
-       fieldId(6) = 'PlyaAlk6'
-       fieldId(7) = 'PlyaAlk7'
-
-       ! Allocate and register each field individually
-       DO N = 1, NPLYA
-          CALL Init_and_Register(                                               &
-               Input_Opt  = Input_Opt,                                          &
-               State_Chm  = State_Chm,                                          &
-               State_Grid = State_Grid,                                         &
-               chmId      = TRIM( fieldId(N) ),                                 &
-               Ptr2Data   = State_Chm%PlyaAlk,                                  &
-               nSlots     = NPLYA,                                              &
-               nCat       = N,                                                  &
-               RC         = RC                                                 )
-
-          IF ( RC /= GC_SUCCESS ) THEN
-             errMsg = TRIM( errMsg_ir ) // TRIM( chmId )
-             CALL GC_Error( errMsg, RC, thisLoc )
-             RETURN
-          ENDIF
-       ENDDO
-
-       !---------------------------------------------------------------------
-       ! PlyaDust Chloride
-       !---------------------------------------------------------------------
-       fieldId(1) = 'PlyaCl1'
-       fieldId(2) = 'PlyaCl2'
-       fieldId(3) = 'PlyaCl3'
-       fieldId(4) = 'PlyaCl4'
-       fieldId(5) = 'PlyaCl5'
-       fieldId(6) = 'PlyaCl6'
-       fieldId(7) = 'PlyaCl7'
-
-       ! Allocate and register each field individually
-       DO N = 1, NPLYA
-          CALL Init_and_Register(                                               &
-               Input_Opt  = Input_Opt,                                          &
-               State_Chm  = State_Chm,                                          &
-               State_Grid = State_Grid,                                         &
-               chmId      = TRIM( fieldId(N) ),                                 &
-               Ptr2Data   = State_Chm%PlyaCl,                                  &
-               nSlots     = NPLYA,                                              &
                nCat       = N,                                                  &
                RC         = RC                                                 )
 
@@ -3433,27 +3336,6 @@ CONTAINS
        State_Chm%SoilDust => NULL()
     ENDIF
 
-    IF ( ASSOCIATED( State_Chm%PlyaDust ) ) THEN
-       DEALLOCATE( State_Chm%PlyaDust, STAT=RC )
-       CALL GC_CheckVar( 'State_Chm%PlyaDust', 2, RC )
-       IF ( RC /= GC_SUCCESS ) RETURN
-       State_Chm%PlyaDust => NULL()
-    ENDIF
-
-    IF ( ASSOCIATED( State_Chm%PlyaAlk ) ) THEN
-       DEALLOCATE( State_Chm%PlyaAlk, STAT=RC )
-       CALL GC_CheckVar( 'State_Chm%PlyaAlk', 2, RC )
-       IF ( RC /= GC_SUCCESS ) RETURN
-       State_Chm%PlyaAlk => NULL()
-    ENDIF
-
-    IF ( ASSOCIATED( State_Chm%PlyaCl ) ) THEN
-       DEALLOCATE( State_Chm%PlyaCl, STAT=RC )
-       CALL GC_CheckVar( 'State_Chm%PlyaCl', 2, RC )
-       IF ( RC /= GC_SUCCESS ) RETURN
-       State_Chm%PlyaCl => NULL()
-    ENDIF
-
     IF ( ASSOCIATED( State_Chm%WetAeroArea ) ) THEN
        DEALLOCATE( State_Chm%WetAeroArea, STAT=RC )
        CALL GC_CheckVar( 'State_Chm%WetAeroArea', 2, RC )
@@ -4795,111 +4677,6 @@ CONTAINS
 
        CASE ( 'SOILDUST7' )
           IF ( isDesc  ) Desc  = 'Dust aerosol concentration in bin 7'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST1' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 1'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST2' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 2'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST3' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 3'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST4' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 4'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST5' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 5'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST6' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 6'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYADUST7' )
-          IF ( isDesc  ) Desc  = 'Playa aerosol concentration in bin 7'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK1' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 1'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK2' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 2'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK3' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 3'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK4' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 4'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK5' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 5'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK6' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 6'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYAALK7' )
-          IF ( isDesc  ) Desc  = 'Playa alkalinity in bin 7'
-          IF ( isUnits ) Units = '-'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL1' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 1'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL2' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 2'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL3' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 3'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL4' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 4'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL5' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 5'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL6' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 6'
-          IF ( isUnits ) Units = 'kg/m3'
-          IF ( isRank  ) Rank  =  3
-
-       CASE ( 'PLYACL7' )
-          IF ( isDesc  ) Desc  = 'Playa chloride concentration in bin 7'
           IF ( isUnits ) Units = 'kg/m3'
           IF ( isRank  ) Rank  =  3
 
