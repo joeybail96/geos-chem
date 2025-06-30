@@ -2122,6 +2122,18 @@ CONTAINS
     id_DST3 =  Ind_('DST3'    )
     id_DST4 =  Ind_('DST4'    )
 
+    id_PLYA1 = Ind_('PLYA1'      )
+    id_PLYA2 = Ind_('PLYA2'      )
+    id_PLYA3 = Ind_('PLYA3'      )
+    id_PLYA4 = Ind_('PLYA4'      )
+    id_PLYAAL1 = Ind_('PLYAAL1'  )
+    id_PLYAAL2 = Ind_('PLYAAL2'  )
+    id_PLYAAL3 = Ind_('PLYAAL3'  )
+    id_PLYAAL4 = Ind_('PLYAAL4'  )
+    id_PLYACL1 = Ind_('PLYACL1'  )
+    id_PLYACL1 = Ind_('PLYACL2'  )
+    id_PLYACL1 = Ind_('PLYACL3'  )
+    id_PLYACL1 = Ind_('PLYACL4'  )
     !-----------------------------------------------------------------
     ! DAL1 - DAL4 and SO4d1 - SO4d4 species (acid uptake sims only)
     !-----------------------------------------------------------------
