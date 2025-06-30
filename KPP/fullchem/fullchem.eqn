@@ -204,6 +204,10 @@ CO         = IGNORE; {CO; Carbon monoxide}
 CO2        = IGNORE; {CO2; Carbon dioxide}
 CSL        = IGNORE; {cresols and xylols}
 DMS        = IGNORE; {(CH3)2S; Dimethylsulfide}
+DSTAL1     = IGNORE; {Alkalinity of mineral dust bin 1}
+DSTAL2     = IGNORE; {Alkalinity of mineral dust bin 2}
+DSTAL3     = IGNORE; {Alkalinity of mineral dust bin 3}
+DSTAL4     = IGNORE; {Alkalinity of mineral dust bin 4}
 EBZ        = IGNORE; {C6H5CH2CH3; Ethylbenzene}
 EOH        = IGNORE; {C2H5OH; Ethanol}
 ETHLN      = IGNORE; {CHOCH2ONO2; Ethanal nitrate}
@@ -420,10 +424,6 @@ PHAN       = IGNORE; {OCC(=O)OON(=O)=O; peroxyhydroxyacetic nitric anhydride}
 PHEN       = IGNORE; {phenol}
 PIO2       = IGNORE; {RO2 from MTPA}
 PIP        = IGNORE; {Peroxides from MTPA}
-PLYAAL1    = IGNORE; {Bin 1 playa dust alkalinity}
-PLYAAL2    = IGNORE; {Bin 2 playa dust alkalinity}
-PLYAAL3    = IGNORE; {Bin 3 playa dust alkalinity}
-PLYAAL4    = IGNORE; {Bin 4 playa dust alkalinity}
 PLYACL1    = IGNORE; {Cl; chloride in playa dust bin 1}
 PLYACL2    = IGNORE; {Cl; chloride in playa dust bin 2}
 PLYACL3    = IGNORE; {Cl; chloride in playa dust bin 3}
@@ -500,10 +500,10 @@ HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
 // Playa Dust
-//HCl  + PLYAAL1       = PLYACL1         : K_MT(8) + K_MT(11) + K_MT(14) + K_MT(17);
-//HCl  + PLYAAL2       = PLYACL2         : K_MT(20);
-//HCl  + PLYAAL3       = PLYACL3         : K_MT(23);
-//HCl  + PLYAAL4       = PLYACL4         : K_MT(26);
+HCl  + DSTAL1       = PLYACL1            : K_MT(8) + K_MT(11) + K_MT(14) + K_MT(17);
+HCl  + DSTAL2       = PLYACL2            : K_MT(20);
+HCl  + DSTAL3       = PLYACL3            : K_MT(23);
+HCl  + DSTAL4       = PLYACL4            : K_MT(26);
 //
 // Cloud
 // S(IV) --> S(VI)
