@@ -1286,7 +1286,7 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(831) = (HOClUptkBySALCCL(State_Het))
   RCONST(832) = (HOClUptkByPLYACL(State_Het,1)+&
                  HOClUptkByPLYACL(State_Het,2)+&
-                 HOClUptkByPLYACL(State_Het,3)+& 
+                 HOClUptkByPLYACL(State_Het,3)+&
                  HOClUptkByPLYACL(State_Het,4))
   RCONST(833) = (HOClUptkByPLYACL(State_Het,5))
   RCONST(834) = (HOClUptkByPLYACL(State_Het,6))
@@ -1335,7 +1335,7 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(874) = (IbrkdnByAcidSALACl(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het))
   RCONST(875) = (IbrkdnByAcidSALCCl(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het))
   RCONST(876) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,1)+&
-                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,2)+&
+                 IbrkdnByAcidPLYACL(SR_MW(ind_IONO), C(ind_IONO),0.02_dp,State_Het,2)+&
                  IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,3)+&
                  IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,4))
   RCONST(877) = (IbrkdnByAcidPLYACL(SR_MW(ind_IONO),C(ind_IONO),0.02_dp,State_Het,5))
