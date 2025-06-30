@@ -39,8 +39,6 @@ MODULE fullchem_SulfurChemFuncs
   INTEGER                :: id_NITs,    id_O3,      id_OH,      id_pFe
   INTEGER                :: id_SALA,    id_SALAAL,  id_SALACL,  id_SALC
   INTEGER                :: id_SALCAL,  id_SALCCL,  id_SO2,     id_SO4
-  INTEGER                :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
-  INTEGER                :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
   INTEGER                :: id_SO4s
 !
 ! !DEFINED_PARAMETERS
@@ -49,14 +47,14 @@ MODULE fullchem_SulfurChemFuncs
   REAL(fp),  PARAMETER   :: TCVV_N    = AIRMW / 14e+0_fp ! hard-coded MW
   REAL(fp),  PARAMETER   :: SMALLNUM  = 1e-20_fp
   REAL(fp),  PARAMETER   :: CM3PERM3  = 1.e6_fp
-  ! Indices for playa dust in aerosol type defined in aerosol mod (15 ... NAEROTYPE=21)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU1        = 15 ! Playa dust (Reff = 0.151 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU2        = 16 ! Playa dust (Reff = 0.253 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU3        = 17 ! Playa dust (Reff = 0.402 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU4        = 18 ! Playa dust (Reff = 0.818 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU5        = 19 ! Playa dust (Reff = 1.491 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU6        = 20 ! Playa dust (Reff = 2.417 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU7        = 21 ! Playa dust (Reff = 3.721 um)
+  ! Indices for dust in aerosol type defined in aerosol mod 
+  INTEGER,  PRIVATE, PARAMETER :: DU1        = 1 ! dust (Reff = 0.151 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU2        = 2 ! dust (Reff = 0.253 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU3        = 3 ! dust (Reff = 0.402 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU4        = 4 ! dust (Reff = 0.818 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU5        = 5 ! dust (Reff = 1.491 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU6        = 6 ! dust (Reff = 2.417 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU7        = 7 ! dust (Reff = 3.721 um)
 
   ! distribution fractions of playa dust bins x=1-4 among playa dust bins y=1-7
   ! see aerosol_mod.F90 for distribution fractions
@@ -150,7 +148,7 @@ CONTAINS
     USE gckpp_Parameters
     USE Input_Opt_Mod,    ONLY : OptInput
     USE rateLawUtilFuncs
-    USE State_Chm_Mod,    ONLY : ChmState
+    USE State_Chm_Mod,    ONLY : ChmState, Ind_
     USE State_Met_Mod,    ONLY : MetState
     USE State_Grid_Mod,   ONLY : GrdState
 !
@@ -186,13 +184,13 @@ CONTAINS
     ! Scalars
     LOGICAL            :: SALAAL_gt_0_1
     LOGICAL            :: SALCAL_gt_0_1
-    LOGICAL            :: PLYAAL1_1_gt_0_1
-    LOGICAL            :: PLYAAL1_2_gt_0_1
-    LOGICAL            :: PLYAAL1_3_gt_0_1
-    LOGICAL            :: PLYAAL1_4_gt_0_1
-    LOGICAL            :: PLYAAL2_5_gt_0_1
-    LOGICAL            :: PLYAAL3_6_gt_0_1
-    LOGICAL            :: PLYAAL4_7_gt_0_1
+    LOGICAL            :: DSTAL1_1_gt_0_1
+    LOGICAL            :: DSTAL1_2_gt_0_1
+    LOGICAL            :: DSTAL1_3_gt_0_1
+    LOGICAL            :: DSTAL1_4_gt_0_1
+    LOGICAL            :: DSTAL2_5_gt_0_1
+    LOGICAL            :: DSTAL3_6_gt_0_1
+    LOGICAL            :: DSTAL4_7_gt_0_1
     LOGICAL            :: O3_gt_1e10
     REAL(fp)           :: k_ex
 
@@ -211,12 +209,12 @@ CONTAINS
 
     !----------------------------------------------------------------------
     ! to skip the SALAAL + SO2 and SALCAL + SO2 reactions or 
-    ! PLYAALx + SO2 reactions if:
+    ! DSTALx + SO2 reactions if:
     !
     ! (1) SALAAL <= 0.1 molec/cm3
     ! (2) SALCAL <= 0.1 molec/cm3
     ! (3) O3 <= 1e10 molec/cm3
-    ! (4) PLYAALx_y_gt_0_1 <= 0.1 molec/cm3   % x is the original playa bin (1-4)
+    ! (4) DSTALx_y_gt_0_1 <= 0.1 molec/cm3   % x is the original playa bin (1-4)
     !                                         % y is the redistributed playa bin (1-7)
     !
     ! An ozone concentration of 1e10 molec/cm3 ~= 0.5 ppbv, which is
@@ -225,13 +223,13 @@ CONTAINS
     SALAAL_gt_0_1 = ( C(ind_SALAAL) > 0.1_dp     )
     SALCAL_gt_0_1 = ( C(ind_SALCAL) > 0.1_dp     )
     O3_gt_1e10    = ( C(ind_O3)     > 1.0e+10_dp )
-    PLYAAL1_1_gt_0_1 = ( PLYA1_1*C(ind_PLYAAL1)  > 0.1_dp     )
-    PLYAAL1_2_gt_0_1 = ( PLYA1_2*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL1_3_gt_0_1 = ( PLYA1_3*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL1_4_gt_0_1 = ( PLYA1_4*C(ind_PLYAAL1)  > 0.1_dp     ) 
-    PLYAAL2_5_gt_0_1 = ( PLYA2_5*C(ind_PLYAAL2)  > 0.1_dp     ) 
-    PLYAAL3_6_gt_0_1 = ( PLYA3_6*C(ind_PLYAAL3)  > 0.1_dp     ) 
-    PLYAAL4_7_gt_0_1 = ( PLYA4_7*C(ind_PLYAAL4)  > 0.1_dp     ) 
+    DSTAL1_1_gt_0_1 = ( PLYA1_1*C(Ind('DSTAL1'))  > 0.1_dp     )
+    DSTAL1_2_gt_0_1 = ( PLYA1_2*C(Ind('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL1_3_gt_0_1 = ( PLYA1_3*C(Ind('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL1_4_gt_0_1 = ( PLYA1_4*C(Ind('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL2_5_gt_0_1 = ( PLYA2_5*C(Ind('DSTAL2'))  > 0.1_dp     ) 
+    DSTAL3_6_gt_0_1 = ( PLYA3_6*C(Ind('DSTAL3'))  > 0.1_dp     ) 
+    DSTAL4_7_gt_0_1 = ( PLYA4_7*C(Ind('DSTAL4'))  > 0.1_dp     ) 
 
     !======================================================================
     ! Reaction rates [1/s] for fine sea salt alkalinity (aka SALAAL)
@@ -340,374 +338,113 @@ CONTAINS
     ENDIF
 
     !========================================================================
-    ! Reaction rates [1/s] for PLYA bin1 (aka PLYAAL1) distributed into bin 1/7
+    ! Reaction rates [1/s] for Playa acid uptake
     !
-    ! K_MT(7) : PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    ! K_MT(8) : PLYAAL1 + HCl      = PLYACL1
-    ! K_MT(9) : PLYAAL1 + HNO3     = NITs
+    ! K_MT(7)  : DSTAL1 + HCl      = PLYACL1
+    ! K_MT(8)  : DSTAL1 + HCl      = PLYACL1
+    ! K_MT(9)  : DSTAL1 + HCl      = PLYACL1
+    ! K_MT(10) : DSTAL1 + HCl      = PLYACL1
+    ! K_MT(11) : DSTAL2 + HCl      = PLYACL2
+    ! K_MT(12) : DSTAL3 + HCl      = PLYACL3
+    ! K_MT(13) : DSTAL4 + HCl      = PLYACL4
     !========================================================================
-
     !------------------------------------------------------------------------
-    ! PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
+    ! DSTAL1 + HCl = PLYACL1
     !------------------------------------------------------------------------
-    IF ( PLYAAL1_1_gt_0_1 .AND. O3_gt_1e10 ) THEN
+    IF ( DSTAL1_1_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU1),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU1),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(7) = kIIR1Ltd( C(ind_SO2), PLYA1_1*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + HCl = PLYACL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_1_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU1),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU1),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU1),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU1),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(8) = kIIR1Ltd( C(ind_HCl), PLYA1_1*C(ind_PLYAAL1), k_ex )
+       K_MT(7) = kIIR1Ltd( C(ind_HCl), PLYA1_1*C(Ind_('DSTAL1')), k_ex )
     ENDIF
-
     !------------------------------------------------------------------------
-    ! PLYAAL1 + HNO3 = NITs
+    ! DSTAL1 + HCl = PLYACL1
     !------------------------------------------------------------------------
-    IF ( PLYAAL1_1_gt_0_1 ) THEN
+    IF ( DSTAL1_2_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU1),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU1),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(9) = kIIR1Ltd( C(ind_HNO3), PLYA1_1*C(ind_PLYAAL1), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin1 (aka PLYAAL1) distributed into bin 2/7
-    !
-    ! K_MT(10) : PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    ! K_MT(11) : PLYAAL1 + HCl      = PLYACL1
-    ! K_MT(12) : PLYAAL1 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_2_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU2),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU2),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(10) = kIIR1Ltd( C(ind_SO2), PLYA1_2*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + HCl = PLYACL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_2_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU2),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU2),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU2),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU2),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(11) = kIIR1Ltd( C(ind_HCl), PLYA1_2*C(ind_PLYAAL1), k_ex )
+       K_MT(8) = kIIR1Ltd( C(ind_HCl), PLYA1_2*C(Ind_('DSTAL1')), k_ex )
     ENDIF
-
     !------------------------------------------------------------------------
-    ! PLYAAL1 + HNO3 = NITs
+    ! DSTAL1 + HCl = PLYACL1
     !------------------------------------------------------------------------
-    IF ( PLYAAL1_2_gt_0_1 ) THEN
+    IF ( DSTAL1_3_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU2),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU2),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(12) = kIIR1Ltd( C(ind_HNO3), PLYA1_2*C(ind_PLYAAL1), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin1 (aka PLYAAL1) distributed into bin 3/7
-    !
-    ! K_MT(13) : PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    ! K_MT(14) : PLYAAL1 + HCl      = PLYACL1
-    ! K_MT(15) : PLYAAL1 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_3_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU3),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU3),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(13) = kIIR1Ltd( C(ind_SO2), PLYA1_3*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + HCl = PLYACL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_3_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU3),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU3),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU3),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU3),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(14) = kIIR1Ltd( C(ind_HCl), PLYA1_3*C(ind_PLYAAL1), k_ex )
+       K_MT(9) = kIIR1Ltd( C(ind_HCl), PLYA1_3*C(Ind_('DSTAL1')), k_ex )
     ENDIF
-
     !------------------------------------------------------------------------
-    ! PLYAAL1 + HNO3 = NITs
+    ! DSTAL1 + HCl = PLYACL1
     !------------------------------------------------------------------------
-    IF ( PLYAAL1_3_gt_0_1 ) THEN
+    IF ( DSTAL1_4_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU3),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU3),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(15) = kIIR1Ltd( C(ind_HNO3), PLYA1_3*C(ind_PLYAAL1), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin1 (aka PLYAAL1) distributed into bin 4/7
-    !
-    ! K_MT(16) : PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    ! K_MT(17) : PLYAAL1 + HCl      = PLYACL1
-    ! K_MT(18) : PLYAAL1 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + SO2 + O3 = SO4s - PLYAAL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_4_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU4),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU4),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(16) = kIIR1Ltd( C(ind_SO2), PLYA1_4*C(ind_PLYAAL1), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL1 + HCl = PLYACL1
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_4_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU4),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU4),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU4),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU4),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(17) = kIIR1Ltd( C(ind_HCl), PLYA1_4*C(ind_PLYAAL1), k_ex )
+       K_MT(10) = kIIR1Ltd( C(ind_HCl), PLYA1_4*C(Ind_('DSTAL1')), k_ex )
     ENDIF
-
+--------------------------------------------------------------
+    ! DSTAL2 + HCl = PLYACL2
     !------------------------------------------------------------------------
-    ! PLYAAL1 + HNO3 = NITs
-    !------------------------------------------------------------------------
-    IF ( PLYAAL1_4_gt_0_1 ) THEN
+    IF ( DSTAL2_5_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU4),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU4),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(18) = kIIR1Ltd( C(ind_HNO3), PLYA1_4*C(ind_PLYAAL1), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin2 (aka PLYAAL2) distributed into bin 5/7
-    !
-    ! K_MT(19) : PLYAAL2 + SO2 + O3 = SO4s - PLYAAL2
-    ! K_MT(20) : PLYAAL2 + HCl      = PLYACL2
-    ! K_MT(21) : PLYAAL2 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL2 + SO2 + O3 = SO4s - PLYAAL2
-    !------------------------------------------------------------------------
-    IF ( PLYAAL2_5_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU5),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU5),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(19) = kIIR1Ltd( C(ind_SO2), PLYA2_5*C(ind_PLYAAL2), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL2 + HCl = PLYACL2
-    !------------------------------------------------------------------------
-    IF ( PLYAAL2_5_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU5),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU5),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU5),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU5),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(20) = kIIR1Ltd( C(ind_HCl), PLYA2_5*C(ind_PLYAAL2), k_ex )
+       K_MT(11) = kIIR1Ltd( C(ind_HCl), PLYA2_5*C(Ind_('DSTAL2')), k_ex )
     ENDIF
-
     !------------------------------------------------------------------------
-    ! PLYAAL2 + HNO3 = NITs
+    ! DSTAL3 + HCl = PLYACL3
     !------------------------------------------------------------------------
-    IF ( PLYAAL2_5_gt_0_1 ) THEN
+    IF ( DSTAL3_6_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU5),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU5),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(21) = kIIR1Ltd( C(ind_HNO3), PLYA2_5*C(ind_PLYAAL2), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin3 (aka PLYAAL3) distributed into bin 6/7
-    !
-    ! K_MT(22) : PLYAAL3 + SO2 + O3 = SO4s - PLYAAL3
-    ! K_MT(23) : PLYAAL3 + HCl      = PLYACL3
-    ! K_MT(24) : PLYAAL3 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL3 + SO2 + O3 = SO4s - PLYAAL3
-    !------------------------------------------------------------------------
-    IF ( PLYAAL2_5_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU6),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU6),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(22) = kIIR1Ltd( C(ind_SO2), PLYA3_6*C(ind_PLYAAL3), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL3 + HCl = PLYACL3
-    !------------------------------------------------------------------------
-    IF ( PLYAAL3_6_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU6),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU6),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU6),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU6),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(23) = kIIR1Ltd( C(ind_HCl), PLYA3_6*C(ind_PLYAAL3), k_ex )
+       K_MT(12) = kIIR1Ltd( C(ind_HCl), PLYA3_6*C(Ind_('DSTAL3')), k_ex )
     ENDIF
-
     !------------------------------------------------------------------------
-    ! PLYAAL3 + HNO3 = NITs
+    ! DSTAL4 + HCl = PLYACL4
     !------------------------------------------------------------------------
-    IF ( PLYAAL3_6_gt_0_1 ) THEN
+    IF ( DSTAL4_7_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU6),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU6),     &
-                       gamma  = 0.5_dp,                                     &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(24) = kIIR1Ltd( C(ind_HNO3), PLYA3_6*C(ind_PLYAAL3), k_ex )
-    ENDIF
-
-    !========================================================================
-    ! Reaction rates [1/s] for PLYA bin4 (aka PLYAAL4) distributed into bin 7/7
-    !
-    ! K_MT(25) : PLYAAL4 + SO2 + O3 = SO4s - PLYAAL4
-    ! K_MT(26) : PLYAAL4 + HCl      = PLYACL4
-    ! K_MT(27) : PLYAAL4 + HNO3     = NITs
-    !========================================================================
-
-    !------------------------------------------------------------------------
-    ! PLYAAL4 + SO2 + O3 = SO4s - PLYAAL4
-    !------------------------------------------------------------------------
-    IF ( PLYAAL4_7_gt_0_1 .AND. O3_gt_1e10 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU7),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU7),     &
-                       gamma  = 0.11_dp,                                    &
-                       srMw   = SR_MW(ind_SO2)                              )
-
-       ! Assume SO2 is limiting, so recompute rxn rate accordingly
-       K_MT(25) = kIIR1Ltd( C(ind_SO2), PLYA4_7*C(ind_PLYAAL4), k_ex ) / C(ind_O3)
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL4 + HCl = PLYACL4
-    !------------------------------------------------------------------------
-    IF ( PLYAAL4_7_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU7),  &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU7),     &
+       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,DU7),  &
+                       radius = State_Chm%AeroRadi(I,J,L,DU7),     &
                        gamma  = 0.07_dp,                                    &
                        srMw   = SR_MW(ind_HCl)                              )
 
        ! Assume HCl is limiting, so recompute rxn rate accordingly
-       K_MT(26) = kIIR1Ltd( C(ind_HCl), PLYA4_7*C(ind_PLYAAL4), k_ex )
-    ENDIF
-
-    !------------------------------------------------------------------------
-    ! PLYAAL4 + HNO3 = NITs
-    !------------------------------------------------------------------------
-    IF ( PLYAAL4_7_gt_0_1 ) THEN
-
-       ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,PLYADU7),   &
-                       radius = State_Chm%AeroRadi(I,J,L,PLYADU7),      &
-                       gamma  = 0.5_dp,                                      &
-                       srMw   = SR_MW(ind_HNO3)                             )
-
-       ! Assume HNO3 is limiting, so recompute rxn rate accordingly
-       K_MT(27) = kIIR1Ltd( C(ind_HNO3), PLYA4_7*C(ind_PLYAAL4), k_ex )
+       K_MT(13) = kIIR1Ltd( C(ind_HCl), PLYA4_7*C(Ind_('DSTAL4')), k_ex )
     ENDIF
 
   END SUBROUTINE fullchem_SulfurAqChem
