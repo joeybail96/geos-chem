@@ -500,10 +500,10 @@ HCl  + SALCAL       = SALCCL             : K_MT(5);
 HNO3 + SALCAL       = NITs               : K_MT(6);
 //
 // Playa Dust
-!HCl  + PLYAAL1       = PLYACL1           : K_MT(8) + K_MT(11) + K_MT(14) + K_MT(17);
-!HCl  + PLYAAL2       = PLYACL2           : K_MT(20);
-!HCl  + PLYAAL3       = PLYACL3           : K_MT(23);
-!HCl  + PLYAAL4       = PLYACL4           : K_MT(26);
+//HCl  + PLYAAL1       = PLYACL1         : K_MT(8) + K_MT(11) + K_MT(14) + K_MT(17);
+//HCl  + PLYAAL2       = PLYACL2         : K_MT(20);
+//HCl  + PLYAAL3       = PLYACL3         : K_MT(23);
+//HCl  + PLYAAL4       = PLYACL4         : K_MT(26);
 //
 // Cloud
 // S(IV) --> S(VI)
