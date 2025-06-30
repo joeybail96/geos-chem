@@ -204,10 +204,10 @@ CONTAINS
     H%SSC_is_Acid   = ( .not.  H%SSC_is_Alk          )
 
     ! pH and alkalinity fields for playa dust
-    H%H_conc_PLYA1 = 10.0**( -5.0_dp              )
-    H%H_conc_PLYA2 = 10.0**( -5.0_dp              )
-    H%H_conc_PLYA3 = 10.0**( -5.0_dp              )
-    H%H_conc_PLYA4 = 10.0**( -5.0_dp              )
+    H%H_conc_DST1 = 10.0**( -5.0_dp              )
+    H%H_conc_DST2 = 10.0**( -5.0_dp              )
+    H%H_conc_DST3 = 10.0**( -5.0_dp              )
+    H%H_conc_DST4 = 10.0**( -5.0_dp              )
 
     ! alkalinity fraction in playa dust
     H%f_Alk_DST1   = SafeDiv( State_Chm%Species(id_DSTAL1)%Conc(I,J,L),     &
