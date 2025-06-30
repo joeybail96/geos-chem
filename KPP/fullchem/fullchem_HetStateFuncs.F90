@@ -210,6 +210,10 @@ CONTAINS
     H%H_conc_PLYA4 = 10.0**( -5.0_dp              )
 
     ! alkalinity fraction in playa dust
+    H%f_Alk_PLYA1   = SafeDiv( State_Chm%Species(id_PLYAAL1)%Conc(I,J,L),     &
+                               State_Chm%Species(id_PLYA1  )%Conc(I,J,L),     &
+                               0.0_dp                                       )
+
     H%f_Alk_PLYA2   = SafeDiv( State_Chm%Species(id_PLYAAL2)%Conc(I,J,L),     &
                                State_Chm%Species(id_PLYA2  )%Conc(I,J,L),     &
                                0.0_dp                                       )
