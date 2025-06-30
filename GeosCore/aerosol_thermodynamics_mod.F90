@@ -188,9 +188,9 @@ CONTAINS
     INTEGER, SAVE            :: id_SALACL, id_HCL, id_SALCCL
     INTEGER, SAVE            :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
     INTEGER, SAVE            :: id_SO4s, id_NITs, id_SALC
-    INTEGER, SAVE            :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
+    INTEGER, SAVE            :: id_DST1, id_DST2, id_DST3, id_DST4
     INTEGER, SAVE            :: id_SALAAL, id_SALCAL
-    INTEGER, SAVE            :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
+    INTEGER, SAVE            :: id_DSTAL1, id_DSTAL2, id_DSTAL3, id_DSTAL4
 
     ! Scalars
     INTEGER                  :: I,    J,    L,    N,  NM
@@ -208,10 +208,10 @@ CONTAINS
     REAL(f8)                 :: WI(NCOMPA)
     REAL(f8)                 :: WT(NCOMPA)
     REAL(f8)                 :: AlkR !Alkalinity % depleted
-    REAL(f8)                 :: Plya1_AlkR ! playa bin 1 alkalinity % depleted
-    REAL(f8)                 :: Plya2_AlkR ! playa bin 2 alkalinity % depleted
-    REAL(f8)                 :: Plya3_AlkR ! playa bin 3 alkalinity % depleted
-    REAL(f8)                 :: Plya4_AlkR ! playa bin 4 alkalinity % depleted
+    REAL(f8)                 :: DST1_AlkR ! playa bin 1 alkalinity % depleted
+    REAL(f8)                 :: DST2_AlkR ! playa bin 2 alkalinity % depleted
+    REAL(f8)                 :: DST3_AlkR ! playa bin 3 alkalinity % depleted
+    REAL(f8)                 :: DST4_AlkR ! playa bin 4 alkalinity % depleted
     REAL(f8)                 :: Qk, PHCl, F_HCl, F_HNO3
     REAL(f8)                 :: Hplus !H+ in SALC,mol/m3
     REAL(f8)                 :: Dcs !SALC diameter, m
@@ -299,10 +299,10 @@ CONTAINS
        id_SALACL  = Ind_('SALACL')
        id_HCL     = Ind_('HCl'   )
        id_SALC    = Ind_('SALC'  )
-       id_PLYA1   = Ind_('PLYA1' )
-       id_PLYA2   = Ind_('PLYA2' )
-       id_PLYA3   = Ind_('PLYA3' )
-       id_PLYA4   = Ind_('PLYA4' )
+       id_DST1   = Ind_('DST1' )
+       id_DST2   = Ind_('DST2' )
+       id_DST3   = Ind_('DST3' )
+       id_DST4   = Ind_('DST4' )
        id_SALCCL  = Ind_('SALCCL')
        id_PLYACL1 = Ind_('PLYACL1')
        id_PLYACL2 = Ind_('PLYACL2')
@@ -313,10 +313,10 @@ CONTAINS
        id_SO4s    = Ind_('SO4s'  )
        id_SALAAL  = Ind_('SALAAL')
        id_SALCAL  = Ind_('SALCAL')
-       id_PLYAAL1 = Ind_('PLYAAL1')
-       id_PLYAAL2 = Ind_('PLYAAL2')
-       id_PLYAAL3 = Ind_('PLYAAL3')
-       id_PLYAAL4 = Ind_('PLYAAL4')
+       id_DSTAL1 = Ind_('DSTAL1')
+       id_DSTAL2 = Ind_('DSTAL2')
+       id_DSTAL3 = Ind_('DSTAL3')
+       id_DSTAL4 = Ind_('DSTAL4')
 
        ! Set a flag if HMS is defined
        IS_HMS    = ( id_HMS > 0 )
@@ -362,23 +362,23 @@ CONTAINS
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
-       IF ( id_PLYA1 <= 0 ) THEN
-          ErrMsg = 'PLYA1 is an undefined species!'
+       IF ( id_DST1 <= 0 ) THEN
+          ErrMsg = 'DST1 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
-       IF ( id_PLYA2 <= 0 ) THEN
-          ErrMsg = 'PLYA2 is an undefined species!'
+       IF ( id_DST2 <= 0 ) THEN
+          ErrMsg = 'DST2 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
-       IF ( id_PLYA3 <= 0 ) THEN
-          ErrMsg = 'PLYA3 is an undefined species!'
+       IF ( id_DST3 <= 0 ) THEN
+          ErrMsg = 'DST3 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
-       IF ( id_PLYA4 <= 0 ) THEN
-          ErrMsg = 'PLYA4 is an undefined species!'
+       IF ( id_DST4 <= 0 ) THEN
+          ErrMsg = 'DST4 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
@@ -429,26 +429,6 @@ CONTAINS
        ENDIF
        IF ( id_SALCAL <= 0 ) THEN
           ErrMsg = 'SALCAL is an undefined species!'
-          CALL GC_Error( ErrMsg, RC, ThisLoc )
-          RETURN
-       ENDIF
-       IF ( id_PLYAAL1 <= 0 ) THEN
-          ErrMsg = 'PLYAAL1 is an undefined species!'
-          CALL GC_Error( ErrMsg, RC, ThisLoc )
-          RETURN
-       ENDIF
-       IF ( id_PLYAAL2 <= 0 ) THEN
-          ErrMsg = 'PLYAAL2 is an undefined species!'
-          CALL GC_Error( ErrMsg, RC, ThisLoc )
-          RETURN
-       ENDIF
-       IF ( id_PLYAAL3 <= 0 ) THEN
-          ErrMsg = 'PLYAAL3 is an undefined species!'
-          CALL GC_Error( ErrMsg, RC, ThisLoc )
-          RETURN
-       ENDIF
-       IF ( id_PLYAAL4 <= 0 ) THEN
-          ErrMsg = 'PLYAAL4 is an undefined species!'
           CALL GC_Error( ErrMsg, RC, ThisLoc )
           RETURN
        ENDIF
@@ -646,10 +626,10 @@ CONTAINS
           GNO3          = 0.0_fp
           HNO3_UGM3     = 0.0_fp
           OTHER         = 0.0_f8
-          Plya1_AlkR    = 0.0_f8
-          Plya2_AlkR    = 0.0_f8
-          Plya3_AlkR    = 0.0_f8
-          Plya4_AlkR    = 0.0_f8
+          DST1_AlkR    = 0.0_f8
+          DST2_AlkR    = 0.0_f8
+          DST3_AlkR    = 0.0_f8
+          DST4_AlkR    = 0.0_f8
           Qk            = 0.0_f8
           SCASI         = ''
           TCa           = 0.0_fp
@@ -688,38 +668,38 @@ CONTAINS
                 AlkR = 1.0_fp
              ENDIF
 
-             ! Calculate alkalinity consumed in grid box for each plya bin
+             ! Calculate alkalinity consumed in grid box for each DST bin
              ! BIN 1
-             IF (Spc(id_PLYAAL1)%Conc(I,J,L) .GT. CONMIN .and. &
-                   Spc(id_PLYA1)%Conc(I,J,L) .GT. CONMIN) THEN
-                Plya1_AlkR = Spc(id_PLYAAL1)%Conc(I,J,L) / Spc(id_PLYA1)%Conc(I,J,L)
-                Plya1_AlkR = MAX( (1.0_fp-Plya1_AlkR), CONMIN)
+             IF (Spc(id_DSTAL1)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_DST1)%Conc(I,J,L) .GT. CONMIN) THEN
+                DST1_AlkR = Spc(id_DSTAL1)%Conc(I,J,L) / Spc(id_DST1)%Conc(I,J,L)
+                DST1_AlkR = MAX( (1.0_fp-DST1_AlkR), CONMIN)
              ELSE
-                Plya1_AlkR = 1.0_fp
+                DST1_AlkR = 1.0_fp
              ENDIF
              ! BIN 2
-             IF (Spc(id_PLYAAL2)%Conc(I,J,L) .GT. CONMIN .and. &
-                   Spc(id_PLYA2)%Conc(I,J,L) .GT. CONMIN) THEN
-                Plya2_AlkR = Spc(id_PLYAAL2)%Conc(I,J,L) / Spc(id_PLYA2)%Conc(I,J,L)
-                Plya2_AlkR = MAX( (1.0_fp-Plya2_AlkR), CONMIN)
+             IF (Spc(id_DSTAL2)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_DST2)%Conc(I,J,L) .GT. CONMIN) THEN
+                DST2_AlkR = Spc(id_DSTAL2)%Conc(I,J,L) / Spc(id_DST2)%Conc(I,J,L)
+                DST2_AlkR = MAX( (1.0_fp-DST2_AlkR), CONMIN)
              ELSE
-                Plya2_AlkR = 1.0_fp
+                DST2_AlkR = 1.0_fp
              ENDIF
              ! BIN 3
-             IF (Spc(id_PLYAAL3)%Conc(I,J,L) .GT. CONMIN .and. &
-                   Spc(id_PLYA3)%Conc(I,J,L) .GT. CONMIN) THEN
-                Plya3_AlkR = Spc(id_PLYAAL3)%Conc(I,J,L) / Spc(id_PLYA3)%Conc(I,J,L)
-                Plya3_AlkR = MAX( (1.0_fp-Plya3_AlkR), CONMIN)
+             IF (Spc(id_DSTAL3)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_DST3)%Conc(I,J,L) .GT. CONMIN) THEN
+                DST3_AlkR = Spc(id_DSTAL3)%Conc(I,J,L) / Spc(id_DST3)%Conc(I,J,L)
+                DST3_AlkR = MAX( (1.0_fp-DST3_AlkR), CONMIN)
              ELSE
-                Plya3_AlkR = 1.0_fp
+                DST3_AlkR = 1.0_fp
              ENDIF
              ! BIN 4
-             IF (Spc(id_PLYAAL4)%Conc(I,J,L) .GT. CONMIN .and. &
-                   Spc(id_PLYA4)%Conc(I,J,L) .GT. CONMIN) THEN
-                Plya4_AlkR = Spc(id_PLYAAL4)%Conc(I,J,L) / Spc(id_PLYA4)%Conc(I,J,L)
-                Plya4_AlkR = MAX( (1.0_fp-Plya4_AlkR), CONMIN)
+             IF (Spc(id_DSTAL4)%Conc(I,J,L) .GT. CONMIN .and. &
+                   Spc(id_DST4)%Conc(I,J,L) .GT. CONMIN) THEN
+                DST4_AlkR = Spc(id_DSTAL4)%Conc(I,J,L) / Spc(id_DST4)%Conc(I,J,L)
+                DST4_AlkR = MAX( (1.0_fp-DST4_AlkR), CONMIN)
              ELSE
-                Plya4_AlkR = 1.0_fp
+                DST4_AlkR = 1.0_fp
              ENDIF
           ENDIF
 
@@ -788,13 +768,13 @@ CONTAINS
              !      ( 35.45_fp  * VOL  )
              SALCCL = Spc(id_SALCCL)%Conc(I,J,L) * 1.0e+3_fp * AlkR /           &
                    ( 35.45_fp  * VOL  )
-             PLYACL1 = Spc(id_PLYACL1)%Conc(I,J,L) * 1.0e+3_fp * Plya1_AlkR /   &
+             PLYACL1 = Spc(id_PLYACL1)%Conc(I,J,L) * 1.0e+3_fp * DST1_AlkR /   &
                    ( 35.45_fp  * VOL  )
-             PLYACL2 = Spc(id_PLYACL2)%Conc(I,J,L) * 1.0e+3_fp * Plya2_AlkR /           &
+             PLYACL2 = Spc(id_PLYACL2)%Conc(I,J,L) * 1.0e+3_fp * DST2_AlkR /           &
                    ( 35.45_fp  * VOL  )
-             PLYACL3 = Spc(id_PLYACL3)%Conc(I,J,L) * 1.0e+3_fp * Plya3_AlkR /           &
+             PLYACL3 = Spc(id_PLYACL3)%Conc(I,J,L) * 1.0e+3_fp * DST3_AlkR /           &
                    ( 35.45_fp  * VOL  )
-             PLYACL4 = Spc(id_PLYACL4)%Conc(I,J,L) * 1.0e+3_fp * Plya4_AlkR /           &
+             PLYACL4 = Spc(id_PLYACL4)%Conc(I,J,L) * 1.0e+3_fp * DST4_AlkR /           &
                    ( 35.45_fp  * VOL  )
              ACL = SALCCL  + PLYACL1  + PLYACL2  + PLYACL3  + PLYACL4
 
@@ -1056,16 +1036,16 @@ CONTAINS
                             Spc(id_SALCCL)%Conc(I,J,L) * (1.0_fp-AlkR) + &
                             (ACL_frSALCCL * ACL)
             Spc(id_PLYACL1)%Conc(I,J,L) = &
-                            Spc(id_PLYACL1)%Conc(I,J,L) * (1.0_fp-Plya1_AlkR) + &
+                            Spc(id_PLYACL1)%Conc(I,J,L) * (1.0_fp-DST1_AlkR) + &
                             (ACL_frPLYACL1 * ACL)
             Spc(id_PLYACL2)%Conc(I,J,L) = &
-                            Spc(id_PLYACL2)%Conc(I,J,L) * (1.0_fp-Plya2_AlkR) + &
+                            Spc(id_PLYACL2)%Conc(I,J,L) * (1.0_fp-DST2_AlkR) + &
                             (ACL_frPLYACL2 * ACL)
             Spc(id_PLYACL3)%Conc(I,J,L) = &
-                            Spc(id_PLYACL3)%Conc(I,J,L) * (1.0_fp-Plya3_AlkR) + &
+                            Spc(id_PLYACL3)%Conc(I,J,L) * (1.0_fp-DST3_AlkR) + &
                             (ACL_frPLYACL3 * ACL)
             Spc(id_PLYACL4)%Conc(I,J,L) = &
-                            Spc(id_PLYACL4)%Conc(I,J,L) * (1.0_fp-Plya4_AlkR) + &
+                            Spc(id_PLYACL4)%Conc(I,J,L) * (1.0_fp-DST4_AlkR) + &
                             (ACL_frPLYACL4 * ACL)
 
           ENDIF
