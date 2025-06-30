@@ -52,9 +52,6 @@ MODULE DUST_MOD
   INTEGER               :: id_DST1,    id_DST2,    id_DST3,    id_DST4
   INTEGER               :: id_DAL1,    id_DAL2,    id_DAL3,    id_DAL4
   INTEGER               :: id_DUST01,  id_NK01 
-  INTEGER               :: id_PLYA1,   id_PLYA2,   id_PLYA3,   id_PLYA4
-  INTEGER               :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
-  INTEGER               :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
 
   ! Arrays
   REAL(fp), ALLOCATABLE :: FRAC_S(:)
@@ -1167,7 +1164,7 @@ CONTAINS
 !
 ! !USES:
 !
-    USE CMN_Size_MOD,       ONLY : NDUST, NAER, NPLYA
+    USE CMN_Size_MOD,       ONLY : NDUST, NAER
 #ifdef RRTMG
     USE CMN_Size_MOD,       ONLY : NAER
 #endif
@@ -1215,7 +1212,6 @@ CONTAINS
     ! Arrays
     LOGICAL           :: LINTERPARR(Input_Opt%NWVSELECT)
     REAL(fp)          :: MSDENS(NDUST)
-    REAL(fp)          :: PLYA_DENS(NPLYA)
     REAL(fp)          :: tempOD(State_Grid%NX,State_Grid%NY,               &
                                 State_Grid%NZ,NDUST,         3)
 
@@ -1241,7 +1237,6 @@ CONTAINS
     REAL(fp), POINTER :: WERADIUS(:,:,:,:)
     REAL(fp), POINTER :: WTAREA(:,:,:,:)
     REAL(fp), POINTER :: DUST(:,:,:,:)
-    REAL(fp), POINTER :: PLYADUST(:,:,:,:)
 
     !=================================================================
     ! RDUST_ONLINE begins here!
@@ -1273,7 +1268,6 @@ CONTAINS
     WERADIUS  => State_Chm%WetAeroRadi  ! Wet Aerosol Radius [cm]
     WTAREA    => State_Chm%WetAeroArea  ! Wet Aerosol Area   [cm2/cm3]
     DUST      => State_Chm%SoilDust     ! Dust aerosol Conc. [kg/m3]
-    PLYADUST  => State_Chm%PlyaDust     ! Playa dust aerosol conc. [kg/m3]
 
     ! Index for dust in ODAER and LUT arrays
     IDST      = 8
@@ -1286,15 +1280,6 @@ CONTAINS
     MSDENS(5) = 2650.0_fp
     MSDENS(6) = 2650.0_fp
     MSDENS(7) = 2650.0_fp
-
-    ! Playa dust density
-    PLYA_DENS(1) = 2500.0_fp
-    PLYA_DENS(2) = 2500.0_fp
-    PLYA_DENS(3) = 2500.0_fp
-    PLYA_DENS(4) = 2500.0_fp
-    PLYA_DENS(5) = 2650.0_fp
-    PLYA_DENS(6) = 2650.0_fp
-    PLYA_DENS(7) = 2650.0_fp
 
     ! Critical RH, above which heteorogeneous chem takes place (tmf, 6/14/07)
     CRITRH = 35.0e+0_fp   ! [%]
@@ -1421,30 +1406,19 @@ CONTAINS
        IF ( .not. State_Met%InChemGrid(I,J,L) ) CYCLE
 
        ERADIUS(I,J,L,N)            = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp
-       ! append playa radii into ERADIUS
-       ERADIUS(I,J,L,N+NDUST+NAER) = RDAA(N,IDST,State_Chm%Phot%DRg) * 1.0e-4_fp  
        
        TAREA(I,J,L,N)              = 3.e+0_fp / ERADIUS(I,J,L,N) * &
                                      DUST(I,J,L,N) / MSDENS(N)
-       ! append playa surface areas into TAREA
-       TAREA(I,J,L,N+NDUST+NAER)   = 3.e+0_fp / ERADIUS(I,J,L,N) * &
-                                     PLYADUST(I,J,L,N) / PLYA_DENS(N)
 
        ! Archive WTAREA and WERADIUS when RH > 35%  (tmf, 6/13/07)
        ! Get RH
        XRH                   = State_Met%RH( I, J, L )  ! [%]
        WTAREA(I,J,L, N)      = 0.e+0_fp
        WERADIUS(I,J,L, N)    = 0.e+0_fp
-       ! WTAREA and WERADIUS for playa dust
-       WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
-       WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
 
        IF ( XRH >= CRITRH ) THEN
           WTAREA(I,J,L, N)   = TAREA(I,J,L, N)
           WERADIUS(I,J,L, N) = ERADIUS(I,J,L, N)
-          ! WTAREA and WERADIUS for playa dust
-          WTAREA(I,J,L, N+NDUST+NAER)   = 0.e+0_fp
-          WERADIUS(I,J,L, N+NDUST+NAER) = 0.e+0_fp
        ENDIF
 
     ENDDO
@@ -2125,18 +2099,6 @@ CONTAINS
     id_DST3 =  Ind_('DST3'    )
     id_DST4 =  Ind_('DST4'    )
 
-    id_PLYA1 = Ind_('PLYA1'      )
-    id_PLYA2 = Ind_('PLYA2'      )
-    id_PLYA3 = Ind_('PLYA3'      )
-    id_PLYA4 = Ind_('PLYA4'      )
-    id_PLYAAL1 = Ind_('PLYAAL1'  )
-    id_PLYAAL2 = Ind_('PLYAAL2'  )
-    id_PLYAAL3 = Ind_('PLYAAL3'  )
-    id_PLYAAL4 = Ind_('PLYAAL4'  )
-    id_PLYACL1 = Ind_('PLYACL1'  )
-    id_PLYACL1 = Ind_('PLYACL2'  )
-    id_PLYACL1 = Ind_('PLYACL3'  )
-    id_PLYACL1 = Ind_('PLYACL4'  )
     !-----------------------------------------------------------------
     ! DAL1 - DAL4 and SO4d1 - SO4d4 species (acid uptake sims only)
     !-----------------------------------------------------------------
