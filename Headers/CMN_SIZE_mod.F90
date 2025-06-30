@@ -48,9 +48,6 @@ MODULE CMN_SIZE_MOD
   ! Number of stratospheric aerosols (SDE 04/17/13)
   INTEGER, PARAMETER :: NSTRATAER = 2
 
-  ! Number of playa dust aerosol size bins (same as FAST-J aerosol)
-  INTEGER, PARAMETER :: NPLYA = 7
-
   ! Number of other aerosol categories, include stratospheric aerosols
   INTEGER, PARAMETER :: NAER = NRHAER + NSTRATAER
 
@@ -70,7 +67,6 @@ MODULE CMN_SIZE_MOD
 #endif
 #else
   INTEGER, PARAMETER :: NDSTBIN  = 4
-  INTEGER, PARAMETER :: NPLYABIN = 4
 #endif
 !
 ! !REVISION HISTORY:
