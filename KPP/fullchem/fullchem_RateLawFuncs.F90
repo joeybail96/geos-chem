@@ -19,6 +19,8 @@ MODULE fullchem_RateLawFuncs
   USE gckpp_Parameters
   USE gckpp_Precision
   USE rateLawUtilFuncs
+  USE State_Chm_Mod,      ONLY : Ind_
+
 
   IMPLICIT NONE
   PUBLIC
@@ -1102,31 +1104,31 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             frac_Cl_CldP = H%frac_Cl_CldP1
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             frac_Cl_CldP = H%frac_Cl_CldP2
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             frac_Cl_CldP = H%frac_Cl_CldP3
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             frac_Cl_CldP = H%frac_Cl_CldP4
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             frac_Cl_CldP = H%frac_Cl_CldP5
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             frac_Cl_CldP = H%frac_Cl_CldP6
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             frac_Cl_CldP = H%frac_Cl_CldP7
     END SELECT
@@ -1515,37 +1517,37 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
             Br_conc_PLYACL = H%Br_conc_PLYACL1 
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
             Br_conc_PLYACL = H%Br_conc_PLYACL2 
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
             Br_conc_PLYACL = H%Br_conc_PLYACL3 
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
             Br_conc_PLYACL = H%Br_conc_PLYACL4
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
             Br_conc_PLYACL = H%Br_conc_PLYACL5 
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
             Br_conc_PLYACL = H%Br_conc_PLYACL6 
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             PLYADUy = PLYADU7
             Br_conc_PLYACL = H%Br_conc_PLYACL7
@@ -2180,7 +2182,7 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H%PLYA1_is_Acid
@@ -2191,7 +2193,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL1
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H%PLYA1_is_Acid
@@ -2202,7 +2204,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL2
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H%PLYA1_is_Acid
@@ -2213,7 +2215,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL3
             f_Acid_PLYA = H%f_Acid_PLYA1  
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
             PLYA_is_Acid = H%PLYA1_is_Acid
@@ -2224,7 +2226,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL4
             f_Acid_PLYA = H%f_Acid_PLYA1  
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
             PLYA_is_Acid = H%PLYA2_is_Acid
@@ -2235,7 +2237,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL5
             f_Acid_PLYA = H%f_Acid_PLYA2  
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
             PLYA_is_Acid = H%PLYA3_is_Acid
@@ -2246,7 +2248,7 @@ CONTAINS
             Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL6
             f_Acid_PLYA = H%f_Acid_PLYA3  
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
             PLYA_is_Acid = H%PLYA4_is_Acid
@@ -2636,7 +2638,7 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
             frac_Cl_CldP = H%frac_Cl_CldP1
@@ -2644,7 +2646,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1  
             f_Acid_PLYA = H%f_Acid_PLYA1      
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
             frac_Cl_CldP = H%frac_Cl_CldP2
@@ -2652,7 +2654,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
             frac_Cl_CldP = H%frac_Cl_CldP3
@@ -2660,7 +2662,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
             frac_Cl_CldP = H%frac_Cl_CldP4
@@ -2668,7 +2670,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
             frac_Cl_CldP = H%frac_Cl_CldP5
@@ -2676,7 +2678,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
             f_Acid_PLYA = H%f_Acid_PLYA2
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
             frac_Cl_CldP = H%frac_Cl_CldP6
@@ -2684,7 +2686,7 @@ CONTAINS
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
             f_Acid_PLYA = H%f_Acid_PLYA3
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             PLYADUy = PLYADU7
             frac_Cl_CldP = PLYAx_y * H%frac_Cl_CldP7
@@ -2971,43 +2973,43 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
             PLYA_is_Acid = H%PLYA1_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
             PLYA_is_Acid = H%PLYA1_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
             PLYA_is_Acid = H%PLYA1_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
             PLYA_is_Acid = H%PLYA1_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA1   
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
             PLYA_is_Acid = H%PLYA2_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA2   
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
             PLYA_is_Acid = H%PLYA3_is_Acid
             f_Acid_PLYA = H%f_Acid_PLYA2  
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             PLYADUy = PLYADU7
             PLYA_is_Acid = H%PLYA4_is_Acid
@@ -3198,31 +3200,31 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             PLYADUy = PLYADU7
     END SELECT
@@ -3912,42 +3914,42 @@ CONTAINS
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
         CASE (1)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             PLYADUy = PLYADU1
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL1
         CASE (2)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             PLYADUy = PLYADU2
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL2
         CASE (3)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             PLYADUy = PLYADU3
             gamma = 0.04_dp * H%Cl_conc_PLYACL3
         CASE (4)
-            ind_PLYACLx = ind_PLYACL1
+            ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             PLYADUy = PLYADU4
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL4
         CASE (5)
-            ind_PLYACLx = ind_PLYACL2
+            ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             PLYADUy = PLYADU5
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL5
         CASE (6)
-            ind_PLYACLx = ind_PLYACL3
+            ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             PLYADUy = PLYADU6
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
             gamma = 0.04_dp * H%Cl_conc_PLYACL6
         CASE (7)
-            ind_PLYACLx = ind_PLYACL4
+            ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             PLYADUy = PLYADU7
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
