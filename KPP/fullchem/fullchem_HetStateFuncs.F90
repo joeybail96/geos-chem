@@ -24,14 +24,14 @@ MODULE fullchem_HetStateFuncs
 
 
 
-  ! Indices for playa aerosol type (15 .. NAEROTYPE=21)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU1        = 15 ! Playa dust (Reff = 0.151 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU2        = 16 ! Playa dust (Reff = 0.253 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU3        = 17 ! Playa dust (Reff = 0.402 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU4        = 18 ! Playa dust (Reff = 0.818 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU5        = 19 ! Playa dust (Reff = 1.491 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU6        = 20 ! Playa dust (Reff = 2.417 um)
-  INTEGER,  PRIVATE, PARAMETER :: PLYADU7        = 21 ! Playa dust (Reff = 3.721 um)
+  ! Indices for playa aerosol type 
+  INTEGER,  PRIVATE, PARAMETER :: DU1        = 1 ! dust (Reff = 0.151 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU2        = 2 ! dust (Reff = 0.253 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU3        = 3 ! dust (Reff = 0.402 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU4        = 4 ! dust (Reff = 0.818 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU5        = 5 ! dust (Reff = 1.491 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU6        = 6 ! dust (Reff = 2.417 um)
+  INTEGER,  PRIVATE, PARAMETER :: DU7        = 7 ! dust (Reff = 3.721 um)
 
   ! distribution fractions of playa dust bins 1-4 among playa dust bins 1-7
   ! see aerosol_mod.F90 for distribution fractions
@@ -70,9 +70,9 @@ CONTAINS
 !
   SUBROUTINE fullChem_SetStateHet( I,          J,          L,                  &
                                    id_SALA,    id_SALAAL,  id_SALC,            &
-                                   id_SALCAL,  id_PLYA1,   id_PLYA2,           &
-                                   id_PLYA3,   id_PLYA4,   id_PLYAAL1,         &
-                                   id_PLYAAL2, id_PLYAAL3, id_PLYAAL4,         &
+                                   id_SALCAL,  id_DST1,    id_DST2,            &
+                                   id_DST3,    id_DST4,    id_DSTAL1,          &
+                                   id_DSTAL2,  id_DSTAL3,  id_DSTAL4,          &
                                    State_Chm,  State_Met,  Input_Opt,          &
                                    H,          RC                              )           
 
@@ -101,14 +101,14 @@ CONTAINS
     TYPE(OptInput), INTENT(IN)    :: Input_Opt  ! Input Options object
     TYPE(ChmState), INTENT(IN)    :: State_Chm  ! Chemistry State object
     TYPE(MetState), INTENT(IN)    :: State_Met  ! Meterology State object
-    INTEGER,        INTENT(IN)    :: id_PLYA1   !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYA2   !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYA3   !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYA4   !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYAAL1 !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYAAL2 !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYAAL3 !  in the State_Chm%Species
-    INTEGER,        INTENT(IN)    :: id_PLYAAL4 !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DST1    !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DST2    !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DST3    !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DST4    !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DSTAL1  !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DSTAL2  !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DSTAL3  !  in the State_Chm%Species
+    INTEGER,        INTENT(IN)    :: id_DSTAL4  !  in the State_Chm%Species
 
 !
 ! INPUT/OUTPUT PARAMETERS:
@@ -210,43 +210,43 @@ CONTAINS
     H%H_conc_PLYA4 = 10.0**( -5.0_dp              )
 
     ! alkalinity fraction in playa dust
-    H%f_Alk_PLYA1   = SafeDiv( State_Chm%Species(id_PLYAAL1)%Conc(I,J,L),     &
-                               State_Chm%Species(id_PLYA1  )%Conc(I,J,L),     &
+    H%f_Alk_DST1   = SafeDiv( State_Chm%Species(id_DSTAL1)%Conc(I,J,L),     &
+                               State_Chm%Species(id_DSTA1  )%Conc(I,J,L),   &
                                0.0_dp                                       )
 
-    H%f_Alk_PLYA2   = SafeDiv( State_Chm%Species(id_PLYAAL2)%Conc(I,J,L),     &
-                               State_Chm%Species(id_PLYA2  )%Conc(I,J,L),     &
+    H%f_Alk_DST2   = SafeDiv( State_Chm%Species(id_DSTAL2)%Conc(I,J,L),     &
+                               State_Chm%Species(id_DSTA2  )%Conc(I,J,L),   &
                                0.0_dp                                       )
 
-    H%f_Alk_PLYA3   = SafeDiv( State_Chm%Species(id_PLYAAL3)%Conc(I,J,L),     &
-                               State_Chm%Species(id_PLYA3  )%Conc(I,J,L),     &
+    H%f_Alk_DST3   = SafeDiv( State_Chm%Species(id_DSTAL3)%Conc(I,J,L),     &
+                               State_Chm%Species(id_DSTA3  )%Conc(I,J,L),   &
                                0.0_dp                                       ) 
  
-    H%f_Alk_PLYA4   = SafeDiv( State_Chm%Species(id_PLYAAL4)%Conc(I,J,L),     &
-                               State_Chm%Species(id_PLYA4  )%Conc(I,J,L),     &
+    H%f_Alk_DST4   = SafeDiv( State_Chm%Species(id_DSTAL4)%Conc(I,J,L),     &
+                               State_Chm%Species(id_DST4  )%Conc(I,J,L),    &
                                0.0_dp                                       )
     
     ! ensure fractions are not above 1 or below 0
-    H%f_Alk_PLYA1   = MAX( MIN( H%f_Alk_PLYA1, 1.0_dp ), 0.0_dp )   
-    H%f_Alk_PLYA2   = MAX( MIN( H%f_Alk_PLYA2, 1.0_dp ), 0.0_dp )
-    H%f_Alk_PLYA3   = MAX( MIN( H%f_Alk_PLYA3, 1.0_dp ), 0.0_dp )
-    H%f_Alk_PLYA4   = MAX( MIN( H%f_Alk_PLYA4, 1.0_dp ), 0.0_dp )
+    H%f_Alk_DST1   = MAX( MIN( H%f_Alk_DST1, 1.0_dp ), 0.0_dp )   
+    H%f_Alk_DST2   = MAX( MIN( H%f_Alk_DST2, 1.0_dp ), 0.0_dp )
+    H%f_Alk_DST3   = MAX( MIN( H%f_Alk_DST3, 1.0_dp ), 0.0_dp )
+    H%f_Alk_DST4   = MAX( MIN( H%f_Alk_DST4, 1.0_dp ), 0.0_dp )
 
     ! acid fraction in playa dust
-    H%f_Acid_PLYA1  = 1.0_dp - H%f_Alk_PLYA1
-    H%f_Acid_PLYA2  = 1.0_dp - H%f_Alk_PLYA2
-    H%f_Acid_PLYA3  = 1.0_dp - H%f_Alk_PLYA3
-    H%f_Acid_PLYA4  = 1.0_dp - H%f_Alk_PLYA4
+    H%f_Acid_DST1  = 1.0_dp - H%f_Alk_DST1
+    H%f_Acid_DST2  = 1.0_dp - H%f_Alk_DST2
+    H%f_Acid_DST3  = 1.0_dp - H%f_Alk_DST3
+    H%f_Acid_DST4  = 1.0_dp - H%f_Alk_DST4
 
     ! determine if playa dust is alkaline or acidic
-    H%PLYA1_is_Alk    = ( ABS( H%f_Alk_PLYA1 ) > 0.01_dp )
-    H%PLYA1_is_Acid   = ( .not.  H%PLYA1_is_Alk          )
-    H%PLYA2_is_Alk    = ( ABS( H%f_Alk_PLYA2 ) > 0.01_dp )
-    H%PLYA2_is_Acid   = ( .not.  H%PLYA2_is_Alk          )
-    H%PLYA3_is_Alk    = ( ABS( H%f_Alk_PLYA3 ) > 0.01_dp )
-    H%PLYA3_is_Acid   = ( .not.  H%PLYA3_is_Alk          )
-    H%PLYA4_is_Alk    = ( ABS( H%f_Alk_PLYA4 ) > 0.01_dp )
-    H%PLYA4_is_Acid   = ( .not.  H%PLYA4_is_Alk          )
+    H%DST1_is_Alk    = ( ABS( H%f_Alk_DST1 ) > 0.01_dp )
+    H%DST1_is_Acid   = ( .not.  H%DST1_is_Alk          )
+    H%DST2_is_Alk    = ( ABS( H%f_Alk_DST2 ) > 0.01_dp )
+    H%DST2_is_Acid   = ( .not.  H%DST2_is_Alk          )
+    H%DST3_is_Alk    = ( ABS( H%f_Alk_DST3 ) > 0.01_dp )
+    H%DST3_is_Acid   = ( .not.  H%DST3_is_Alk          )
+    H%DST4_is_Alk    = ( ABS( H%f_Alk_DST4 ) > 0.01_dp )
+    H%DST4_is_Acid   = ( .not.  H%DST4_is_Alk          )
 
     ! Other fields
     H%gamma_HO2     = Input_Opt%gamma_HO2
@@ -543,101 +543,100 @@ CONTAINS
     ! Br- molar concentration of bin x=1 into biny=1
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 1,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU1),                 &
-                               r_w         = H%xRadi(PLYADU1),                 &
+                               surf_area   = H%xArea(DU1),                 &
+                               r_w         = H%xRadi(DU1),                 &
                                conc_x      = H%Br_conc_PLYACL1                )
 
     ! Br- molar concentration of bin x=1 into biny=2
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 2,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU2),                 &
-                               r_w         = H%xRadi(PLYADU2),                 &
+                               surf_area   = H%xArea(DU2),                 &
+                               r_w         = H%xRadi(DU2),                 &
                                conc_x      = H%Br_conc_PLYACL2                )
 
     ! Br- molar concentration of bin x=1 into biny=3
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 3,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU3),                 &
-                               r_w         = H%xRadi(PLYADU3),                 &
+                               surf_area   = H%xArea(DU3),                 &
+                               r_w         = H%xRadi(DU3),                 &
                                conc_x      = H%Br_conc_PLYACL3                )
 
     ! Br- molar concentration of bin x=1 into biny=4
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 4,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU4),                 &
-                               r_w         = H%xRadi(PLYADU4),                 &
+                               surf_area   = H%xArea(DU4),                 &
+                               r_w         = H%xRadi(DU4),                 &
                                conc_x      = H%Br_conc_PLYACL4                )
 
     ! Br- molar concentration of bin x=2 into biny=5
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 5,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU5),                 &
-                               r_w         = H%xRadi(PLYADU5),                 &
+                               surf_area   = H%xArea(DU5),                 &
+                               r_w         = H%xRadi(DU5),                 &
                                conc_x      = H%Br_conc_PLYACL5                )
 
     ! Br- molar concentration of bin x=3 into biny=6
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 6,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU6),                 &
-                               r_w         = H%xRadi(PLYADU6),                 &
+                               surf_area   = H%xArea(DU6),                 &
+                               r_w         = H%xRadi(DU6),                 &
                                conc_x      = H%Br_conc_PLYACL6                )
 
     ! Br- molar concentration of bin x=4 into biny=7
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 7,                                &
                                n_x         = 0.0_dp,                           &
-                               surf_area   = H%xArea(PLYADU7),                 &
-                               r_w         = H%xRadi(PLYADU7),                 &
+                               surf_area   = H%xArea(DU7),                 &
+                               r_w         = H%xRadi(DU7),                 &
                                conc_x      = H%Br_conc_PLYACL7                )
 
     ! Cl- molar concentration of bin x=1 into biny=1
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 1,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
-                               surf_area   = H%xArea(PLYADU1),                 &
-                               r_w         = H%xRadi(PLYADU1),                 &
+                               surf_area   = H%xArea(DU1),                 &
+                               r_w         = H%xRadi(DU1),                 &
                                conc_x      = H%Cl_conc_PLYACL1                )
 
     ! Cl- molar concentration of bin x=1 into biny=2
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 2,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
-                               surf_area   = H%xArea(PLYADU2),                 &
-                               r_w         = H%xRadi(PLYADU2),                 &
+                               surf_area   = H%xArea(DU2),                 &
+                               r_w         = H%xRadi(DU2),                 &
                                conc_x      = H%Cl_conc_PLYACL2                )
 
     ! Cl- molar concentration of bin x=1 into biny=3
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 3,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
-                               surf_area   = H%xArea(PLYADU3),                 &
-                               r_w         = H%xRadi(PLYADU3),                 &
+                               surf_area   = H%xArea(DU3),                 &
+                               r_w         = H%xRadi(DU3),                 &
                                conc_x      = H%Cl_conc_PLYACL3                )
 
     ! Cl- molar concentration of bin x=1 into biny=4
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 4,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
-                               surf_area   = H%xArea(PLYADU4),                 &
-                               r_w         = H%xRadi(PLYADU4),                 &
+                               surf_area   = H%xArea(DU4),                 &
+                               r_w         = H%xRadi(DU4),                 &
                                conc_x      = H%Cl_conc_PLYACL4                )
 
     ! Cl- molar concentration of bin x=2 into biny=5
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 5,                                &
                                n_x         = C(Ind_('PLYACL2')),                   &
-                               surf_area   = H%xArea(PLYADU5),                 &
-                               r_w         = H%xRadi(PLYADU5),                 &
+                               surf_area   = H%xArea(DU5),                 &
+                               r_w         = H%xRadi(DU5),                 &
                                conc_x      = H%Cl_conc_PLYACL5                )
 
     ! Cl- molar concentration of bin x=3 into biny=6
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 6,                                &
                                n_x         = C(Ind_('PLYACL3')),                   &
-                               surf_area   = H%xArea(PLYADU6),                 &
-                               r_w         = H%xRadi(PLYADU6),                 &
+                               surf_area   = H%xArea(DU6),                 &
+                               r_w         = H%xRadi(DU6),                 &
                                conc_x      = H%Cl_conc_PLYACL6                )
 
     ! Cl- molar concentration of bin x=4 into biny=7
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 7,                                &
                                n_x         = C(Ind_('PLYACL4')),                   &
-                               surf_area   = H%xArea(PLYADU7),                 &
-                               r_w         = H%xRadi(PLYADU7),                 &
+                               surf_area   = H%xArea(DU7),                 &
+                               r_w         = H%xRadi(DU7),                 &
                                conc_x      = H%Cl_conc_PLYACL7                )
-
     ! NO3- concentration in fine sea salt aerosol
     CALL Get_Halide_SSAConc( n_x       = C(ind_NIT),                         &
                              surf_area = H%aClArea,                          &
@@ -898,39 +897,14 @@ CONTAINS
        conc_x = 0.0_dp
        RETURN
     ENDIF
-    
-    ! Calculate how playa dust concentrations in bins x=1-4 are distributed among dust bins y=1-7 (see aerosol_mod.F90 for distribution details)
-    SELECT CASE (PLYA_BINy)
-        CASE (1)
-            ! fraction of playa chloride contribution of PLYACL1 into #1 playa bin
-            PLYAx_y = PLYA1_1
-        CASE (2)
-            ! fraction of playa chloride contribution of PLYACL1 into #2 playa bin
-            PLYAx_y = PLYA1_2
-        CASE (3)
-            ! fraction of playa chloride contribution of PLYACL1 into #3 playa bin
-            PLYAx_y = PLYA1_3
-        CASE (4)
-            ! fraction of playa chloride contribution of PLYACL1 into #4 playa bin
-            PLYAx_y = PLYA1_4
-        CASE (5)
-            ! fraction of playa chloride contribution of PLYACL2 into #5 playa bin
-            PLYAx_y = PLYA2_5
-        CASE (6)
-            ! fraction of playa chloride contribution of PLYACL3 into #6 playa bin
-            PLYAx_y = PLYA3_6
-        CASE (7)
-            ! fraction of playa chloride contribution of PLYACL4 into #7 playa bin
-            PLYAx_y = PLYA4_7
-    END SELECT
-    
+
     ! update number concentration of playa dust to reflect how much dust is being distributed in PLYA_BINy
     n_x_y = PLYAx_y*n_x
-    
+        
     ! this calculation is copied directly from Get_Halide_SsaConc
     ! calculate the molar concentration of playa dust Cl
     ! I am concerned that this calculation is not accurate and assumes 1 molec of Cl == 1 particle of playa dust
-    conc_x = ( n_x_y / AVO ) / V_tot    ! mol/L
+    conc_x = ( n_x / AVO ) / V_tot    ! mol/L
     conc_x = MAX( conc_x, 0.0_dp )
 
   END SUBROUTINE Get_Halide_PlayaConc
