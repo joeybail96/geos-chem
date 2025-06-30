@@ -594,49 +594,49 @@ CONTAINS
                                n_x         = C(Ind_('PLYACL1')),                   &
                                surf_area   = H%xArea(DU1),                 &
                                r_w         = H%xRadi(DU1),                 &
-                               conc_x      = H%Cl_conc_PLYACL1                )
+                               conc_x      = H%Cl_conc_DST1                )
 
     ! Cl- molar concentration of bin x=1 into biny=2
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 2,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
                                surf_area   = H%xArea(DU2),                 &
                                r_w         = H%xRadi(DU2),                 &
-                               conc_x      = H%Cl_conc_PLYACL2                )
+                               conc_x      = H%Cl_conc_DST2                )
 
     ! Cl- molar concentration of bin x=1 into biny=3
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 3,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
                                surf_area   = H%xArea(DU3),                 &
                                r_w         = H%xRadi(DU3),                 &
-                               conc_x      = H%Cl_conc_PLYACL3                )
+                               conc_x      = H%Cl_conc_DST3                )
 
     ! Cl- molar concentration of bin x=1 into biny=4
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 4,                                &
                                n_x         = C(Ind_('PLYACL1')),                   &
                                surf_area   = H%xArea(DU4),                 &
                                r_w         = H%xRadi(DU4),                 &
-                               conc_x      = H%Cl_conc_PLYACL4                )
+                               conc_x      = H%Cl_conc_DST4                )
 
     ! Cl- molar concentration of bin x=2 into biny=5
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 5,                                &
                                n_x         = C(Ind_('PLYACL2')),                   &
                                surf_area   = H%xArea(DU5),                 &
                                r_w         = H%xRadi(DU5),                 &
-                               conc_x      = H%Cl_conc_PLYACL5                )
+                               conc_x      = H%Cl_conc_DST5                )
 
     ! Cl- molar concentration of bin x=3 into biny=6
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 6,                                &
                                n_x         = C(Ind_('PLYACL3')),                   &
                                surf_area   = H%xArea(DU6),                 &
                                r_w         = H%xRadi(DU6),                 &
-                               conc_x      = H%Cl_conc_PLYACL6                )
+                               conc_x      = H%Cl_conc_DST6                )
 
     ! Cl- molar concentration of bin x=4 into biny=7
     CALL Get_Halide_PlayaConc( PLYA_BINy   = 7,                                &
                                n_x         = C(Ind_('PLYACL4')),                   &
                                surf_area   = H%xArea(DU7),                 &
                                r_w         = H%xRadi(DU7),                 &
-                               conc_x      = H%Cl_conc_PLYACL7                )
+                               conc_x      = H%Cl_conc_DST7                )
     ! NO3- concentration in fine sea salt aerosol
     CALL Get_Halide_SSAConc( n_x       = C(ind_NIT),                         &
                              surf_area = H%aClArea,                          &
@@ -664,32 +664,32 @@ CONTAINS
        H%Br_over_Cl_SSC = H%Br_conc_SSC / H%Cl_conc_SSC  ! in coarse sea salt
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL1 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL1 = H%Br_conc_PLYACL1 / H%Cl_conc_PLYACL1
+    IF ( H%Cl_conc_DST1 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL1 = H%Br_conc_PLYACL1 / H%Cl_conc_DST1
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL2 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL2 = H%Br_conc_PLYACL2 / H%Cl_conc_PLYACL2
+    IF ( H%Cl_conc_DST2 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL2 = H%Br_conc_PLYACL2 / H%Cl_conc_DST2
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL3 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL3 = H%Br_conc_PLYACL3 / H%Cl_conc_PLYACL3
+    IF ( H%Cl_conc_DST3 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL3 = H%Br_conc_PLYACL3 / H%Cl_conc_DST3
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL4 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL4 = H%Br_conc_PLYACL4 / H%Cl_conc_PLYACL4
+    IF ( H%Cl_conc_DST4 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL4 = H%Br_conc_PLYACL4 / H%Cl_conc_DST4
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL5 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL5 = H%Br_conc_PLYACL5 / H%Cl_conc_PLYACL5
+    IF ( H%Cl_conc_DST5 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL5 = H%Br_conc_PLYACL5 / H%Cl_conc_DST5
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL6 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL6 = H%Br_conc_PLYACL6 / H%Cl_conc_PLYACL6
+    IF ( H%Cl_conc_DST6 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL6 = H%Br_conc_PLYACL6 / H%Cl_conc_DST6
     ENDIF
 
-    IF ( H%Cl_conc_PLYACL7 > 0.0_dp ) THEN
-       H%Br_over_Cl_PLYACL7 = H%Br_conc_PLYACL7 / H%Cl_conc_PLYACL7
+    IF ( H%Cl_conc_DST7 > 0.0_dp ) THEN
+       H%Br_over_Cl_PLYACL7 = H%Br_conc_PLYACL7 / H%Cl_conc_DST7
     ENDIF
 
     !=======================================================================

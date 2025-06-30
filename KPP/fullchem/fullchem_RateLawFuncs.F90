@@ -2178,7 +2178,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             DUy = DU1
             H_conc_DST = H%H_conc_DST1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL1 
@@ -2189,7 +2189,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             DUy = DU2
             H_conc_DST = H%H_conc_DST1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL2 
@@ -2200,7 +2200,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             DUy = DU3
             H_conc_DST = H%H_conc_DST1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL3
@@ -2211,7 +2211,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             DUy = DU4
             H_conc_DST = H%H_conc_DST1
             Cl_conc_PLYACL = H%Cl_conc_PLYACL4
@@ -2222,7 +2222,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
-            DST_is_Acid = H%PLYA2_is_Acid
+            DST_is_Acid = H%DST2_is_Acid
             DUy = DU5
             H_conc_DST = H%H_conc_DST2
             Cl_conc_PLYACL = H%Cl_conc_PLYACL5
@@ -2233,7 +2233,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
-            DST_is_Acid = H%PLYA3_is_Acid
+            DST_is_Acid = H%DST3_is_Acid
             DUy = DU6
             H_conc_DST = H%H_conc_DST3
             Cl_conc_PLYACL = H%Cl_conc_PLYACL6
@@ -2244,7 +2244,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
-            DST_is_Acid = H%PLYA4_is_Acid
+            DST_is_Acid = H%DST4_is_Acid
             DUy = DU7
             H_conc_DST = H%H_conc_DST4
             Cl_conc_PLYACL = H%Cl_conc_PLYACL7
@@ -2646,7 +2646,7 @@ CONTAINS
             DUy = DU2
             frac_Cl_CldP = H%frac_Cl_CldP2
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL2
+            Cl_conc_DST = H%Cl_conc_DST2
             f_Acid_DST = H%f_Acid_DST1  
             DST_is_Acid = H%DST1_is_Acid     
         CASE (3)
@@ -2655,7 +2655,7 @@ CONTAINS
             DUy = DU3
             frac_Cl_CldP = H%frac_Cl_CldP3
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL3
+            Cl_conc_DST = H%Cl_conc_DST3
             f_Acid_DST = H%f_Acid_DST1   
             DST_is_Acid = H%DST1_is_Acid    
         CASE (4)
@@ -2664,7 +2664,7 @@ CONTAINS
             DUy = DU4
             frac_Cl_CldP = H%frac_Cl_CldP4
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL4
+            Cl_conc_DST = H%Cl_conc_DST4
             f_Acid_DST = H%f_Acid_DST1   
             DST_is_Acid = H%DST1_is_Acid    
         CASE (5)
@@ -2673,7 +2673,7 @@ CONTAINS
             DUy = DU5
             frac_Cl_CldP = H%frac_Cl_CldP5
             H_conc_DST = H%H_conc_DST2
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL5
+            Cl_conc_DST = H%Cl_conc_DST5
             f_Acid_DST = H%f_Acid_DST2
             DST_is_Acid = H%DST2_is_Acid    
         CASE (6)
@@ -2682,7 +2682,7 @@ CONTAINS
             DUy = DU6
             frac_Cl_CldP = H%frac_Cl_CldP6
             H_conc_DST = H%H_conc_DST3
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL6
+            Cl_conc_DST = H%Cl_conc_DST6
             f_Acid_DST = H%f_Acid_DST3
             DST_is_Acid = H%DST3_is_Acid    
         CASE (7)
@@ -2691,7 +2691,7 @@ CONTAINS
             DUy = DU7
             frac_Cl_CldP = PLYAx_y * H%frac_Cl_CldP7
             H_conc_DST = H%H_conc_DST4
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL7
+            Cl_conc_DST = H%Cl_conc_DST7
             f_Acid_DST = H%f_Acid_DST4
             DST_is_Acid = H%DST4_is_Acid    
     END SELECT
@@ -2709,7 +2709,7 @@ CONTAINS
     !
     ! Compute HOCl + PLYACL uptake rate [1/s] on acidic aerosols in clear-sky
     IF ( H%DST_is_Acid ) THEN
-       CALL Gam_HOCl_Aer( H, H%xRadi(DUy), H_conc_DST, Cl_conc_PLYACL, gamma )
+       CALL Gam_HOCl_Aer( H, H%xRadi(DUy), H_conc_DST, Cl_conc_DST, gamma )
        area = H%ClearFr * H%xArea(DUy) * f_Acid_DST
        k    = k + Ars_L1k( area, H%xRadi(DUy), gamma, srMw )
     ENDIF
@@ -2965,11 +2965,11 @@ CONTAINS
     REAL(dp)                   :: k
     REAL(dp)                   :: ssarea         ! acidic sea salt area
     ! local vars continued...
-    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: ind_PLYACLx        ! index referencing gckpp_Parameters.F90
     INTEGER                    :: DUy                ! index of aerosol properties defined by HetState
-    LOGICAL                    :: DST_is_Acid           ! is playa dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
-    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
-    REAL(dp)                   :: f_Acid_DST            ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
+    LOGICAL                    :: DST_is_Acid        ! is playa dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
+    REAL(dp)                   :: PLYAx_y            ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    REAL(dp)                   :: f_Acid_DST         ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
     !
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
@@ -2977,43 +2977,43 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             DUy = DU1
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             f_Acid_DST = H%f_Acid_DST1   
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             DUy = DU2
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             f_Acid_DST = H%f_Acid_DST1   
         CASE (3)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             DUy = DU3
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             f_Acid_DST = H%f_Acid_DST1   
         CASE (4)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             DUy = DU4
-            DST_is_Acid = H%PLYA1_is_Acid
+            DST_is_Acid = H%DST1_is_Acid
             f_Acid_DST = H%f_Acid_DST1   
         CASE (5)
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             DUy = DU5
-            DST_is_Acid = H%PLYA2_is_Acid
+            DST_is_Acid = H%DST2_is_Acid
             f_Acid_DST = H%f_Acid_DST2   
         CASE (6)
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             DUy = DU6
-            DST_is_Acid = H%PLYA3_is_Acid
+            DST_is_Acid = H%DST3_is_Acid
             f_Acid_DST = H%f_Acid_DST2  
         CASE (7)
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             DUy = DU7
-            DST_is_Acid = H%PLYA4_is_Acid
+            DST_is_Acid = H%DST4_is_Acid
             f_Acid_DST = H%f_Acid_DST2  
     END SELECT
     !
@@ -3023,7 +3023,7 @@ CONTAINS
     !
     IF ( DST_is_Acid ) THEN
        ssarea = f_Acid_DST * H%xArea(DUy)
-       k = 0.85_dp * ARs_L1K( ssarea, H%xRAdi(DUy), gamma, srMw )
+       k = 0.85_dp * ARs_L1K( ssarea, H%xRadi(DUy), gamma, srMw )
        k = kIIR1Ltd( conc, PLYAx_y*C(ind_PLYACLx), k ) ! conc is limiting, so update k
     ENDIF
   END FUNCTION IbrkdnbyAcidPLYACL
@@ -3918,42 +3918,42 @@ CONTAINS
             PLYAx_y = PLYA1_1
             DUy = DU1
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL1
+            gamma = 0.04_dp * H%Cl_conc_DST1
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             DUy = DU2
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL2
+            gamma = 0.04_dp * H%Cl_conc_DST2
         CASE (3)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             DUy = DU3
-            gamma = 0.04_dp * H%Cl_conc_PLYACL3
+            gamma = 0.04_dp * H%Cl_conc_DST3
         CASE (4)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             DUy = DU4
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL4
+            gamma = 0.04_dp * H%Cl_conc_DST4
         CASE (5)
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             DUy = DU5
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL5
+            gamma = 0.04_dp * H%Cl_conc_DST5
         CASE (6)
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             DUy = DU6
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL6
+            gamma = 0.04_dp * H%Cl_conc_DST6
         CASE (7)
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             DUy = DU7
             ! Compute uptake; gamma is from cf Knipping & Dabdub, 2002
-            gamma = 0.04_dp * H%Cl_conc_PLYACL7
+            gamma = 0.04_dp * H%Cl_conc_DST7
     END SELECT
     !
     ! Exit if in the stratosphere
