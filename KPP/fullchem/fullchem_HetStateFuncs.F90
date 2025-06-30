@@ -21,6 +21,9 @@ MODULE fullchem_HetStateFuncs
   PRIVATE
 
 ! !DEFINED PARAMETERS:
+
+
+
   ! Indices for playa aerosol type (15 .. NAEROTYPE=21)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU1        = 15 ! Playa dust (Reff = 0.151 um)
   INTEGER,  PRIVATE, PARAMETER :: PLYADU2        = 16 ! Playa dust (Reff = 0.253 um)
@@ -207,22 +210,6 @@ CONTAINS
     H%H_conc_PLYA4 = 10.0**( -5.0_dp              )
 
     ! alkalinity fraction in playa dust
-    PRINT *, 'id_PLYA1 = ', id_PLYA1
-    PRINT *, 'id_PLYAAL1 = ', id_PLYAAL1
-    PRINT *, 'State_Chm%nSpecies = ', State_Chm%nSpecies
-    
-    IF (ASSOCIATED(State_Chm%Species(id_PLYAAL1)%Conc)) THEN
-        PRINT *, 'PLYAAL1 Conc:', State_Chm%Species(id_PLYAAL1)%Conc(I,J,L)
-    ELSE
-        PRINT *, 'PLYAAL1 Conc NOT associated'
-    ENDIF
-    
-    IF (ASSOCIATED(State_Chm%Species(id_PLYA1)%Conc)) THEN
-        PRINT *, 'PLYA1 Conc:', State_Chm%Species(id_PLYA1)%Conc(I,J,L)
-    ELSE
-        PRINT *, 'PLYA1 Conc NOT associated'
-    ENDIF
-
     H%f_Alk_PLYA2   = SafeDiv( State_Chm%Species(id_PLYAAL2)%Conc(I,J,L),     &
                                State_Chm%Species(id_PLYA2  )%Conc(I,J,L),     &
                                0.0_dp                                       )

@@ -49,9 +49,12 @@ MODULE DUST_MOD
 ! !PRIVATE TYPES:
 !
   ! Species ID flags
-  INTEGER               :: id_DST1,   id_DST2,  id_DST3,   id_DST4
-  INTEGER               :: id_DAL1,   id_DAL2,  id_DAL3,   id_DAL4
-  INTEGER               :: id_DUST01, id_NK01
+  INTEGER               :: id_DST1,    id_DST2,    id_DST3,    id_DST4
+  INTEGER               :: id_DAL1,    id_DAL2,    id_DAL3,    id_DAL4
+  INTEGER               :: id_DUST01,  id_NK01 
+  INTEGER               :: id_PLYA1,   id_PLYA2,   id_PLYA3,   id_PLYA4
+  INTEGER               :: id_PLYAAL1, id_PLYAAL2, id_PLYAAL3, id_PLYAAL4
+  INTEGER               :: id_PLYACL1, id_PLYACL2, id_PLYACL3, id_PLYACL4
 
   ! Arrays
   REAL(fp), ALLOCATABLE :: FRAC_S(:)
