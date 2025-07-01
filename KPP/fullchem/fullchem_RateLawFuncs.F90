@@ -1089,7 +1089,7 @@ CONTAINS
     ! local vars continued...
     INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
     REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
-    REAL(dp)                   :: frac_Cl_CldP           ! fraction of clouds containing chloride from PLYA_BINy
+    REAL(dp)                   :: frac_Cl_CldDST         ! fraction of clouds containing chloride from PLYA_BINy
     !
     k    = 0.0_dp
     srMw = SR_MW(ind_ClNO2)
@@ -1099,31 +1099,31 @@ CONTAINS
         CASE (1)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
-            frac_Cl_CldP = H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST1
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
-            frac_Cl_CldP = H%frac_Cl_CldP2
+            frac_Cl_CldDST = H%frac_Cl_CldDST2
         CASE (3)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
-            frac_Cl_CldP = H%frac_Cl_CldP3
+            frac_Cl_CldDST = H%frac_Cl_CldDST3
         CASE (4)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
-            frac_Cl_CldP = H%frac_Cl_CldP4
+            frac_Cl_CldDST = H%frac_Cl_CldDST4
         CASE (5)
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
-            frac_Cl_CldP = H%frac_Cl_CldP5
+            frac_Cl_CldDST = H%frac_Cl_CldDST5
         CASE (6)
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
-            frac_Cl_CldP = H%frac_Cl_CldP6
+            frac_Cl_CldDST = H%frac_Cl_CldDST6
         CASE (7)
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
-            frac_Cl_CldP = H%frac_Cl_CldP7
+            frac_Cl_CldDST = H%frac_Cl_CldDST7
     END SELECT
     !
     ! ClNO2 + PLYACL uptake rate [1/s] in tropospheric cloud
@@ -1131,7 +1131,7 @@ CONTAINS
        CALL Gam_ClNO2(                                                       &
             H,             H%rLiq, H%phCloud, H%Cl_conc_Cld,                 &
             H%Br_conc_Cld, gamma,  branchCl,  dummy                         )
-       branch = branchCl * frac_Cl_CldP
+       branch = branchCl * frac_Cl_CldDST
        k      = k + CloudHet( H, srMw, gamma, 0.0_dp, branch, 0.0_dp )
     ENDIF
     !
@@ -1505,7 +1505,7 @@ CONTAINS
     INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
     INTEGER                    :: DUy                ! index of aerosol properties defined by HetState
     REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
-    REAL(dp)                   :: Br_conc_PLYACL         ! Br- in PLYA_BINy [mol/L] (should be 0 since currently no Br tracked in playa dust)
+    REAL(dp)                   :: Br_conc_DST         ! Br- in PLYA_BINy [mol/L] (should be 0 since currently no Br tracked in playa dust)
     !
     ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
     SELECT CASE (PLYA_BINy)
@@ -1513,37 +1513,37 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             DUy = DU1
-            Br_conc_PLYACL = H%Br_conc_PLYACL1 
+            Br_conc_DST = H%Br_conc_DST1 
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             DUy = DU2
-            Br_conc_PLYACL = H%Br_conc_PLYACL2 
+            Br_conc_DST = H%Br_conc_DST2 
         CASE (3)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             DUy = DU3
-            Br_conc_PLYACL = H%Br_conc_PLYACL3 
+            Br_conc_DST = H%Br_conc_DST3 
         CASE (4)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             DUy = DU4
-            Br_conc_PLYACL = H%Br_conc_PLYACL4
+            Br_conc_DST = H%Br_conc_DST4
         CASE (5)
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             DUy = DU5
-            Br_conc_PLYACL = H%Br_conc_PLYACL5 
+            Br_conc_DST = H%Br_conc_DST5 
         CASE (6)
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             DUy = DU6
-            Br_conc_PLYACL = H%Br_conc_PLYACL6 
+            Br_conc_DST = H%Br_conc_DST6 
         CASE (7)
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             DUy = DU7
-            Br_conc_PLYACL = H%Br_conc_PLYACL7
+            Br_conc_DST = H%Br_conc_DST7
     END SELECT
     !
     ! Exit if in the stratosphere
@@ -1551,7 +1551,7 @@ CONTAINS
     IF ( H%stratBox ) RETURN
     !
     ! Compute uptake rate of ClNO3 + BrPLYA in clear sky
-    CALL Gam_ClNO3_Aer( H, Br_conc_PLYACL, gamma, branchBr )
+    CALL Gam_ClNO3_Aer( H, Br_conc_DST, gamma, branchBr )
     srMw   = SR_MW(ind_ClNO3)
     area   = H%ClearFr * H%xArea(DUy)
     branch = 1.0_dp - branchBr
@@ -2159,11 +2159,11 @@ CONTAINS
     INTEGER                    :: DUy                    ! index of aerosol properties defined by HetState
     LOGICAL                    :: DST_is_Acid            ! is playa dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
     REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
-    REAL(dp)                   :: frac_Cl_CldP           ! fraction of cloud that is from PLYA_BINy
+    REAL(dp)                   :: frac_Cl_CldDST           ! fraction of cloud that is from PLYA_BINy
     REAL(dp)                   :: H_conc_DST             ! H+ concentration in PLYA_BINy (bin x=1 is same for bin y=1-4)
-    REAL(dp)                   :: Cl_conc_PLYACL         ! Cl- conc in PLYA_BINy [mol/L]
-    REAL(dp)                   :: Br_conc_PLYACL         ! Br- conc in PLYA_BINy [mol/L] (should be 0 bc no Br- currently tracked in playa dust)
-    REAL(dp)                   :: Br_over_Cl_PLYACL      ! Ratio of Br:Cl in PLYA_BINy (should be 0 since currently no Br- tracked in playa dust)
+    REAL(dp)                   :: Cl_conc_DST         ! Cl- conc in PLYA_BINy [mol/L]
+    REAL(dp)                   :: Br_conc_DST         ! Br- conc in PLYA_BINy [mol/L] (should be 0 bc no Br- currently tracked in playa dust)
+    REAL(dp)                   :: Br_over_Cl_DST      ! Ratio of Br:Cl in PLYA_BINy (should be 0 since currently no Br- tracked in playa dust)
     REAL(dp)                   :: f_Acid_DST             ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
     !
     k        = 0.0_dp
@@ -2177,79 +2177,79 @@ CONTAINS
         CASE (1)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST1
             DST_is_Acid = H%DST1_is_Acid
             DUy = DU1
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL1 
-            Br_conc_PLYACL = H%Br_conc_PLYACL1  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL1
+            Cl_conc_DST = H%Cl_conc_DST1 
+            Br_conc_DST = H%Br_conc_DST1  
+            Br_over_Cl_DST = H%Br_over_Cl_DST1
             f_Acid_DST = H%f_Acid_DST1   
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST2
             DST_is_Acid = H%DST1_is_Acid
             DUy = DU2
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL2 
-            Br_conc_PLYACL = H%Br_conc_PLYACL2  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL2
+            Cl_conc_DST = H%Cl_conc_DST2 
+            Br_conc_DST = H%Br_conc_DST2  
+            Br_over_Cl_DST = H%Br_over_Cl_DST2
             f_Acid_DST = H%f_Acid_DST1   
         CASE (3)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST3
             DST_is_Acid = H%DST1_is_Acid
             DUy = DU3
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL3
-            Br_conc_PLYACL = H%Br_conc_PLYACL3  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL3
+            Cl_conc_DST = H%Cl_conc_DST3
+            Br_conc_DST = H%Br_conc_DST3  
+            Br_over_Cl_DST = H%Br_over_Cl_DST3
             f_Acid_DST = H%f_Acid_DST1  
         CASE (4)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST4
             DST_is_Acid = H%DST1_is_Acid
             DUy = DU4
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL4
-            Br_conc_PLYACL = H%Br_conc_PLYACL4  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL4
+            Cl_conc_DST = H%Cl_conc_DST4
+            Br_conc_DST = H%Br_conc_DST4  
+            Br_over_Cl_DST = H%Br_over_Cl_DST4
             f_Acid_DST = H%f_Acid_DST1  
         CASE (5)
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP2
+            frac_Cl_CldDST = H%frac_Cl_CldDST5
             DST_is_Acid = H%DST2_is_Acid
             DUy = DU5
             H_conc_DST = H%H_conc_DST2
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL5
-            Br_conc_PLYACL = H%Br_conc_PLYACL5  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL5
+            Cl_conc_DST = H%Cl_conc_DST5
+            Br_conc_DST = H%Br_conc_DST5  
+            Br_over_Cl_DST = H%Br_over_Cl_DST5
             f_Acid_DST = H%f_Acid_DST2  
         CASE (6)
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP3
+            frac_Cl_CldDST = H%frac_Cl_CldDST6
             DST_is_Acid = H%DST3_is_Acid
             DUy = DU6
             H_conc_DST = H%H_conc_DST3
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL6
-            Br_conc_PLYACL = H%Br_conc_PLYACL6  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL6
+            Cl_conc_DST = H%Cl_conc_DST6
+            Br_conc_DST = H%Br_conc_DST6  
+            Br_over_Cl_DST = H%Br_over_Cl_DST6
             f_Acid_DST = H%f_Acid_DST3  
         CASE (7)
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
-            frac_Cl_CldP = PLYAx_y*H%frac_Cl_CldP4
+            frac_Cl_CldDST = H%frac_Cl_CldDST7
             DST_is_Acid = H%DST4_is_Acid
             DUy = DU7
             H_conc_DST = H%H_conc_DST4
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL7
-            Br_conc_PLYACL = H%Br_conc_PLYACL7  
-            Br_over_Cl_PLYACL = H%Br_over_Cl_PLYACL7
+            Cl_conc_DST = H%Cl_conc_DST7
+            Br_conc_DST = H%Br_conc_DST7  
+            Br_over_Cl_DST = H%Br_over_Cl_DST7
             f_Acid_DST = H%f_Acid_DST4  
     END SELECT
     !
@@ -2266,7 +2266,7 @@ CONTAINS
        IF ( H%Br_over_Cl_Cld <= 5.0e-4_dp ) THEN
           branch = branch_0 * ( 1.0_dp -  Br2_Yield( H%Br_over_Cl_Cld ) )
        ENDIF
-       brLiq = branch * frac_Cl_CldP
+       brLiq = branch * frac_Cl_CldDST
        !
        ! Compute overall HOBr removal rate in cloud
        k = k + CloudHet( H, srMw, gammaLiq, 0.0_dp, brLiq, 0.0_dp )
@@ -2278,12 +2278,12 @@ CONTAINS
        !
        ! Uptake probability [1]
        CALL Gam_HOBr_Aer( H,                H%xRadi(DUy), H_conc_DST,  &
-                          Cl_conc_PLYACL, Br_conc_PLYACL, gammaAer        )
+                          Cl_conc_DST, Br_conc_DST, gammaAer        )
        !
        ! Branching ratio (depends on Br- / Cl- ratio)
        branch = 0.1_dp
-       IF ( Br_over_Cl_PLYACL <= 5.0e-4_dp ) THEN
-          !branch = 1.0_dp - Br2_Yield( H%Br_over_Cl_PLYACL )
+       IF ( Br_over_Cl_DST <= 5.0e-4_dp ) THEN
+          !branch = 1.0_dp - Br2_Yield( H%Br_over_Cl_DST )
           ! to avoid log10(0) error in Br2_Yield(), just set branch to 1.0. There should be no yield anyway.
           branch = 1.0_dp
        ENDIF
@@ -2620,9 +2620,9 @@ CONTAINS
     INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
     INTEGER                    :: DUy                    ! index of aerosol properties defined by HetState
     REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
-    REAL(dp)                   :: frac_Cl_CldP           ! fraction of cloud that is from PLYA_BINy
+    REAL(dp)                   :: frac_Cl_CldDST           ! fraction of cloud that is from PLYA_BINy
     REAL(dp)                   :: H_conc_DST             ! H+ concentration in PLYA_BINy (bin x=1 is same for bin y=1-4)
-    REAL(dp)                   :: Cl_conc_PLYACL         ! Cl- conc in PLYA_BINy [mol/L]
+    REAL(dp)                   :: Cl_conc_DST         ! Cl- conc in PLYA_BINy [mol/L]
     REAL(dp)                   :: f_Acid_DST             ! PLYA_BINy's acid fraction (acid fraction same for y=1-4 since it is intensive property)
     LOGICAL                    :: DST_is_Acid            ! is dust in PLYA_BINy acidic? (bin x=1 is same for bin y=1-4)
     !
@@ -2635,16 +2635,16 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_1
             DUy = DU1
-            frac_Cl_CldP = H%frac_Cl_CldP1
+            frac_Cl_CldDST = H%frac_Cl_CldDST1
             H_conc_DST = H%H_conc_DST1
-            Cl_conc_PLYACL = H%Cl_conc_PLYACL1  
+            Cl_conc_DST = H%Cl_conc_DST1  
             f_Acid_DST = H%f_Acid_DST1  
             DST_is_Acid = H%DST1_is_Acid    
         CASE (2)
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_2
             DUy = DU2
-            frac_Cl_CldP = H%frac_Cl_CldP2
+            frac_Cl_CldDST = H%frac_Cl_CldDST2
             H_conc_DST = H%H_conc_DST1
             Cl_conc_DST = H%Cl_conc_DST2
             f_Acid_DST = H%f_Acid_DST1  
@@ -2653,7 +2653,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_3
             DUy = DU3
-            frac_Cl_CldP = H%frac_Cl_CldP3
+            frac_Cl_CldDST = H%frac_Cl_CldDST3
             H_conc_DST = H%H_conc_DST1
             Cl_conc_DST = H%Cl_conc_DST3
             f_Acid_DST = H%f_Acid_DST1   
@@ -2662,7 +2662,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL1')
             PLYAx_y = PLYA1_4
             DUy = DU4
-            frac_Cl_CldP = H%frac_Cl_CldP4
+            frac_Cl_CldDST = H%frac_Cl_CldDST4
             H_conc_DST = H%H_conc_DST1
             Cl_conc_DST = H%Cl_conc_DST4
             f_Acid_DST = H%f_Acid_DST1   
@@ -2671,7 +2671,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL2')
             PLYAx_y = PLYA2_5
             DUy = DU5
-            frac_Cl_CldP = H%frac_Cl_CldP5
+            frac_Cl_CldDST = H%frac_Cl_CldDST5
             H_conc_DST = H%H_conc_DST2
             Cl_conc_DST = H%Cl_conc_DST5
             f_Acid_DST = H%f_Acid_DST2
@@ -2680,7 +2680,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL3')
             PLYAx_y = PLYA3_6
             DUy = DU6
-            frac_Cl_CldP = H%frac_Cl_CldP6
+            frac_Cl_CldDST = H%frac_Cl_CldDST6
             H_conc_DST = H%H_conc_DST3
             Cl_conc_DST = H%Cl_conc_DST6
             f_Acid_DST = H%f_Acid_DST3
@@ -2689,7 +2689,7 @@ CONTAINS
             ind_PLYACLx = Ind_('PLYACL4')
             PLYAx_y = PLYA4_7
             DUy = DU7
-            frac_Cl_CldP = PLYAx_y * H%frac_Cl_CldP7
+            frac_Cl_CldDST = H%frac_Cl_CldDST7
             H_conc_DST = H%H_conc_DST4
             Cl_conc_DST = H%Cl_conc_DST7
             f_Acid_DST = H%f_Acid_DST4
@@ -2701,14 +2701,14 @@ CONTAINS
        !
        ! HOCl + PLYACL uptake coeff [1] & branch ratio [1], liquid path
        CALL Gam_HOCl_Cld( H, gamma, branchCl, dummy )
-       branch = branchCl * frac_Cl_CldP
+       branch = branchCl * frac_Cl_CldDST
        !
        ! HOCl + HCl uptake rate [1/s] accounting for cloud fraction
        k = k + CloudHet( H, srMw, gamma, 0.0_dp, branch, 0.0_dp )
     ENDIF
     !
     ! Compute HOCl + PLYACL uptake rate [1/s] on acidic aerosols in clear-sky
-    IF ( H%DST_is_Acid ) THEN
+    IF ( DST_is_Acid ) THEN
        CALL Gam_HOCl_Aer( H, H%xRadi(DUy), H_conc_DST, Cl_conc_DST, gamma )
        area = H%ClearFr * H%xArea(DUy) * f_Acid_DST
        k    = k + Ars_L1k( area, H%xRadi(DUy), gamma, srMw )

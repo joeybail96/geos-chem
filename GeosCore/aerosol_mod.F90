@@ -92,7 +92,6 @@ MODULE AEROSOL_MOD
   INTEGER :: id_DUST01, id_SOAS,  id_SALACL, id_HMS   ! (jmm, 06/29/18)
   INTEGER :: id_SOAGX, id_SOAIE
   INTEGER :: id_INDIOL,id_LVOCOA
-  INTEGER :: id_PLYA1, id_PLYA2, id_PLYA3, id_PLYA4
 
   ! Index to map between NRHAER and species database hygroscopic species
   ! NOTE: Increasing value of NRHAER in CMN_SIZE_Mod.F90 (e.g. if there is
@@ -264,7 +263,6 @@ CONTAINS
     PMID         => State_Met%PMID
     T            => State_Met%T
     SOILDUST     => State_Chm%SoilDust
-    PLAYA_DUST   => State_Chm%PlyaDust
     KG_STRAT_AER => State_Chm%KG_AER
 
     !=================================================================
@@ -640,27 +638,6 @@ CONTAINS
           SOILDUST(I,J,L,5) = Spc(id_DST2)%Conc(I,J,L) / AIRVOL(I,J,L)
           SOILDUST(I,J,L,6) = Spc(id_DST3)%Conc(I,J,L) / AIRVOL(I,J,L)
           SOILDUST(I,J,L,7) = Spc(id_DST4)%Conc(I,J,L) / AIRVOL(I,J,L)
-
-       ENDIF
-
-       !-----------------------------------------------------------
-       ! Adding Playa Dust Tracers following same SOILDUST distribution
-       !-----------------------------------------------------------
-       IF ( LDUST ) THEN
-          
-          ! PLAYA DUST AEROSOL TRACER
-          ! Lump 1st dust tracer for het chem (see above for detailed comment)
-          PLAYA_DUST(I,J,L,1) = 0.007e+0_fp  * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,2) = 0.0332e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,3) = 0.2487e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,4) = 0.7111e+0_fp * Spc(id_PLYA1)%Conc(I,J,L) &
-                              / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,5) = Spc(id_PLYA2)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,6) = Spc(id_PLYA3)%Conc(I,J,L) / AIRVOL(I,J,L)
-          PLAYA_DUST(I,J,L,7) = Spc(id_PLYA4)%Conc(I,J,L) / AIRVOL(I,J,L)
 
        ENDIF
 
@@ -2479,10 +2456,6 @@ CONTAINS
     id_SOAIE  = Ind_( 'SOAIE'  )
     id_INDIOL = Ind_( 'INDIOL' )
     id_LVOCOA = Ind_( 'LVOCOA' )
-    id_PLYA1  = Ind_( 'PLYA1'   )
-    id_PLYA2  = Ind_( 'PLYA2'   )
-    id_PLYA3  = Ind_( 'PLYA3'   )
-    id_PLYA4  = Ind_( 'PLYA4'   )
 
     ! Define logical flags
     IS_OCPI    = ( id_OCPI  > 0 )

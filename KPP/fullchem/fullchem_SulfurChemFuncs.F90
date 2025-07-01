@@ -223,13 +223,13 @@ CONTAINS
     SALAAL_gt_0_1 = ( C(ind_SALAAL) > 0.1_dp     )
     SALCAL_gt_0_1 = ( C(ind_SALCAL) > 0.1_dp     )
     O3_gt_1e10    = ( C(ind_O3)     > 1.0e+10_dp )
-    DSTAL1_1_gt_0_1 = ( PLYA1_1*C(Ind('DSTAL1'))  > 0.1_dp     )
-    DSTAL1_2_gt_0_1 = ( PLYA1_2*C(Ind('DSTAL1'))  > 0.1_dp     ) 
-    DSTAL1_3_gt_0_1 = ( PLYA1_3*C(Ind('DSTAL1'))  > 0.1_dp     ) 
-    DSTAL1_4_gt_0_1 = ( PLYA1_4*C(Ind('DSTAL1'))  > 0.1_dp     ) 
-    DSTAL2_5_gt_0_1 = ( PLYA2_5*C(Ind('DSTAL2'))  > 0.1_dp     ) 
-    DSTAL3_6_gt_0_1 = ( PLYA3_6*C(Ind('DSTAL3'))  > 0.1_dp     ) 
-    DSTAL4_7_gt_0_1 = ( PLYA4_7*C(Ind('DSTAL4'))  > 0.1_dp     ) 
+    DSTAL1_1_gt_0_1 = ( PLYA1_1*C(Ind_('DSTAL1'))  > 0.1_dp     )
+    DSTAL1_2_gt_0_1 = ( PLYA1_2*C(Ind_('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL1_3_gt_0_1 = ( PLYA1_3*C(Ind_('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL1_4_gt_0_1 = ( PLYA1_4*C(Ind_('DSTAL1'))  > 0.1_dp     ) 
+    DSTAL2_5_gt_0_1 = ( PLYA2_5*C(Ind_('DSTAL2'))  > 0.1_dp     ) 
+    DSTAL3_6_gt_0_1 = ( PLYA3_6*C(Ind_('DSTAL3'))  > 0.1_dp     ) 
+    DSTAL4_7_gt_0_1 = ( PLYA4_7*C(Ind_('DSTAL4'))  > 0.1_dp     ) 
 
     !======================================================================
     ! Reaction rates [1/s] for fine sea salt alkalinity (aka SALAAL)
@@ -404,7 +404,7 @@ CONTAINS
        ! Assume HCl is limiting, so recompute rxn rate accordingly
        K_MT(10) = kIIR1Ltd( C(ind_HCl), PLYA1_4*C(Ind_('DSTAL1')), k_ex )
     ENDIF
---------------------------------------------------------------
+    !--------------------------------------------------------------
     ! DSTAL2 + HCl = PLYACL2
     !------------------------------------------------------------------------
     IF ( DSTAL2_5_gt_0_1 ) THEN
