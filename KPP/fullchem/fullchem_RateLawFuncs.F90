@@ -19,6 +19,7 @@ MODULE fullchem_RateLawFuncs
   USE gckpp_Parameters
   USE gckpp_Precision
   USE rateLawUtilFuncs
+  USE State_Chm_Mod,      ONLY : Ind_
 
   IMPLICIT NONE
   PUBLIC
