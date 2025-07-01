@@ -3145,10 +3145,18 @@ VerboseOnCores:              root       # Accepted values: root all
 #==============================================================================
 (((OFFLINE_DUST
 (((.not.DustDead.or.DustGinoux
-0 EMIS_DST1 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST1 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST1 - 3 2
-0 EMIS_DST2 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST2 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST2 - 3 2
-0 EMIS_DST3 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST3 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST3 - 3 2
-0 EMIS_DST4 $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_DST4 1980-2022/1-12/1-31/* EFY xy kg/m2/s DST4 - 3 2
+0 EMIS_DST1     $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc   EMIS_DST1  1980-2022/1-12/1-31/* EFY xy kg/m2/s DST1     -   3 2
+0 EMIS_PLYA1    $ROOT/OFFLINE_PLAYA/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/playa_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_PLYA1 1980-2022/1-12/1-31/* EFY xy kg/m2/s PLYA1    -   3 2
+0 EMIS_PLYACL1  -                                                                                                                               -          -                     -   -  -       PLYACL1  618 3 2
+0 EMIS_DST2     $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc   EMIS_DST2  1980-2022/1-12/1-31/* EFY xy kg/m2/s DST2     -   3 2
+0 EMIS_PLYA2    $ROOT/OFFLINE_PLAYA/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/playa_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_PLYA2 1980-2022/1-12/1-31/* EFY xy kg/m2/s PLYA2    -   3 2
+0 EMIS_PLYACL2  -                                                                                                                               -          -                     -   -  -       PLYACL2  618 3 2
+0 EMIS_DST3     $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc                  EMIS_DST3  1980-2022/1-12/1-31/* EFY xy kg/m2/s DST3     -   3 2
+0 EMIS_PLYA3    $ROOT/OFFLINE_PLAYA/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/playa_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_PLYA3 1980-2022/1-12/1-31/* EFY xy kg/m2/s PLYA3    -   3 2
+0 EMIS_PLYACL3  -                                                                                                                               -          -                     -   -  -       PLYACL3  618 3 2
+0 EMIS_DST4     $ROOT/OFFLINE_DUST/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/dust_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc   EMIS_DST4  1980-2022/1-12/1-31/* EFY xy kg/m2/s DST4     -   3 2
+0 EMIS_PLYA4    $ROOT/OFFLINE_PLAYA/v2021-08/${RUNDIR_OFFLINE_EMIS_RES}/$YYYY/$MM/playa_emissions_${RUNDIR_OFFLINE_EMIS_LAT_RES}.$YYYY$MM$DD.nc EMIS_PLYA4 1980-2022/1-12/1-31/* EFY xy kg/m2/s PLYA4    -   3 2
+0 EMIS_PLYACL4  -                                                                                                                               -          -                     -   -  -       PLYACL4  618 3 2                                                                                                                   
 ))).not.DustDead.or.DustGinoux
 )))OFFLINE_DUST
 
@@ -4491,6 +4499,15 @@ ${RUNDIR_TES_CLIM_N2O}
 616 SSChloride   0.5504  - - - xy 1 1
 617 BrContent    2.11e-3 - - - xy 1 1
 )))OFFLINE_SEASALT
+#==============================================================================
+# --- Offline playa chloride factors ---
+#
+# NOTES:
+# - Playa chloride fraction
+#==============================================================================
+(((OFFLINE_DUST
+618 PlyaChloride 0.0412  - - - xy 1 1
+)))OFFLINE_PLAYA
 
 )))EMISSIONS
 
