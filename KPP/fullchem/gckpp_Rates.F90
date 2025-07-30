@@ -1231,8 +1231,10 @@ SUBROUTINE Update_RCONST ( YIN )
   RCONST(788) = (N2O5uptkByCloud(State_Het))
   RCONST(789) = (N2O5uptkBySALACl(State_Het))
   RCONST(790) = (N2O5uptkBySALCCl(State_Het))
-  RCONST(791) = (N2O5uptkByPLYACL(State_Het,1)+&N2O5uptkByPLYACL(State_Het,2)+&N2O5uptkByPLYACL(State_Het,&
-                  &3)+&N2O5uptkByPLYACL(State_Het,4))
+  RCONST(791) = (N2O5uptkByPLYACL(State_Het,1)+&
+                 N2O5uptkByPLYACL(State_Het,2)+&
+                 N2O5uptkByPLYACL(State_Het,3)+&
+                 N2O5uptkByPLYACL(State_Het,4))
   RCONST(792) = (N2O5uptkByPLYACL(State_Het,5))
   RCONST(793) = (N2O5uptkByPLYACL(State_Het,6))
   RCONST(794) = (N2O5uptkByPLYACL(State_Het,7))
