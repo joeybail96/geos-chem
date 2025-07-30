@@ -2967,7 +2967,7 @@ CONTAINS
     REAL(dp), INTENT(OUT) :: Y_ClNO2   ! [1]
     REAL(dp), INTENT(OUT) :: rp        ! [cm]
     REAL(dp), INTENT(OUT) :: areaTotal ! [cm2/cm3]
-    REAL(dp) :: volTotal, H2Ototal, volRatioDry, M_H2O
+    REAL(dp) :: volTotal, H2Ototal, volRatioDry
     REAL(dp), PARAMETER   :: ONE_THIRD = 1.0_dp / 3.0_dp
     !
     !------------------------------------------------------------------------
@@ -2991,29 +2991,10 @@ CONTAINS
     ! Total particle surface area, cm2/cm3
     areaTotal = 3.0_dp * volTotal / Rp
     !
-    ! Concentrations [mol/L]
-    M_H2O = H2Ototal / 18e+0_dp / volTotal * 1000.0_dp 
+    ! Fixed values based on experimental data from Christie et al. (2025) for playa dust
+    gamma   = 0.065_dp
+    Y_ClNO2 = 1.000_dp
     !
-    ! Determine gamma and ClNO2 yield based on Christie et al 2025
-    IF (RELHUM > 45) THEN
-       ! max observed gamma and yield at RH>45%
-       gamma   = 0.0303_dp
-       Y_ClNO2 = 0.9786_dp
-    ELSE IF (RELHUM > 40) THEN
-       ! max observed gamma and yield at RH between 40-45%
-       gamma   = 0.0303_dp
-       Y_ClNO2 = 0.9364_dp
-    ELSE IF (RELHUM > 30) THEN
-       ! max observed gamma and yield at RH between 30-40%
-       gamma   = 0.0303_dp
-       Y_ClNO2 = 0.9171_dp  
-    ELSE if ( M_H2O > 0.1_dp ) THEN
-       gamma   = 0.0303_dp
-       Y_ClNO2 = 0.9171_dp
-    ELSE
-       gamma   = 0.0_dp
-       Y_ClNO2 = 0.0_dp
-    END IF
   END SUBROUTINE N2O5_PLYA
 
 
