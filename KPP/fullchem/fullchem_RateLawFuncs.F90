@@ -66,6 +66,16 @@ MODULE fullchem_RateLawFuncs
 
   ! Reference temperature used in Henry's law
   REAL(dp), PRIVATE, PARAMETER :: INV_T298       = 1.0_dp / 298.15_dp
+
+  ! distribution fractions of playa dust bins 1-4 among mineral dust bins 1-7
+  ! see aerosol_mod.F90 for distribution fractions
+  REAL(dp), PRIVATE, PARAMETER :: PLYA1_1     = 0.0070e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA1_2     = 0.0332e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA1_3     = 0.2487e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA1_4     = 0.7111e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA2_5     = 1.0000e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA3_6     = 1.0000e+0_dp
+  REAL(dp), PRIVATE, PARAMETER :: PLYA4_7     = 1.0000e+0_dp
 !
 ! !REFERENCES:
 !  Eastham et al., Development and evaluation of the unified tropospheric-
@@ -2877,6 +2887,134 @@ CONTAINS
     ! Eq from Bertram and Thronton (2009); avoid overflow
     phi = 1.0_dp / ( 1.0_dp + k2k3 * SafeDiv( H2O, Cl, 1.0e+30_dp )          )
   END FUNCTION ClNO2_BT
+
+  FUNCTION N2O5uptkByPLYACL( H,    PLYA_BINy ) RESULT( k )
+    !
+    ! Computes uptake rate of N2O5 on Cl- in playa dust aerosols.
+    ! This reaction follows the N2O5 + Cl- channel.
+    !
+    TYPE(HetState), INTENT(IN) :: H                      ! Hetchem State
+    INTEGER, INTENT(IN)        :: PLYA_BINy              ! Playa bin (1-7)
+    REAL(dp)                   :: k                      ! Rxn rate [1/s]
+    REAL(dp)                   :: gamma, Y_ClNO2, Rp, SA
+    ! local vars continued...
+    INTEGER                    :: ind_PLYACLx            ! index referencing gckpp_Parameters.F90
+    INTEGER                    :: DUy                    ! index of aerosol properties defined by HetState
+    REAL(dp)                   :: PLYAx_y                ! fraction of playa chloride contribution of PLYACLx (1-4) into PLYA_BINy (1-7)
+    !
+    ! define variables specific to PLYA_BINy (see aerosol_mod.F90 for distribution details)
+    SELECT CASE (PLYA_BINy)
+        CASE (1)
+            ind_PLYACLx = Ind_('PLYACL1')
+            PLYAx_y = PLYA1_1
+            DUy = DU1
+        CASE (2)
+            ind_PLYACLx = Ind_('PLYACL1')
+            PLYAx_y = PLYA1_2
+            DUy = DU2
+        CASE (3)
+            ind_PLYACLx = Ind_('PLYACL1')
+            PLYAx_y = PLYA1_3
+            DUy = DU3
+        CASE (4)
+            ind_PLYACLx = Ind_('PLYACL1')
+            PLYAx_y = PLYA1_4
+            DUy = DU4
+        CASE (5)
+            ind_PLYACLx = Ind_('PLYACL2')
+            PLYAx_y = PLYA2_5
+            DUy = DU5
+        CASE (6)
+            ind_PLYACLx = Ind_('PLYACL3')
+            PLYAx_y = PLYA3_6
+            DUy = DU6
+        CASE (7)
+            ind_PLYACLx = Ind_('PLYACL4')
+            PLYAx_y = PLYA4_7
+            DUy = DU7
+    END SELECT
+    !
+    ! Exit if in the stratosphere
+    k = 0.0_dp
+    IF ( H%stratBox ) RETURN
+    !
+    ! Properties of playa dust (same as corresponding mineral dust)
+    !  
+    CALL N2O5_PLYA( H,      H%xVol(DUy),  0.0_dp,  H%xH2O(DUy),   &
+                    0.0_dp, H%xRadi(DUy), gamma,   Y_ClNO2,       &
+                    Rp,     SA                                    )
+    !
+    ! Total loss rate of N2O5 (kN2O5) on playa dust
+    k = Ars_L1k( H%ClearFr * SA, Rp, gamma, SR_MW(ind_N2O5) )
+    k = k * Y_ClNO2
+    !
+    ! Assume N2O5 is limiting, so update the removal rate accordingly
+    k = kIIR1Ltd( C(ind_N2O5), PLYAx_y*C(ind_PLYACLx), k )
+  END FUNCTION N2O5uptkByPLYACL
+
+  SUBROUTINE N2O5_PLYA( H,      volInorg,  volOrg,  H2Oinorg,   &
+                        H2Oorg, Rcore,     gamma,   Y_ClNO2,    &
+                        rp,     areaTotal                       )
+    !
+    TYPE(HetState), INTENT(IN) :: H    ! HetState Object
+    REAL(dp), INTENT(IN)  :: volInorg  ! vol of wet inorg aerosol core  [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: volOrg    ! vol of wet org aerosol coating [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: H2Oinorg  ! vol of H2O in inorg core [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: H2Oorg    ! vol of H2O in org coating [cm3/cm3]
+    REAL(dp), INTENT(IN)  :: Rcore     ! radius of inorg core [cm]
+    REAL(dp), INTENT(OUT) :: gamma     ! [1]
+    REAL(dp), INTENT(OUT) :: Y_ClNO2   ! [1]
+    REAL(dp), INTENT(OUT) :: rp        ! [cm]
+    REAL(dp), INTENT(OUT) :: areaTotal ! [cm2/cm3]
+    REAL(dp) :: volTotal, H2Ototal, volRatioDry, M_H2O
+    REAL(dp), PARAMETER   :: ONE_THIRD = 1.0_dp / 3.0_dp
+    !
+    !------------------------------------------------------------------------
+    ! Concentrations, thickness, etc.
+    !------------------------------------------------------------------------
+    !
+    ! Total volume (organic + inorganic), cm3(aerosol)/cm3(air)
+    volTotal = volInorg + volOrg
+    !
+    ! Total H2O (organic + inorganic), cm3(H2O)/cm3(air)
+    H2Ototal = H2Oinorg + H2Oorg
+    !
+    ! Ratio of inorganic to total (organic+inorganic) volumes when dry, unitless
+    volRatioDry = SafeDiv( MAX( volInorg - H2Oinorg, 0.0_dp ),               &
+                           MAX( volTotal - H2Ototal, 0.0_dp ), 0.0_dp       )
+    !
+    ! Particle radius, cm
+    ! see N2O5_InorgOrg comments
+    Rp = SafeDiv( Rcore, volRatioDry**ONE_THIRD, Rcore )
+    !
+    ! Total particle surface area, cm2/cm3
+    areaTotal = 3.0_dp * volTotal / Rp
+    !
+    ! Concentrations [mol/L]
+    M_H2O = H2Ototal / 18e+0_dp / volTotal * 1000.0_dp 
+    !
+    ! Determine gamma and ClNO2 yield based on Christie et al 2025
+    IF (RELHUM > 45) THEN
+       ! max observed gamma and yield at RH>45%
+       gamma   = 0.0303_dp
+       Y_ClNO2 = 0.9786_dp
+    ELSE IF (RELHUM > 40) THEN
+       ! max observed gamma and yield at RH between 40-45%
+       gamma   = 0.0303_dp
+       Y_ClNO2 = 0.9364_dp
+    ELSE IF (RELHUM > 30) THEN
+       ! max observed gamma and yield at RH between 30-40%
+       gamma   = 0.0303_dp
+       Y_ClNO2 = 0.9171_dp  
+    ELSE if ( M_H2O > 0.1_dp ) THEN
+       gamma   = 0.0303_dp
+       Y_ClNO2 = 0.9171_dp
+    ELSE
+       gamma   = 0.0_dp
+       Y_ClNO2 = 0.0_dp
+    END IF
+  END SUBROUTINE N2O5_PLYA
+
 
   FUNCTION N2O5uptkByCloud( H ) RESULT( k )
     !
